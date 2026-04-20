@@ -53,6 +53,12 @@
     font-weight: 500;
 }
 
+@media (max-width: 1270px) {
+    .serviceListGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (max-width: 900px) {
     .serviceListGrid {
         grid-template-columns: 1fr;
