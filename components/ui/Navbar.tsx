@@ -161,7 +161,7 @@ export default function Navbar() {
             <div className={styles.lowerNav}>
                 <div className={styles.navContainer}>
                     {navLinks.map((link) => {
-                        const isActive = pathname === link.href;
+                        const isActive = pathname === link.href || (link.href === "/" && pathname === "/home");
                         return (
                             <Link
                                 key={link.href}
