@@ -12,7 +12,8 @@
 .card {
   display: flex;
   align-items: flex-start;
-  gap: 20rem;
+  gap: 4rem;
+  flex-wrap: wrap;
 }
 
 /* === Title Side === */

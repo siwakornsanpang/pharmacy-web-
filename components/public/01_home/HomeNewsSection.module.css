@@ -31,6 +31,7 @@
   margin: 0 auto;
   padding: 0 20px;
   z-index: 1;
+  overflow: hidden;
 }
 
 /* === Section Header common === */
