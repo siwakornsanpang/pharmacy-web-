@@ -24,28 +24,47 @@ const nextConfig: NextConfig = {
     ],
   },
   async rewrites() {
-    return [
-      // Public Routes
-      { source: "/home/:path*", destination: "/01_home/:path*" },
-      { source: "/about/:path*", destination: "/02_about/:path*" },
-      { source: "/department/:path*", destination: "/03_department/:path*" },
-      { source: "/service/:path*", destination: "/04_service/:path*" },
-      { source: "/meeting/:path*", destination: "/05_meeting/:path*" },
-      { source: "/news/:path*", destination: "/06_news/:path*" },
-      { source: "/laws/:path*", destination: "/07_laws/:path*" },
-      { source: "/other-service/:path*", destination: "/08_other-service/:path*" },
-      { source: "/contact/:path*", destination: "/09_contact/:path*" },
+    return {
+      beforeFiles: [
+        // Public Routes
+        { source: "/home", destination: "/01_home" },
+        { source: "/home/:path*", destination: "/01_home/:path*" },
+        { source: "/about", destination: "/02_about" },
+        { source: "/about/:path*", destination: "/02_about/:path*" },
+        { source: "/department", destination: "/03_department" },
+        { source: "/department/:path*", destination: "/03_department/:path*" },
+        { source: "/service", destination: "/04_service" },
+        { source: "/service/:path*", destination: "/04_service/:path*" },
+        { source: "/meeting", destination: "/05_meeting" },
+        { source: "/meeting/:path*", destination: "/05_meeting/:path*" },
+        { source: "/news", destination: "/06_news" },
+        { source: "/news/:path*", destination: "/06_news/:path*" },
+        { source: "/laws", destination: "/07_laws" },
+        { source: "/laws/:path*", destination: "/07_laws/:path*" },
+        { source: "/other-service", destination: "/08_other-service" },
+        { source: "/other-service/:path*", destination: "/08_other-service/:path*" },
+        { source: "/contact", destination: "/09_contact" },
+        { source: "/contact/:path*", destination: "/09_contact/:path*" },
 
-      // Member Routes
-      { source: "/member-home/:path*", destination: "/01_member-home/:path*" },
-      { source: "/profile/:path*", destination: "/02_profile/:path*" },
-      { source: "/member-service/:path*", destination: "/03_member-service/:path*" },
-      { source: "/member-meeting/:path*", destination: "/04_member-meeting/:path*" },
-      { source: "/learning/:path*", destination: "/05_learning/:path*" },
-      { source: "/careers/:path*", destination: "/06_careers/:path*" },
-      { source: "/tools/:path*", destination: "/07_tools/:path*" },
-      { source: "/store/:path*", destination: "/08_store/:path*" },
-    ];
+        // Member Routes
+        { source: "/member-home", destination: "/01_member-home" },
+        { source: "/member-home/:path*", destination: "/01_member-home/:path*" },
+        { source: "/profile", destination: "/02_profile" },
+        { source: "/profile/:path*", destination: "/02_profile/:path*" },
+        { source: "/member-service", destination: "/03_member-service" },
+        { source: "/member-service/:path*", destination: "/03_member-service/:path*" },
+        { source: "/member-meeting", destination: "/04_member-meeting" },
+        { source: "/member-meeting/:path*", destination: "/04_member-meeting/:path*" },
+        { source: "/learning", destination: "/05_learning" },
+        { source: "/learning/:path*", destination: "/05_learning/:path*" },
+        { source: "/careers", destination: "/06_careers" },
+        { source: "/careers/:path*", destination: "/06_careers/:path*" },
+        { source: "/tools", destination: "/07_tools" },
+        { source: "/tools/:path*", destination: "/07_tools/:path*" },
+        { source: "/store", destination: "/08_store" },
+        { source: "/store/:path*", destination: "/08_store/:path*" },
+      ],
+    };
   },
 };
 
