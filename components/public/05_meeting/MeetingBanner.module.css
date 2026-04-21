@@ -41,4 +41,14 @@
     .banner {
         height: 250px;
     }
+
+    .bannerOverlay {
+        padding: 0 5% 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bannerOverlay {
+        padding: 0 1rem 2rem;
+    }
 }

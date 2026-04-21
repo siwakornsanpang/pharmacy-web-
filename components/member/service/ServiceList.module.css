@@ -2,6 +2,7 @@
     background: #ffffff;
     margin: auto;
     padding: 40px 20px;
+    overflow: hidden;
 }
 
 .sectionCon {
@@ -43,7 +44,6 @@
     font-size: 26px;
     font-weight: 700;
     min-width: 120px;
-    white-space: nowrap;
 }
 
 .serviceDesc {
@@ -79,17 +79,21 @@
     }
 
     .serviceLabel {
-        font-size: 20px;
+        font-size: 14px;
         min-width: auto;
     }
 
     .title {
-        font-size: 28px;
+        font-size: 10px;
     }
 }
 
 @media (max-width: 480px) {
     .title {
         font-size: 24px;
+    }
+
+    .sectionCon {
+        max-width: 100%;
     }
 }

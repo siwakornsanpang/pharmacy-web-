@@ -189,7 +189,8 @@
 
 /* === Meeting Image === */
 .meetingImageWrapper {
-  width: 280px;
+  max-width: 280px;
+  width: 100%;
   height: 180px;
   border-radius: 16px;
   overflow: hidden;

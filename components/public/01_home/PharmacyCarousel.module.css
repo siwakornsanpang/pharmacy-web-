@@ -6,9 +6,10 @@
 }
 
 .sectionInner {
-  max-width: 90%; /* ขยายความกว้างให้พอสำหรับ 5 การ์ด */
+  max-width: 90%;
   margin: 0 auto;
   text-align: center;
+  overflow: hidden;
 }
 
 .sectionTitle {

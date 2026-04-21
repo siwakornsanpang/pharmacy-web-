@@ -49,6 +49,7 @@
     padding: 0 1.5rem 2rem;
     position: relative;
     z-index: 2;
+    overflow-x: hidden;
 }
 
 .infoSection {
@@ -228,6 +229,12 @@
 
     .container {
         margin-top: 1.5rem;
+        max-width: 100%;
+        padding: 0 0.75rem 1rem;
+    }
+
+    .bannerOverlay {
+        padding: 0 5% 3rem;
     }
 }
 

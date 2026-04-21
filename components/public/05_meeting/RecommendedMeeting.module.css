@@ -50,7 +50,8 @@
 }
 
 .recommendImage {
-    width: 420px;
+    max-width: 420px;
+    width: 100%;
     height: 260px;
     object-fit: cover;
     border-radius: 18px;
@@ -77,6 +78,7 @@
     align-items: flex-start;
     gap: 1.5rem;
     margin-bottom: 0.5rem;
+    flex-wrap: wrap;
 }
 
 .cpeBadge {
@@ -179,9 +181,44 @@
     .recommendCard {
         flex-direction: column;
         gap: 1.5rem;
+        padding: 1.25rem;
     }
     .recommendImage {
         width: 100%;
+        max-width: 100%;
         height: auto;
+        aspect-ratio: 16 / 9;
+    }
+    .recommendContent h3 {
+        font-size: 1.35rem;
+    }
+    .sectionHeader h2 {
+        font-size: 2rem;
+    }
+}
+
+@media (max-width: 600px) {
+    .sectionHeader {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1rem;
+    }
+    .sliderButtons {
+        align-self: flex-end;
+    }
+    .recommendContent h3 {
+        font-size: 1.2rem;
+    }
+    .infoItem p,
+    .infoItem span {
+        font-size: 1rem;
+    }
+    .cpeBadge {
+        width: fit-content;
+        font-size: 0.85rem;
+        padding: 0.4rem 0.8rem;
+    }
+    .sliderIndicators {
+        margin-top: 1.5rem;
     }
 }
