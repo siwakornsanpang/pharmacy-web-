@@ -1,0 +1,462 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding: 2.5rem;
+    background-color: #ffffff;
+    border-radius: 2.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    border: 1px solid #f1f5f9;
+    position: relative;
+    overflow: hidden;
+}
+
+@media (min-width: 1280px) {
+    .container {
+        flex-direction: row;
+    }
+}
+
+/* === Tooltip === */
+.tooltip {
+    position: absolute;
+    z-index: 50;
+    pointer-events: none;
+    background-color: rgba(15, 23, 42, 0.9);
+    backdrop-filter: blur(8px);
+    color: #ffffff;
+    padding: 1rem;
+    border-radius: 1.25rem;
+    box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.3);
+    transition: all 75ms cubic-bezier(0.4, 0, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    min-width: 160px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltipLabel {
+    color: #94a3b8;
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 0.25rem;
+}
+
+.tooltipValue {
+    color: #ffffff;
+    font-weight: 800;
+    font-size: 1rem;
+}
+
+.tooltipCount {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.tooltipNumber {
+    color: #4ade80;
+    font-weight: 900;
+    font-size: 1.25rem;
+}
+
+.tooltipUnit {
+    color: #94a3b8;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+/* === Map Section === */
+.mapWrapper {
+    flex: 1.5;
+    position: relative;
+    background-color: #0f172a; /* Deeper dark background */
+    border-radius: 2.5rem;
+    overflow: hidden;
+    min-height: 750px;
+    border: 1px solid #1e293b;
+    box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.2);
+}
+
+.zoomControls {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    z-index: 20;
+}
+
+.zoomButton {
+    width: 2.75rem;
+    height: 2.75rem;
+    background-color: #ffffff; /* White background for visibility */
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+    color: #0f172a; /* Dark icon color */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+.zoomButton:hover {
+    background-color: #f8fafc;
+    color: #10b981; /* Green accent on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+.zoomButton:active {
+    transform: scale(0.95);
+}
+
+.legend {
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    background-color: #ffffff; /* White background for maximum contrast */
+    padding: 1.5rem;
+    border-radius: 1.5rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.legendTitle {
+    color: #0f172a;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.legendList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.legendColorBox {
+    width: 2.5rem;
+    height: 1rem;
+    border-radius: 0.25rem;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.legendText {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+}
+
+.legendLabel {
+    color: #1e293b;
+    font-size: 13px;
+    font-weight: 700;
+    min-width: 80px;
+}
+
+.legendDesc {
+    color: #64748b;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* === Sidebar Section === */
+.statsSection {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+@media (min-width: 1280px) {
+    .statsSection {
+        width: 420px;
+    }
+}
+
+/* === Stats Card === */
+.statsCard {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 2.5rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.statsCard:hover {
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+}
+
+.statsHeader {
+    color: #475569;
+    font-size: 1.125rem; /* Increased size */
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+}
+
+.statsTitle {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: #0f172a;
+    margin-bottom: 1rem;
+    letter-spacing: -0.02em;
+}
+
+.statsMain {
+    display: flex;
+    flex-direction: column;
+}
+
+.statsCountWrapper {
+    display: flex;
+    align-items: baseline; /* Align by baseline of the big number */
+    gap: 1rem;
+}
+
+.statsNumber {
+    font-size: 5.5rem;
+    font-weight: 900;
+    color: #064e3b;
+    line-height: 1;
+    letter-spacing: -0.04em;
+}
+
+.statsUnitWrapper {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    gap: 0.5rem;
+}
+
+.statsUnit {
+    color: #1e293b;
+    font-weight: 900;
+    font-size: 1.5rem;
+}
+
+.statsLabelSmall {
+    color: #64748b;
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+}
+
+.statsProgressInfo {
+    margin-top: 2rem;
+    padding-top: 2rem;
+    border-top: 1px dashed #e2e8f0;
+}
+
+.statsProgressHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.statsProgressLabel {
+    font-size: 1.125rem; /* Larger text */
+    font-weight: 700;
+    color: #475569;
+}
+
+.statsProgressStatus {
+    font-size: 11px;
+    font-weight: 800;
+    color: #064e3b;
+    background-color: #dcfce7;
+    padding: 0.375rem 1rem;
+    border-radius: 9999px;
+    text-transform: uppercase;
+}
+
+.progressBar {
+    height: 1.25rem; /* Significantly thicker bar */
+    background-color: #f1f5f9;
+    border-radius: 9999px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.progressFill {
+    height: 100%;
+    border-radius: 9999px;
+    background: linear-gradient(90deg, #10b981, #064e3b);
+    transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* === Ranking === */
+.rankingCard {
+    background-color: #ffffff;
+    padding: 2.5rem;
+    border-radius: 2.5rem;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+}
+
+.rankingHeader {
+    color: #0f172a;
+    margin-bottom: 2.5rem;
+}
+
+.rankingTitleWrapper {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+}
+
+.rankingIndicator {
+    width: 0.5rem;
+    height: 3rem; /* Taller to match two lines */
+    background: linear-gradient(to bottom, #10b981, #064e3b);
+    border-radius: 9999px;
+}
+
+.rankingTitleMain {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.rankingTitleBig {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.rankingTitleSub {
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: #64748b;
+}
+
+.rankingBadge {
+    display: none; /* Removed */
+}
+
+.rankingList {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.rankingItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem;
+    border-radius: 1.5rem;
+    border: 1px solid transparent;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+}
+
+.rankingItemActive {
+    background-color: #f0fdf4;
+    border-color: #bbf7d0;
+    transform: scale(1.02);
+    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+}
+
+.rankingItemDefault {
+    background-color: #f8fafc;
+    border-color: #f1f5f9;
+}
+
+.rankingItemDefault:hover {
+    background-color: #ffffff;
+    border-color: #dcfce7;
+    transform: scale(1.02);
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.rankingItemLeft {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+}
+
+.rankingIndex {
+    font-weight: 900;
+    font-size: 1.25rem;
+    transition: all 0.3s ease;
+    width: 32px;
+}
+
+.rankingIndexDefault {
+    color: #cbd5e1;
+}
+
+.rankingIndexActive {
+    color: #10b981;
+}
+
+.rankingName {
+    font-size: 1.125rem;
+    font-weight: 800;
+    transition: all 0.3s ease;
+}
+
+.rankingNameDefault {
+    color: #1e293b;
+}
+
+.rankingNameActive {
+    color: #064e3b;
+}
+
+.rankingCountBox {
+    padding: 0.5rem 1.25rem;
+    border-radius: 9999px;
+    background-color: #064e3b; /* Default Dark Green for all */
+    min-width: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 6px -1px rgba(6, 78, 59, 0.2);
+    transition: all 0.3s ease;
+}
+
+/* Apply the vibrant glow to ANY active item's count box */
+.rankingItemActive .rankingCountBox {
+    background: linear-gradient(135deg, #34d399, #059669);
+    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.rankingCount {
+    font-size: 1rem;
+    font-weight: 800;
+    color: #ffffff;
+}
+
+.rankingItemActive .rankingCount {
+    color: #ffffff;
+}
