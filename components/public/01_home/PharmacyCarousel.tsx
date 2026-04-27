@@ -79,7 +79,7 @@ export default function PharmacyCarousel() {
     setActiveIndex((prev) => (prev + 1) % slides.length);
   }, []);
 
-  // Auto-play logic
+  // Auto-play logic with progress reset
   useEffect(() => {
     if (!isPaused) {
       timerRef.current = setInterval(goNext, 5000);
@@ -87,16 +87,18 @@ export default function PharmacyCarousel() {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused, goNext]);
+  }, [isPaused, goNext, activeIndex]); // Added activeIndex to reset timer on manual click
 
   return (
     <section className={styles.section}>
       <Container className={styles.sectionInner}>
         {/* Header */}
-        <h2 className={styles.sectionTitle}>6 สาขาวิชาชีพเภสัชกร</h2>
-        <p className={styles.sectionSubtitle}>
-          วิชาชีพเภสัชกรมีความหลากหลายในการปฏิบัติงานเพื่อดูแลประชาชนในมิติต่าง ๆ
-        </p>
+        <div className={styles.headerGroup}>
+          <h2 className={styles.sectionTitle}>6 สาขาวิชาชีพเภสัชกร</h2>
+          <p className={styles.sectionSubtitle}>
+            วิชาชีพเภสัชกรมีความหลากหลายในการปฏิบัติงานเพื่อดูแลประชาชนในมิติต่าง ๆ
+          </p>
+        </div>
 
         {/* Carousel */}
         <div 
@@ -119,12 +121,13 @@ export default function PharmacyCarousel() {
                   onClick={() => goTo(i)}
                 >
                   <div className={styles.cardInner}>
+                    <div className={styles.cardShine} />
                     <Image
                       src={slide.image}
                       alt={slide.title}
                       width={340}
                       height={420}
-                      style={{ objectFit: "cover", width: "100%", height: "100%" }}
+                      className={styles.slideImage}
                       unoptimized={true}
                     />
                   </div>
@@ -141,7 +144,7 @@ export default function PharmacyCarousel() {
             onClick={goPrev}
             aria-label="Previous slide"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="15 18 9 12 15 6" />
             </svg>
           </button>
@@ -159,7 +162,7 @@ export default function PharmacyCarousel() {
             onClick={goNext}
             aria-label="Next slide"
           >
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <polyline points="9 18 15 12 9 6" />
             </svg>
           </button>

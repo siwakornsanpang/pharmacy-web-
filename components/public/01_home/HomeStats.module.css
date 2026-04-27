@@ -1,19 +1,47 @@
 /* === HomeStats Section === */
 .statsSection {
   background: white;
-  padding: 3rem 1.5rem;
+  padding: 6rem 1.5rem;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Background Decorations */
+.decorationBlur1, .decorationBlur2 {
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.05;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.decorationBlur1 {
+  top: -100px;
+  left: -100px;
+  background: #10b981;
+}
+
+.decorationBlur2 {
+  bottom: -100px;
+  right: -100px;
+  background: #059669;
 }
 
 .statsContainer {
-  max-width: 90%;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
+  position: relative;
+  z-index: 1;
 }
 
 .statsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 2rem;
+  gap: 3rem;
   text-align: center;
 }
 
@@ -22,36 +50,158 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding: 3rem 2rem;
+  border-radius: 2rem;
+  transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: transparent;
+  animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  opacity: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.statItem:nth-child(1) { animation-delay: 0.1s; }
+.statItem:nth-child(2) { animation-delay: 0.2s; }
+.statItem:nth-child(3) { animation-delay: 0.3s; }
+
+.statItem:hover {
+  transform: translateY(-15px);
+  background: rgba(249, 250, 251, 0.8);
+  box-shadow: 0 30px 60px rgba(16, 185, 129, 0.08), 0 10px 20px rgba(16, 185, 129, 0.03);
+}
+
+.statIconWrapper {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.statIconGlow {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 150%;
+  height: 150%;
+  background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.statItem:hover .statIconGlow {
+  opacity: 1;
+  animation: pulseGlow 2s infinite ease-in-out;
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 0.8; }
 }
 
 .statNumber {
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #111827;
-  margin: 0 0 0.5rem;
+  font-size: 4.5rem;
+  font-weight: 900;
+  margin: 0;
   line-height: 1;
+  background: linear-gradient(135deg, #111827 0%, #374151 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  position: relative;
+  z-index: 2;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.numberShine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  transition: 0.5s;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  z-index: 3;
+}
+
+.statItem:hover .numberShine {
+  animation: shineSweep 1.5s ease-in-out infinite;
+}
+
+@keyframes shineSweep {
+  0% { left: -100%; }
+  100% { left: 100%; }
+}
+
+.statItem:hover .statNumber {
+  transform: scale(1.1);
 }
 
 .statLabel {
-  font-size: 1.1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
   color: #4b5563;
   margin: 0;
+  letter-spacing: -0.01em;
+  position: relative;
+  z-index: 2;
+}
+
+.statDecoration {
+  position: absolute;
+  bottom: -20px;
+  right: -10px;
+  font-size: 8rem;
+  font-weight: 900;
+  color: #10b981;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
+  transition: all 0.5s ease;
+}
+
+.statItem:hover .statDecoration {
+  transform: translate(-10px, -10px) scale(1.1);
+  opacity: 0.06;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* === Responsive === */
 @media (max-width: 1024px) {
   .statNumber {
-    font-size: 3rem;
+    font-size: 3.5rem;
+  }
+  .statDecoration {
+    font-size: 6rem;
   }
 }
 
 @media (max-width: 768px) {
   .statsGrid {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 2rem;
   }
   
+  .statItem {
+    padding: 2.5rem 1.5rem;
+  }
+
   .statNumber {
-    font-size: 3.5rem;
+    font-size: 4rem;
   }
 }
