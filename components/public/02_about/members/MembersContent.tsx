@@ -110,7 +110,25 @@ const MembersContent = () => {
   const [selectedProvince, setSelectedProvince] = useState<ProvinceData | null>(null);
   const [hoveredData, setHoveredData] = useState<{ id: string; name: string; count: number; x: number; y: number } | null>(null);
   const [position, setPosition] = useState({ coordinates: [100.5, 13.2], zoom: 1 });
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  const allProvincesList = Object.keys(provinceMapping).map(key => ({
+    id: key,
+    name: provinceMapping[key]
+  })).sort((a, b) => a.name.localeCompare(b.name, 'th'));
+
+  // Close search dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
+        setIsSearchOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     fetch("/data/pharmacist-stats.json")
@@ -292,6 +310,58 @@ const MembersContent = () => {
 
       {/* Stats Section */}
       <div className={styles.statsSection}>
+        {/* Search Bar */}
+        <div className={`${styles.searchWrapper} ${styles.animateFadeInUp}`}>
+          <div className={styles.searchInputContainer}>
+            <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input
+              type="text"
+              placeholder="ค้นหาจังหวัด..."
+              className={styles.searchInput}
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setIsSearchOpen(true);
+              }}
+              onFocus={() => setIsSearchOpen(true)}
+            />
+            {searchQuery && (
+              <button className={styles.clearSearchBtn} onClick={() => { setSearchQuery(""); setIsSearchOpen(false); }}>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+              </button>
+            )}
+          </div>
+
+          {isSearchOpen && searchQuery && (
+            <div className={styles.searchResults}>
+              {allProvincesList
+                .filter(p => p.name.includes(searchQuery))
+                .map((p) => {
+                  const provinceStats = getProvinceData(p.id);
+                  return (
+                    <div 
+                      key={p.id} 
+                      className={styles.searchResultItem}
+                      onClick={() => {
+                        const thaiName = p.name;
+                        if (provinceStats) setSelectedProvince({ ...provinceStats, name: thaiName });
+                        else setSelectedProvince({ id: p.id, name: thaiName, count: 0 });
+                        setSearchQuery("");
+                        setIsSearchOpen(false);
+                      }}
+                    >
+                      <span className={styles.searchResultName}>{p.name}</span>
+                      <span className={styles.searchResultCount}>{provinceStats?.count.toLocaleString() || 0} คน</span>
+                    </div>
+                  );
+                })}
+              {allProvincesList.filter(p => p.name.includes(searchQuery)).length === 0 && (
+                <div className={styles.searchResultEmpty}>ไม่พบชื่อจังหวัดที่ค้นหา</div>
+              )}
+            </div>
+          )}
+        </div>
+
         <div className={`${styles.statsCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.1s' }}>
           <div className={styles.cardGlow} />
 
