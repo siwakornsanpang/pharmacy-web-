@@ -94,10 +94,10 @@ const provinceMapping: { [key: string]: string } = {
   "Yasothon": "ยโสธร"
 };
 
-// ชุดสี ขาว -> เขียว (Light to Dark)
+// ชุดสี ขาว -> เขียวมะกอก (Olive Palette)
 const colorScale = scaleLinear<string>()
   .domain([0, 1000, 3000, 7000, 15000])
-  .range(["#ffffff", "#dcfce7", "#4ade80", "#166534", "#064e3b"]);
+  .range(["#ffffff", "#f4f7dc", "#d9e28d", "#879127", "#737300"]);
 
 interface ProvinceData {
   id: string;
@@ -180,7 +180,7 @@ const MembersContent = () => {
       )}
 
       {/* Map Section */}
-      <div className={styles.mapWrapper}>
+      <div className={`${styles.mapWrapper} ${styles.animateFadeInUp}`}>
         {/* Zoom Controls Overlay */}
         <div className={styles.zoomControls}>
           <button onClick={handleZoomIn} className={styles.zoomButton} title="ซูมเข้า">
@@ -200,7 +200,11 @@ const MembersContent = () => {
             scale: 3500,
             center: [100.5, 13.2],
           }}
-          style={{ width: "100%", height: "100%" }}
+          style={{ 
+            width: "100%", 
+            height: "100%",
+            filter: "drop-shadow(0px 15px 25px rgba(0, 0, 0, 0.1)) drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.05))"
+          }}
         >
           <ZoomableGroup
             zoom={position.zoom}
@@ -233,24 +237,26 @@ const MembersContent = () => {
                         default: {
                           fill: provinceStats ? colorScale(count) : "#ffffff",
                           outline: "none",
-                          stroke: isHovered || isSelected ? "#facc15" : "#64748b",
-                          strokeWidth: isSelected ? 2 : (isHovered ? 1.5 : 0.2),
-                          transition: "all 300ms ease",
+                          stroke: isHovered || isSelected ? "#737300" : "#94a3b8",
+                          strokeWidth: 0.5,
+                          transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
                           zIndex: isSelected ? 10 : 1
                         },
                         hover: {
-                          fill: provinceStats ? colorScale(count) : "#f1f5f9",
-                          filter: "brightness(0.9)",
+                          fill: provinceStats ? colorScale(count) : "#f8fafc",
+                          filter: "brightness(0.95) drop-shadow(0 0 6px rgba(115, 115, 0, 0.4))",
                           outline: "none",
-                          stroke: "#facc15",
-                          strokeWidth: 1.5,
-                          cursor: "pointer"
+                          stroke: "#737300",
+                          strokeWidth: 0.5,
+                          cursor: "pointer",
+                          transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
+                          zIndex: 20
                         },
                         pressed: {
-                          fill: "#166534",
+                          fill: "#879127",
                           outline: "none",
                           stroke: "#ffffff",
-                          strokeWidth: 1,
+                          strokeWidth: 0.5,
                         },
                       }}
                     />
@@ -267,10 +273,10 @@ const MembersContent = () => {
           <div className={styles.legendList}>
             {[
               { label: "0 - 1,000", color: "#ffffff", desc: "น้อย" },
-              { label: "1,001 - 3,000", color: "#dcfce7", desc: "ปกติ" },
-              { label: "3,001 - 7,000", color: "#4ade80", desc: "ปานกลาง" },
-              { label: "7,001 - 15,000", color: "#166534", desc: "มาก" },
-              { label: "15,001 ขึ้นไป", color: "#064e3b", desc: "หนาแน่นสูง" },
+              { label: "1,001 - 3,000", color: "#f4f7dc", desc: "ปกติ" },
+              { label: "3,001 - 7,000", color: "#d9e28d", desc: "ปานกลาง" },
+              { label: "7,001 - 15,000", color: "#879127", desc: "มาก" },
+              { label: "15,001 ขึ้นไป", color: "#737300", desc: "หนาแน่นสูง" },
             ].map((item) => (
               <div key={item.label} className={styles.legendItem}>
                 <div className={styles.legendColorBox} style={{ backgroundColor: item.color }} />
@@ -286,7 +292,7 @@ const MembersContent = () => {
 
       {/* Stats Section */}
       <div className={styles.statsSection}>
-        <div className={styles.statsCard}>
+        <div className={`${styles.statsCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.1s' }}>
           <div className={styles.cardGlow} />
 
           <h4 className={styles.statsHeader}>ข้อมูลรายจังหวัด</h4>
@@ -324,10 +330,10 @@ const MembersContent = () => {
         </div>
 
         {/* Top Ranking list */}
-        <div className={styles.rankingCard}>
+        <div className={`${styles.rankingCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.2s' }}>
           <div className={styles.rankingHeader}>
             <div className={styles.rankingTitleWrapper}>
-              <div className={styles.rankingIndicator} />
+              <div className={`${styles.rankingIndicator} ${styles.animatePulseGlow}`} />
               <div className={styles.rankingTitleMain}>
                 <div className={styles.rankingTitleBig}>5 อันดับ</div>
                 <div className={styles.rankingTitleSub}>จังหวัดที่มีเภสัชกรมากที่สุด</div>

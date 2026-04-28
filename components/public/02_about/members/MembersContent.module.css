@@ -59,7 +59,7 @@
 }
 
 .tooltipNumber {
-    color: #10b981;
+    color: #737300;
     font-weight: 900;
     font-size: 1.5rem;
 }
@@ -74,7 +74,8 @@
 .mapWrapper {
     flex: 1.5;
     position: relative;
-    background-color: #ffffff;
+    background-color: #f1f5f9;
+    /* Light ocean/slate blue background */
     border-radius: 2.5rem;
     overflow: hidden;
     min-height: 750px;
@@ -110,9 +111,9 @@
 }
 
 .zoomButton:hover {
-    background-color: #f8fafc;
-    color: #10b981;
-    /* Green accent on hover */
+    background-color: #fcfdf8;
+    color: #737300;
+    /* Olive accent on hover */
     transform: translateY(-2px);
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
@@ -246,7 +247,7 @@
 .statsNumber {
     font-size: 5.5rem;
     font-weight: 900;
-    color: #064e3b;
+    color: #464a1e;
     line-height: 1;
     letter-spacing: -0.04em;
 }
@@ -294,8 +295,8 @@
 .statsProgressStatus {
     font-size: 11px;
     font-weight: 800;
-    color: #064e3b;
-    background-color: #dcfce7;
+    color: #464a1e;
+    background-color: #f4f7dc;
     padding: 0.375rem 1rem;
     border-radius: 9999px;
     text-transform: uppercase;
@@ -313,7 +314,7 @@
 .progressFill {
     height: 100%;
     border-radius: 9999px;
-    background: linear-gradient(90deg, #10b981, #064e3b);
+    background: linear-gradient(90deg, #aeb93a, #737300);
     transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
@@ -341,7 +342,7 @@
     width: 0.5rem;
     height: 3rem;
     /* Taller to match two lines */
-    background: linear-gradient(to bottom, #10b981, #064e3b);
+    background: linear-gradient(to bottom, #aeb93a, #737300);
     border-radius: 9999px;
 }
 
@@ -387,10 +388,10 @@
 }
 
 .rankingItemActive {
-    background-color: #f0fdf4;
-    border-color: #bbf7d0;
+    background-color: #fbfcf1;
+    border-color: #e9efb9;
     transform: scale(1.02);
-    box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.1);
+    box-shadow: 0 10px 15px -3px rgba(115, 115, 0, 0.1);
 }
 
 .rankingItemDefault {
@@ -400,7 +401,7 @@
 
 .rankingItemDefault:hover {
     background-color: #ffffff;
-    border-color: #dcfce7;
+    border-color: #f4f7dc;
     transform: scale(1.02);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
@@ -423,7 +424,7 @@
 }
 
 .rankingIndexActive {
-    color: #10b981;
+    color: #879127;
 }
 
 .rankingName {
@@ -437,26 +438,26 @@
 }
 
 .rankingNameActive {
-    color: #064e3b;
+    color: #464a1e;
 }
 
 .rankingCountBox {
     padding: 0.5rem 1.25rem;
     border-radius: 9999px;
-    background-color: #064e3b;
-    /* Default Dark Green for all */
+    background-color: #464a1e;
+    /* Default Dark Olive for all */
     min-width: 90px;
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 4px 6px -1px rgba(6, 78, 59, 0.2);
+    box-shadow: 0 4px 6px -1px rgba(70, 74, 30, 0.2);
     transition: all 0.3s ease;
 }
 
 /* Apply the vibrant glow to ANY active item's count box */
 .rankingItemActive .rankingCountBox {
-    background: linear-gradient(135deg, #34d399, #059669);
-    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, #aeb93a, #737300);
+    box-shadow: 0 10px 20px -5px rgba(115, 115, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.2);
     transform: translateY(-2px);
 }
@@ -469,4 +470,36 @@
 
 .rankingItemActive .rankingCount {
     color: #ffffff;
+}
+
+/* === Animations === */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.animateFadeInUp {
+    animation: fadeInUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 0 0 0 rgba(115, 115, 0, 0.4);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(115, 115, 0, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(115, 115, 0, 0);
+    }
+}
+
+.animatePulseGlow {
+    animation: pulseGlow 2s infinite;
 }
