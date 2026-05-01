@@ -1,0 +1,186 @@
+.policyContainer {
+    width: 100%;
+    margin-top: 1.5rem;
+    overflow-x: auto;
+    background: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.policyTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    min-width: 1000px;
+    font-family: inherit;
+}
+
+.policyTable th {
+    background: linear-gradient(180deg, #f9fafb 0%, #f3f4f6 100%);
+    padding: 1.25rem 1rem;
+    text-align: center;
+    font-weight: 700;
+    color: #374151;
+    border-bottom: 1px solid #e5e7eb;
+    text-transform: uppercase;
+    font-size: 1rem; /* Increased from 0.85rem */
+    letter-spacing: 0.025em;
+}
+
+.policyTable th:first-child {
+    text-align: left;
+    width: 35%;
+    padding-left: 2rem;
+    border-top-left-radius: 1rem;
+}
+
+.policyTable th:last-child {
+    border-top-right-radius: 1rem;
+}
+
+.policyTable td {
+    padding: 1.5rem 1rem;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    transition: background-color 0.2s;
+}
+
+.categoryRow {
+    background-color: #f8fafc;
+}
+
+.categoryTitle {
+    font-weight: 800;
+    color: #1e293b;
+    font-size: 1.25rem; /* Increased from 1.15rem */
+    padding: 1.5rem 2rem !important;
+    border-bottom: 2px solid #e2e8f0 !important;
+}
+
+.projectName {
+    padding-left: 3rem !important;
+    color: #475569;
+    font-weight: 500;
+    position: relative;
+    line-height: 1.7;
+    font-size: 1.1rem; /* Added font size */
+}
+
+.projectName::before {
+    content: "";
+    position: absolute;
+    left: 1.75rem;
+    top: 2rem; /* Adjusted to align with the first line */
+    width: 8px;
+    height: 8px;
+    background-color: #334155; /* Dark color for bullet point */
+    border-radius: 50%;
+    box-shadow: 0 0 10px rgba(51, 65, 85, 0.2);
+}
+
+.summaryCell {
+    text-align: center;
+}
+
+.downloadButton {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6rem 1.25rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    color: #64748b;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.downloadButton:hover {
+    background: #ffffff;
+    border-color: #10b981;
+    color: #10b981;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+.statusCell {
+    text-align: center;
+    width: 10%;
+}
+
+.progressBarContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.progressStep {
+    width: 48px;
+    height: 10px;
+    background-color: #f1f5f9;
+    border-radius: 9999px;
+    position: relative;
+    overflow: hidden;
+}
+
+.progressStepActiveGreen {
+    background-color: #10b981;
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
+}
+
+.progressStepActiveYellow {
+    background-color: #f59e0b; /* Yellow/Amber for delayed */
+    box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
+}
+
+.progressStepActiveRed {
+    background-color: #ef4444; /* Red for terminated */
+    box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
+}
+
+.progressStepActiveGreen::after,
+.progressStepActiveYellow::after,
+.progressStepActiveRed::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    animation: shine 2s infinite;
+}
+
+@keyframes shine {
+    100% {
+        left: 100%;
+    }
+}
+
+tr:hover td {
+    background-color: #fcfdfd;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .policyTable th, .policyTable td {
+        padding: 1rem 0.75rem;
+        font-size: 0.875rem;
+    }
+    
+    .categoryTitle {
+        padding: 1rem 1.25rem !important;
+    }
+    
+    .projectName {
+        padding-left: 2.25rem !important;
+    }
+    
+    .projectName::before {
+        left: 1rem;
+    }
+}
