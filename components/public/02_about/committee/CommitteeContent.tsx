@@ -22,7 +22,7 @@ type CouncilMember = {
     background?: string;
 };
 
-const API_URL = "https://pharmacy-api-6w5d.onrender.com/council";
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export default function CommitteeContent() {
     const [members, setMembers] = useState<CouncilMember[]>([]);
@@ -36,7 +36,7 @@ export default function CommitteeContent() {
                 setLoading(true);
                 setError("");
 
-                const res = await fetch(API_URL, {
+                const res = await fetch(API_URL + "/council", {
                     cache: "no-store",
                 });
 
