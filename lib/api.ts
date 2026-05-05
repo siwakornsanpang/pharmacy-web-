@@ -33,6 +33,24 @@ export interface News {
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
 
+// Helper function for fetch with timeout
+async function fetchWithTimeout(url: string, options: any = {}, timeout = 15000) {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+
+    try {
+        const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+        });
+        clearTimeout(id);
+        return response;
+    } catch (error) {
+        clearTimeout(id);
+        throw error;
+    }
+}
+
 export async function getWebSettings(): Promise<WebSettings> {
     if (!API_BASE_URL) {
         console.error('NEXT_PUBLIC_API_URL is not defined');
@@ -43,7 +61,7 @@ export async function getWebSettings(): Promise<WebSettings> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/web-settings`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/web-settings`, {
             next: { revalidate: 60 }, // Cache for 1 minute
         });
 
@@ -68,7 +86,7 @@ export async function getNews(): Promise<News[]> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/news`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/news`, {
             next: { revalidate: 60 }, // Cache for 1 minute
         });
 
@@ -90,7 +108,7 @@ export async function getNewsById(id: string): Promise<News | null> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/news/${id}`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/news/${id}`, {
             next: { revalidate: 60 },
         });
 
@@ -133,7 +151,7 @@ export async function getHomeContent(): Promise<HomeContent> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/home-content`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/home-content`, {
             next: { revalidate: 60 },
         });
 
@@ -155,7 +173,7 @@ export async function getPharmacistHomeContent(): Promise<PharmacistHomeContent>
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/pharmacist-home-content`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/pharmacist-home-content`, {
             next: { revalidate: 60 },
         });
 
@@ -194,7 +212,7 @@ export async function getAgencies(): Promise<Agency[]> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/agencies`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/agencies`, {
             next: { revalidate: 60 },
         });
 
@@ -230,7 +248,7 @@ export async function getLawsByCategory(category: string): Promise<LawItem[]> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/laws/${category}`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/laws/${category}`, {
             next: { revalidate: 60 },
         });
 
@@ -269,7 +287,7 @@ export async function getServices(): Promise<ServiceItem[]> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/services`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/services`, {
             next: { revalidate: 60 },
         });
 
@@ -291,7 +309,7 @@ export async function getPopularServices(): Promise<ServiceItem[]> {
     }
 
     try {
-        const res = await fetch(`${API_BASE_URL}/services/popular`, {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/services/popular`, {
             next: { revalidate: 60 },
         });
 
