@@ -15,7 +15,7 @@ type CouncilMember = {
     prefix: string;
     name: string;
     position: string;
-    type: string;
+    type?: string;
     imageUrl: string;
     originalImageUrl?: string;
     order: number;
@@ -28,16 +28,38 @@ export default function CommitteeContent() {
     const [members, setMembers] = useState<CouncilMember[]>([]);
     const [selected, setSelected] = useState<CouncilMember | null>(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
 
     useEffect(() => {
         async function getCouncil() {
             try {
-                const res = await fetch(API_URL, { cache: "no-store" });
-                const data: CouncilMember[] = await res.json();
+                setLoading(true);
+                setError("");
 
-                setMembers(data);
+                const res = await fetch(API_URL, {
+                    cache: "no-store",
+                });
+
+                if (!res.ok) {
+                    throw new Error(`API error: ${res.status}`);
+                }
+
+                const json = await res.json();
+
+                const data: CouncilMember[] = Array.isArray(json)
+                    ? json
+                    : Array.isArray(json.data)
+                        ? json.data
+                        : [];
+
+                const sortedData = data
+                    .filter((item) => item?.id && item?.imageUrl)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0));
+
+                setMembers(sortedData);
             } catch (error) {
                 console.error("Failed to fetch council:", error);
+                setError("ไม่สามารถโหลดข้อมูลกรรมการได้");
             } finally {
                 setLoading(false);
             }
@@ -49,23 +71,23 @@ export default function CommitteeContent() {
     const { appointed, elected } = useMemo(() => {
         const raw = [...members];
 
-        const appointedByType = raw
-            .filter((item) => item.type?.trim().toLowerCase() === "appointed")
-            .sort((a, b) => a.order - b.order);
+        const appointedByType = raw.filter((item) => {
+            const type = item.type?.trim().toLowerCase();
+            return type === "appointed" || type === "appoint";
+        });
 
-        const electedByType = raw
-            .filter((item) => item.type?.trim().toLowerCase() === "elected")
-            .sort((a, b) => a.order - b.order);
+        const electedByType = raw.filter((item) => {
+            const type = item.type?.trim().toLowerCase();
+            return type === "elected" || type === "election";
+        });
 
-        // ใช้ type เป็นหลัก
-        if (appointedByType.length > 0 && electedByType.length > 0) {
+        if (appointedByType.length > 0 || electedByType.length > 0) {
             return {
                 appointed: appointedByType.slice(0, 12),
                 elected: electedByType.slice(0, 12),
             };
         }
 
-        // fallback: ถ้า type ไม่ครบ ให้แยกตามลำดับข้อมูลจาก API
         return {
             appointed: raw.slice(0, 12),
             elected: raw.slice(12, 24),
@@ -76,6 +98,14 @@ export default function CommitteeContent() {
         return (
             <section className={styles.wrapper}>
                 <div className={styles.loading}>กำลังโหลดข้อมูลกรรมการ...</div>
+            </section>
+        );
+    }
+
+    if (error) {
+        return (
+            <section className={styles.wrapper}>
+                <div className={styles.loading}>{error}</div>
             </section>
         );
     }
@@ -117,7 +147,9 @@ export default function CommitteeContent() {
 
                         <div className={styles.modalContent}>
                             <span className={styles.modalBadge}>
-                                {selected.type === "appointed" ? "แต่งตั้งสภา" : "เลือกตั้งสภา"}
+                                {appointed.some((item) => item.id === selected.id)
+                                    ? "แต่งตั้งสภา"
+                                    : "เลือกตั้งสภา"}
                             </span>
 
                             <h3>
@@ -197,13 +229,13 @@ function CommitteeCarousel({
                 }}
                 className={styles.swiper}
             >
-                {members.map((member) => (
+                {members.map((member, index) => (
                     <SwiperSlide
-                        key={`${typeLabel}-${member.id}`}
+                        key={`${typeLabel}-${member.id}-${index}`}
                         className={styles.slide}
                     >
                         <article className={styles.card}>
-                            <span className={styles.order}>#{member.order}</span>
+                            <span className={styles.order}>#{member.order || index + 1}</span>
 
                             <div className={styles.imageBox}>
                                 <img
@@ -221,7 +253,6 @@ function CommitteeCarousel({
                                 </h4>
 
                                 <p className={styles.position}>{member.position}</p>
-
 
                                 <button
                                     type="button"
