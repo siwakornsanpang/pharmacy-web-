@@ -22,21 +22,22 @@ type CouncilMember = {
     background?: string;
 };
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_URL =
+    process.env.NEXT_PUBLIC_API_URL || "https://pharmacy-api-6w5d.onrender.com";
 
 export default function CommitteeContent() {
     const [members, setMembers] = useState<CouncilMember[]>([]);
     const [selected, setSelected] = useState<CouncilMember | null>(null);
     const [loading, setLoading] = useState(true);
-    const [error, setError] = useState("");
 
     useEffect(() => {
         async function getCouncil() {
             try {
                 setLoading(true);
-                setError("");
 
-                const res = await fetch(API_URL + "/council", {
+                const cleanApiUrl = API_URL.replace(/\/$/, "");
+
+                const res = await fetch(`${cleanApiUrl}/council`, {
                     cache: "no-store",
                 });
 
@@ -59,7 +60,7 @@ export default function CommitteeContent() {
                 setMembers(sortedData);
             } catch (error) {
                 console.error("Failed to fetch council:", error);
-                setError("ไม่สามารถโหลดข้อมูลกรรมการได้");
+                setMembers([]);
             } finally {
                 setLoading(false);
             }
@@ -102,12 +103,8 @@ export default function CommitteeContent() {
         );
     }
 
-    if (error) {
-        return (
-            <section className={styles.wrapper}>
-                <div className={styles.loading}>{error}</div>
-            </section>
-        );
+    if (members.length === 0) {
+        return null;
     }
 
     return (
