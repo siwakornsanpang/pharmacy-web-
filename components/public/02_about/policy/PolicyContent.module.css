@@ -6,13 +6,14 @@
     border-radius: 1rem;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
 }
 
 .policyTable {
     width: 100%;
-    border-collapse: separate;
-    border-spacing: 0;
-    min-width: 1000px;
+    border-collapse: collapse; /* Merges borders for perfect connection */
+    min-width: 1100px;
+    table-layout: fixed; /* Locked widths for better scaling */
     font-family: inherit;
 }
 
@@ -24,92 +25,105 @@
     color: #374151;
     border-bottom: 1px solid #e5e7eb;
     text-transform: uppercase;
-    font-size: 1rem; /* Increased from 0.85rem */
+    font-size: 0.95rem;
     letter-spacing: 0.025em;
 }
 
 .policyTable th:first-child {
     text-align: left;
-    width: 35%;
     padding-left: 2rem;
-    border-top-left-radius: 1rem;
-}
-
-.policyTable th:last-child {
-    border-top-right-radius: 1rem;
 }
 
 .policyTable td {
     padding: 1.5rem 1rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid #f1f5f9;
     vertical-align: middle;
     transition: background-color 0.2s;
 }
 
-.categoryRow {
-    background-color: #f8fafc;
+/* Vertical Separators */
+.policyColumn,
+.projectColumn,
+.summaryColumn {
+    border-right: 1px solid #e2e8f0;
 }
 
-.categoryTitle {
+.separatorColumn {
+    border-right: 2px solid #e2e8f0 !important;
+}
+
+.groupStartRow td {
+    border-top: 2px solid #e2e8f0;
+}
+
+.categoryCell {
+    background-color: #f8fafc;
+    padding: 1.5rem 2rem !important;
+    vertical-align: top !important;
+}
+
+.categoryTitleText {
     font-weight: 800;
     color: #1e293b;
-    font-size: 1.25rem; /* Increased from 1.15rem */
-    padding: 1.5rem 2rem !important;
-    border-bottom: 2px solid #e2e8f0 !important;
+    font-size: 1.15rem;
+    line-height: 1.4;
+    position: sticky;
+    top: 2rem;
 }
 
 .projectName {
-    padding-left: 3rem !important;
+    padding: 1.5rem 1.5rem !important;
     color: #475569;
     font-weight: 500;
-    position: relative;
     line-height: 1.7;
-    font-size: 1.1rem; /* Added font size */
+    font-size: 1.1rem;
+    display: flex;
+    align-items: flex-start;
 }
 
 .projectName::before {
     content: "";
-    position: absolute;
-    left: 1.75rem;
-    top: 2.35rem; /* Adjusted to align with the center of the first line */
+    flex-shrink: 0;
     width: 8px;
     height: 8px;
-    background-color: #334155; /* Dark color for bullet point */
+    background-color: #334155;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(51, 65, 85, 0.2);
+    margin-right: 1rem;
+    margin-top: 0.65rem; /* Precision alignment with first line */
+    box-shadow: 0 0 10px rgba(51, 65, 85, 0.1);
 }
 
 .summaryCell {
     text-align: center;
+    padding: 1rem !important;
 }
 
 .downloadButton {
     display: inline-flex;
     align-items: center;
     padding: 0.6rem 1.25rem;
-    background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+    background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 0.5rem;
     color: #64748b;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s;
     text-decoration: none;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    white-space: nowrap;
 }
 
 .downloadButton:hover {
-    background: #ffffff;
     border-color: #2563eb;
     color: #2563eb;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
 }
 
 .statusCell {
     text-align: center;
-    width: 10%;
+    width: 90px;
 }
 
 .progressBarContainer {
@@ -119,7 +133,7 @@
 }
 
 .progressStep {
-    width: 48px;
+    width: 44px;
     height: 10px;
     background-color: #f1f5f9;
     border-radius: 9999px;
@@ -127,20 +141,9 @@
     overflow: hidden;
 }
 
-.progressStepActiveGreen {
-    background-color: #10b981;
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.3);
-}
-
-.progressStepActiveYellow {
-    background-color: #f59e0b; /* Yellow/Amber for delayed */
-    box-shadow: 0 0 12px rgba(245, 158, 11, 0.3);
-}
-
-.progressStepActiveRed {
-    background-color: #ef4444; /* Red for terminated */
-    box-shadow: 0 0 12px rgba(239, 68, 68, 0.3);
-}
+.progressStepActiveGreen { background-color: #10b981; }
+.progressStepActiveYellow { background-color: #f59e0b; }
+.progressStepActiveRed { background-color: #ef4444; }
 
 .progressStepActiveGreen::after,
 .progressStepActiveYellow::after,
@@ -156,32 +159,104 @@
 }
 
 @keyframes shine {
-    100% {
-        left: 100%;
-    }
+    100% { left: 100%; }
 }
 
 tr:hover td {
     background-color: #fcfdfd;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .policyTable th, .policyTable td {
-        padding: 1rem 0.75rem;
-        font-size: 0.875rem;
-    }
-    
-    .categoryTitle {
-        padding: 1rem 1.25rem !important;
-    }
-    
-    .projectName {
-        padding-left: 2.25rem !important;
-    }
-    
-    .projectName::before {
-        left: 1rem;
-        top: 1.65rem; /* Adjusted for smaller padding on mobile */
-    }
+/* --- Responsive Layout --- */
+.mobileWrapper { display: none; }
+.desktopWrapper { display: block; }
+
+@media (max-width: 1024px) {
+    .desktopWrapper { display: none; }
+    .mobileWrapper { display: block; }
 }
+
+/* --- Mobile Card Styles --- */
+.categoryCard {
+    margin-bottom: 2rem;
+}
+
+.categoryCardTitle {
+    background: #f8fafc;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+    font-weight: 800;
+    color: #1e293b;
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    border-left: 5px solid #334155;
+}
+
+.projectList {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.projectCard {
+    background: #ffffff;
+    border: 1px solid #eef2f6;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+}
+
+.projectCardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.projectCardName {
+    font-weight: 600;
+    color: #475569;
+    line-height: 1.6;
+    font-size: 1.05rem;
+}
+
+.mobileSummaryBtn {
+    flex-shrink: 0;
+    padding: 0.5rem 1rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.5rem;
+    color: #2563eb;
+    font-size: 0.875rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.mobileStatusWrapper {
+    background: #f9fafb;
+    padding: 1.25rem;
+    border-radius: 0.75rem;
+}
+
+.mobileStatusLabel {
+    font-size: 0.9rem;
+    color: #64748b;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.mobileProgressBar {
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.mobileProgressFill {
+    height: 100%;
+    border-radius: 999px;
+}
+
+.bgGreen { background-color: #10b981; }
+.bgYellow { background-color: #f59e0b; }
+.bgRed { background-color: #ef4444; }
