@@ -324,3 +324,68 @@ export async function getPopularServices(): Promise<ServiceItem[]> {
     }
 }
 
+
+// ===== Policies =====
+
+export interface PolicyProject {
+    id: number;
+    categoryId: number;
+    name: string;
+    summaryPdfUrl: string | null;
+    status: 'planned' | 'ongoing' | 'completed' | 'delayed' | 'terminated';
+    order: number;
+}
+
+export interface PolicyCategory {
+    id: number;
+    title: string;
+    description: string | null;
+    summaryPdfUrl: string | null;
+    order: number;
+    projectCount: number;
+    projects?: PolicyProject[];
+}
+
+export async function getPolicyCategories(): Promise<PolicyCategory[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/policy-categories`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch policy categories: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching policy categories:', error);
+        return [];
+    }
+}
+
+export async function getPolicyProjects(categoryId: number): Promise<PolicyProject[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/policy-projects?categoryId=${categoryId}`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch policy projects: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error(`Error fetching policy projects for category ${categoryId}:`, error);
+        return [];
+    }
+}
