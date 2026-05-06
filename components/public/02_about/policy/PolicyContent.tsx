@@ -13,19 +13,22 @@ const STATUS_LABELS = {
     terminated: "ยุติโครงการ",
 };
 
-export default function PolicyContent() {
-    const [policyData, setPolicyData] = useState<PolicyCategory[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
+export default function PolicyContent({ initialData = [] }: { initialData?: PolicyCategory[] }) {
+    const [policyData, setPolicyData] = useState<PolicyCategory[]>(initialData);
+    const [isLoading, setIsLoading] = useState(initialData.length === 0);
 
     useEffect(() => {
+        // Only fetch if initialData was empty (fallback)
+        if (initialData.length > 0) {
+            setIsLoading(false);
+            return;
+        }
+
         const fetchData = async () => {
             try {
                 const categories = await getPolicyCategories();
-
-                // Sort categories by order
                 const sortedCategories = categories.sort((a, b) => a.order - b.order);
 
-                // Fetch projects for each category
                 const dataWithProjects = await Promise.all(
                     sortedCategories.map(async (cat) => {
                         const projects = await getPolicyProjects(cat.id);
@@ -45,7 +48,7 @@ export default function PolicyContent() {
         };
 
         fetchData();
-    }, []);
+    }, [initialData]);
 
     const renderStatus = (status: string, targetStatus: string) => {
         const isActive = status === targetStatus;

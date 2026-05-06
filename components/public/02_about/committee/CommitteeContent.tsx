@@ -25,12 +25,17 @@ type CouncilMember = {
 const API_URL =
     process.env.NEXT_PUBLIC_API_URL || "https://pharmacy-api-6w5d.onrender.com";
 
-export default function CommitteeContent() {
-    const [members, setMembers] = useState<CouncilMember[]>([]);
+export default function CommitteeContent({ initialMembers = [] }: { initialMembers?: CouncilMember[] }) {
+    const [members, setMembers] = useState<CouncilMember[]>(initialMembers);
     const [selected, setSelected] = useState<CouncilMember | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(initialMembers.length === 0);
 
     useEffect(() => {
+        if (initialMembers.length > 0) {
+            setLoading(false);
+            return;
+        }
+
         async function getCouncil() {
             try {
                 setLoading(true);
