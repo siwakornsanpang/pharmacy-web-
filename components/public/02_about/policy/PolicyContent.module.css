@@ -24,6 +24,7 @@
     font-weight: 700;
     color: #374151;
     border: 1px solid #e2e8f0;
+    border-top: none; /* Let container handle top border */
     text-transform: uppercase;
     font-size: 0.9rem;
     letter-spacing: 0.025em;
@@ -44,6 +45,10 @@
     border: 1px solid #e2e8f0;
     vertical-align: middle;
     transition: background-color 0.2s;
+}
+
+.policyTable tr:last-child td {
+    border-bottom: none; /* Let container handle bottom border */
 }
 
 .policyTable tr td:first-child {
@@ -111,9 +116,9 @@
     align-items: center;
     padding: 0.5rem 0.75rem;
     background: #ffffff;
-    border: 1px solid #3b82f6;
+    border: 1px solid #737300;
     border-radius: 0.4rem;
-    color: #3b82f6;
+    color: #737300;
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
@@ -123,10 +128,10 @@
 }
 
 .downloadButton:hover {
-    border-color: #2563eb;
-    color: #2563eb;
+    background: #737300;
+    color: #ffffff;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
+    box-shadow: 0 4px 12px rgba(115, 115, 0, 0.2);
 }
 
 .noSummaryText {
@@ -155,7 +160,7 @@
     overflow: hidden;
 }
 
-.progressStepActiveGray { background-color: #cbd5e1; }
+.progressStepActiveGray { background-color: #64748b; }
 .progressStepActiveBlue { background-color: #3b82f6; }
 .progressStepActiveGreen { background-color: #10b981; }
 .progressStepActiveYellow { background-color: #f59e0b; }
@@ -275,7 +280,7 @@ tr:hover td {
     border-radius: 999px;
 }
 
-.bgGray { background-color: #cbd5e1; }
+.bgGray { background-color: #64748b; }
 .bgBlue { background-color: #3b82f6; }
 .bgGreen { background-color: #10b981; }
 .bgYellow { background-color: #f59e0b; }

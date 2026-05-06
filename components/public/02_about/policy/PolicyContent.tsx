@@ -21,7 +21,7 @@ export default function PolicyContent() {
         const fetchData = async () => {
             try {
                 const categories = await getPolicyCategories();
-                
+
                 // Sort categories by order
                 const sortedCategories = categories.sort((a, b) => a.order - b.order);
 
@@ -50,7 +50,7 @@ export default function PolicyContent() {
     const renderStatus = (status: string, targetStatus: string) => {
         const isActive = status === targetStatus;
         let activeClass = styles.progressStepActiveGreen;
-        
+
         if (targetStatus === "planned") activeClass = styles.progressStepActiveGray;
         if (targetStatus === "ongoing") activeClass = styles.progressStepActiveBlue;
         if (targetStatus === "delayed") activeClass = styles.progressStepActiveYellow;
@@ -105,7 +105,7 @@ export default function PolicyContent() {
                                 <th className={styles.projectColumn}>โครงการ</th>
                                 <th className={styles.summaryColumn}>สรุป</th>
                                 <th className={styles.noBorderRight}>เริ่มวางแผน</th>
-                                <th className={styles.noBorderRight}>กำลังดำเนินการ</th>
+                                <th className={styles.noBorderRight}>กำลัง ดำเนินการ</th>
                                 <th>เสร็จโครงการ</th>
                                 <th className={styles.noBorderRight}>ชะลอโครงการ</th>
                                 <th>ยุติโครงการ</th>
@@ -117,8 +117,8 @@ export default function PolicyContent() {
                                     {(category.projects || []).map((project, index) => (
                                         <tr key={project.id} className={index === 0 ? styles.groupStartRow : ""}>
                                             {index === 0 && (
-                                                <td 
-                                                    rowSpan={(category.projects || []).length} 
+                                                <td
+                                                    rowSpan={(category.projects || []).length}
                                                     className={`${styles.categoryCell} ${styles.policyColumn}`}
                                                 >
                                                     <div className={styles.categoryTitleText}>{category.title}</div>
@@ -182,20 +182,19 @@ export default function PolicyContent() {
                                     <div className={styles.mobileStatusWrapper}>
                                         <div className={styles.mobileStatusLabel}>สถานะ: {STATUS_LABELS[project.status as keyof typeof STATUS_LABELS]}</div>
                                         <div className={styles.mobileProgressBar}>
-                                            <div 
-                                                className={`${styles.mobileProgressFill} ${
-                                                    project.status === 'planned' ? styles.bgGray :
+                                            <div
+                                                className={`${styles.mobileProgressFill} ${project.status === 'planned' ? styles.bgGray :
                                                     project.status === 'ongoing' ? styles.bgBlue :
-                                                    project.status === 'delayed' ? styles.bgYellow : 
-                                                    project.status === 'terminated' ? styles.bgRed : 
-                                                    styles.bgGreen
-                                                }`} 
-                                                style={{ 
-                                                    width: 
-                                                        project.status === 'planned' ? '20%' : 
-                                                        project.status === 'ongoing' ? '50%' : 
-                                                        '100%' 
-                                                }} 
+                                                        project.status === 'delayed' ? styles.bgYellow :
+                                                            project.status === 'terminated' ? styles.bgRed :
+                                                                styles.bgGreen
+                                                    }`}
+                                                style={{
+                                                    width:
+                                                        project.status === 'planned' ? '20%' :
+                                                            project.status === 'ongoing' ? '50%' :
+                                                                '100%'
+                                                }}
                                             />
                                         </div>
                                     </div>
