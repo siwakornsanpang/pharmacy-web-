@@ -11,6 +11,7 @@ import { scaleLinear } from "d3-scale";
 
 import styles from "./MembersContent.module.css";
 
+// URL สำหรับโหลดไฟล์ GeoJSON ของแผนที่ประเทศไทย
 const geoUrl = "/data/thailand.json";
 
 // Mapping ชื่อจังหวัดภาษาอังกฤษ -> ภาษาไทย (ครบ 77 จังหวัด)
@@ -96,30 +97,42 @@ const provinceMapping: { [key: string]: string } = {
 
 // ชุดสี ขาว -> เขียวมะกอก (Olive Palette)
 const colorScale = scaleLinear<string>()
-  .domain([0, 1000, 3000, 7000, 15000])
+  .domain([0, 200, 500, 1000, 3000])
   .range(["#ffffff", "#f4f7dc", "#d9e28d", "#879127", "#737300"]);
 
+// โครงสร้างข้อมูลจังหวัด
 interface ProvinceData {
-  id: string;
-  name: string;
-  count: number;
+  id: string;   // ชื่อภาษาอังกฤษ (ใช้เป็น ID สำหรับแผนที่)
+  name: string; // ชื่อภาษาไทย
+  count: number; // จำนวนเภสัชกร
 }
 
 const MembersContent = () => {
-  const [data, setData] = useState<ProvinceData[]>([]);
-  const [selectedProvince, setSelectedProvince] = useState<ProvinceData | null>(null);
-  const [hoveredData, setHoveredData] = useState<{ id: string; name: string; count: number; x: number; y: number } | null>(null);
-  const [position, setPosition] = useState({ coordinates: [100.5, 13.2], zoom: 1 });
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  // สร้างสถานะ (States) สำหรับเก็บข้อมูลต่างๆ
+  const [data, setData] = useState<ProvinceData[]>([]); // ข้อมูลสถิติทุกจังหวัด
+  const [selectedProvince, setSelectedProvince] = useState<ProvinceData | null>(null); // จังหวัดที่กำลังเลือก
+  const [hoveredData, setHoveredData] = useState<{ id: string; name: string; count: number; x: number; y: number } | null>(null); // ข้อมูลขณะเอาเมาส์ชี้
+  const [position, setPosition] = useState({ coordinates: [100.5, 13.2], zoom: 1 }); // ตำแหน่งและระดับการซูมของแผนที่
+  const [searchQuery, setSearchQuery] = useState(""); // ข้อความค้นหา
+  const [isSearchOpen, setIsSearchOpen] = useState(false); // สถานะเปิด/ปิด Dropdown ค้นหา
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // รายชื่อจังหวัดทั้งหมดสำหรับใช้ในการค้นหา
   const allProvincesList = Object.keys(provinceMapping).map(key => ({
     id: key,
     name: provinceMapping[key]
   })).sort((a, b) => a.name.localeCompare(b.name, 'th'));
 
-  // Close search dropdown when clicking outside
+  // ฟังก์ชันสำหรับดึงสถานะความหนาแน่นตามจำนวนคน
+  const getDensityStatus = (count: number) => {
+    if (count > 3000) return "หนาแน่นสูง";
+    if (count > 1000) return "มาก";
+    if (count > 500) return "ปานกลาง";
+    if (count > 200) return "ปกติ";
+    return "น้อย";
+  };
+
+  // ปิด Dropdown ค้นหาเมื่อคลิกนอกพื้นที่
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -130,12 +143,13 @@ const MembersContent = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  // โหลดข้อมูลสถิติจากไฟล์ JSON
   useEffect(() => {
     fetch("/data/pharmacist-stats.json")
       .then((res) => res.json())
       .then((stats: ProvinceData[]) => {
         setData(stats);
-        // Default selection to Bangkok if available
+        // เลือกกรุงเทพฯ เป็นค่าเริ่มต้น
         const bkk = stats.find((s) => s.id === "Bangkok Metropolis");
         if (bkk) {
           setSelectedProvince({ ...bkk, name: provinceMapping[bkk.id] || bkk.name });
@@ -144,14 +158,17 @@ const MembersContent = () => {
       .catch((err) => console.error("Error loading stats:", err));
   }, []);
 
+  // ดึงข้อมูลสถิติของจังหวัดตามชื่อ ID
   const getProvinceData = (name: string) => {
     return data.find((s) => s.id.trim().toLowerCase() === name.trim().toLowerCase());
   };
 
+  // ดึง 5 อันดับแรกที่มีจำนวนมากที่สุด
   const topProvinces = [...data]
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
 
+  // จัดการเมื่อเมาส์เคลื่อนที่บนแผนที่ (แสดง Tooltip)
   const handleMouseMove = (e: React.MouseEvent, id: string, name: string, count: number) => {
     if (containerRef.current) {
       const bounds = containerRef.current.getBoundingClientRect();
@@ -165,16 +182,19 @@ const MembersContent = () => {
     }
   };
 
+  // ฟังก์ชันซูมเข้า
   const handleZoomIn = () => {
     if (position.zoom >= 5) return;
     setPosition((pos) => ({ ...pos, zoom: pos.zoom * 1.5 }));
   };
 
+  // ฟังก์ชันซูมออก
   const handleZoomOut = () => {
     if (position.zoom <= 1) return;
     setPosition((pos) => ({ ...pos, zoom: pos.zoom / 1.5 }));
   };
 
+  // จัดการเมื่อการซูมหรือเลื่อนแผนที่สิ้นสุดลง
   const handleMoveEnd = (newPosition: { coordinates: [number, number]; zoom: number }) => {
     setPosition(newPosition);
   };
@@ -182,7 +202,7 @@ const MembersContent = () => {
   return (
     <div ref={containerRef} className={`${styles.container} ThaiFont`}>
 
-      {/* Tooltip */}
+      {/* กล่องแสดงข้อมูลเมื่อเมาส์ชี้ (Tooltip) */}
       {hoveredData && (
         <div
           className={styles.tooltip}
@@ -197,9 +217,9 @@ const MembersContent = () => {
         </div>
       )}
 
-      {/* Map Section */}
+      {/* ส่วนของแผนที่ */}
       <div className={`${styles.mapWrapper} ${styles.animateFadeInUp}`}>
-        {/* Zoom Controls Overlay */}
+        {/* ปุ่มควบคุมการซูม */}
         <div className={styles.zoomControls}>
           <button onClick={handleZoomIn} className={styles.zoomButton} title="ซูมเข้า">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -285,16 +305,16 @@ const MembersContent = () => {
           </ZoomableGroup>
         </ComposableMap>
 
-        {/* Legend */}
+        {/* แถบอธิบายสัญลักษณ์สี (Legend) */}
         <div className={styles.legend}>
           <p className={styles.legendTitle}>ความหนาแน่นของสมาชิก</p>
           <div className={styles.legendList}>
             {[
-              { label: "0 - 1,000", color: "#ffffff", desc: "น้อย" },
-              { label: "1,001 - 3,000", color: "#f4f7dc", desc: "ปกติ" },
-              { label: "3,001 - 7,000", color: "#d9e28d", desc: "ปานกลาง" },
-              { label: "7,001 - 15,000", color: "#879127", desc: "มาก" },
-              { label: "15,001 ขึ้นไป", color: "#737300", desc: "หนาแน่นสูง" },
+              { label: "0 - 200", color: "#ffffff", desc: "น้อย" },
+              { label: "201 - 500", color: "#f4f7dc", desc: "ปกติ" },
+              { label: "501 - 1,000", color: "#d9e28d", desc: "ปานกลาง" },
+              { label: "1,001 - 3,000", color: "#879127", desc: "มาก" },
+              { label: "3,001 ขึ้นไป", color: "#737300", desc: "หนาแน่นสูง" },
             ].map((item) => (
               <div key={item.label} className={styles.legendItem}>
                 <div className={styles.legendColorBox} style={{ backgroundColor: item.color }} />
@@ -308,9 +328,9 @@ const MembersContent = () => {
         </div>
       </div>
 
-      {/* Stats Section */}
+      {/* ส่วนแสดงข้อมูลสถิติและการค้นหา */}
       <div className={styles.statsSection}>
-        {/* Search Bar */}
+        {/* ช่องค้นหาจังหวัด */}
         <div className={`${styles.searchWrapper} ${styles.animateFadeInUp}`}>
           <div className={styles.searchInputContainer}>
             <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
@@ -384,14 +404,14 @@ const MembersContent = () => {
               <div className={styles.statsProgressHeader}>
                 <span className={styles.statsProgressLabel}>จำนวนเภสัชกรในพื้นที่</span>
                 <span className={styles.statsProgressStatus}>
-                  {selectedProvince && selectedProvince.count > 5000 ? "หนาแน่นสูง" : "ปกติ"}
+                  {selectedProvince ? getDensityStatus(selectedProvince.count) : "ปกติ"}
                 </span>
               </div>
               <div className={styles.progressBar}>
                 <div
                   className={styles.progressFill}
                   style={{
-                    width: `${Math.min((selectedProvince?.count || 0) / 150, 100)}%`
+                    width: `${Math.min((selectedProvince?.count || 0) / 30, 100)}%`
                   }}
                 />
               </div>
@@ -399,7 +419,7 @@ const MembersContent = () => {
           </div>
         </div>
 
-        {/* Top Ranking list */}
+        {/* รายการ 5 อันดับสูงสุด */}
         <div className={`${styles.rankingCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.2s' }}>
           <div className={styles.rankingHeader}>
             <div className={styles.rankingTitleWrapper}>
