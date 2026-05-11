@@ -10,7 +10,7 @@ import "swiper/css/navigation";
 
 import styles from "./CommitteeContent.module.css";
 
-type CouncilMember = {
+export type CouncilMember = {
     id: number;
     prefix: string;
     name: string;
@@ -22,10 +22,14 @@ type CouncilMember = {
     background?: string;
 };
 
-const API_URL =
-    process.env.NEXT_PUBLIC_API_URL || "https://pharmacy-api-6w5d.onrender.com";
+interface CommitteeContentProps {
+    initialMembers?: CouncilMember[];
+}
 
-export default function CommitteeContent({ initialMembers = [] }: { initialMembers?: CouncilMember[] }) {
+
+const API_URL = "/api/proxy";
+
+export default function CommitteeContent({ initialMembers = [] }: CommitteeContentProps) {
     const [members, setMembers] = useState<CouncilMember[]>(initialMembers);
     const [selected, setSelected] = useState<CouncilMember | null>(null);
     const [loading, setLoading] = useState(initialMembers.length === 0);
@@ -126,7 +130,6 @@ export default function CommitteeContent({ initialMembers = [] }: { initialMembe
                 members={elected}
                 typeLabel="เลือกตั้ง"
                 onSelect={setSelected}
-                reverse
             />
 
             {selected && (
@@ -208,13 +211,13 @@ function CommitteeCarousel({
                 grabCursor
                 navigation
                 speed={900}
-                slidesPerView={5}
-                spaceBetween={34}
+                slidesPerView={4}
+                spaceBetween={40}
                 coverflowEffect={{
                     rotate: 0,
                     stretch: 0,
-                    depth: 130,
-                    modifier: 1.8,
+                    depth: 100,
+                    modifier: 1.5,
                     slideShadows: false,
                 }}
                 autoplay={{
@@ -226,8 +229,8 @@ function CommitteeCarousel({
                 breakpoints={{
                     0: { slidesPerView: 1.2, spaceBetween: 16 },
                     640: { slidesPerView: 2.3, spaceBetween: 20 },
-                    1024: { slidesPerView: 3.5, spaceBetween: 26 },
-                    1280: { slidesPerView: 5, spaceBetween: 34 },
+                    1024: { slidesPerView: 3, spaceBetween: 30 },
+                    1440: { slidesPerView: 4, spaceBetween: 40 },
                 }}
                 className={styles.swiper}
             >
@@ -237,7 +240,6 @@ function CommitteeCarousel({
                         className={styles.slide}
                     >
                         <article className={styles.card}>
-                            <span className={styles.order}>#{member.order || index + 1}</span>
 
                             <div className={styles.imageBox}>
                                 <img
