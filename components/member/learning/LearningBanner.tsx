@@ -1,0 +1,19 @@
+"use client";
+
+import React from 'react';
+import styles from "./LearningBanner.module.css";
+
+export default function LearningBanner() {
+    return (
+        <div className={styles.banner}>
+            <div className={styles.bannerOverlay}>
+                <div className={styles.bannerContent}>
+                    <h1 className={`${styles.bannerTitle} ThaiFont`}>ศูนย์การเรียนรู้ออนไลน์</h1>
+                    <p className={`${styles.bannerSubtitle} ThaiFont`}>
+                        ยกระดับทักษะและวิชาชีพเภสัชกรรม ด้วยคอร์สเรียนออนไลน์ที่หลากหลายและทันสมัย
+                    </p>
+                </div>
+            </div>
+        </div>
+    );
+}

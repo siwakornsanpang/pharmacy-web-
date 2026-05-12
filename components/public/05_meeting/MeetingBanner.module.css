@@ -19,6 +19,7 @@
 .bannerContent {
     color: white;
     max-width: 1000px;
+    animation: slideUpFade 1s ease-out forwards;
 }
 
 .bannerTitle {
@@ -50,5 +51,16 @@
 @media (max-width: 480px) {
     .bannerOverlay {
         padding: 0 1rem 2rem;
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -26,6 +26,7 @@
     width: 100%;
     padding: 0 5%;
     color: white !important;
+    animation: slideUpFade 1s ease-out forwards;
 }
 
 .bannerTitle {
@@ -515,4 +516,15 @@
 
 .rotate180 {
     transform: rotate(180deg);
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

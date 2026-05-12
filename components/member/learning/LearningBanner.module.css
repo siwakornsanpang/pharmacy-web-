@@ -1,14 +1,10 @@
-.pageWrapper {
-    min-height: 100vh;
-    background-color: #ffffff;
-}
-
 .banner {
     position: relative;
     width: 100%;
     height: 350px;
-    background: url('/images/public/department/imgbg1.png') center/cover no-repeat;
+    background: #2e3a1f url('https://images.unsplash.com/photo-1576086213369-97a306d36557?q=80&w=2080&auto=format&fit=crop') center/cover no-repeat;
     overflow: hidden;
+    display: flex;
 }
 
 .bannerOverlay {
@@ -22,9 +18,12 @@
 }
 
 .bannerContent {
-    animation: slideUpFade 1s ease-out forwards;
-    color: white;
+    color: white !important;
     max-width: 1000px;
+    z-index: 5;
+    position: relative;
+    /* This is the animation part */
+    animation: slideUpFade 1s ease-out forwards;
 }
 
 .bannerTitle {
@@ -33,6 +32,7 @@
     margin: 0 0 0.5rem;
     line-height: 1.1;
     text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    color: white !important;
 }
 
 .bannerSubtitle {
@@ -41,44 +41,34 @@
     margin: 0;
     opacity: 0.95;
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    color: white !important;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 4rem auto 4rem;
-    padding: 0 1.5rem;
-    position: relative;
-    z-index: 2;
-}
-
-.title {
-    font-size: 2.25rem;
-    font-weight: 700;
-    color: #111827;
-    margin-bottom: 2rem;
-}
-
-@media (max-width: 640px) {
-    .banner {
-        height: 250px;
-    }
-
-    .bannerContent h1 {
-        font-size: 2.5rem;
-    }
-
-    .container {
-        margin-top: 2rem;
-    }
-}
-
+/* Animation Definition */
 @keyframes slideUpFade {
     from {
         opacity: 0;
         transform: translateY(30px);
     }
+
     to {
         opacity: 1;
         transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .banner {
+        height: 250px;
+    }
+
+    .bannerOverlay {
+        padding: 0 5% 3rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .bannerOverlay {
+        padding: 0 1rem 2rem;
     }
 }

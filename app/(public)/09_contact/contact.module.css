@@ -23,6 +23,7 @@
 }
 
 .bannerContent {
+    animation: slideUpFade 1s ease-out forwards;
     color: white;
     max-width: 1000px;
 }
@@ -460,5 +461,16 @@
 
     .captchaWrapper {
         width: 100%;
+    }
+}
+
+@keyframes slideUpFade {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

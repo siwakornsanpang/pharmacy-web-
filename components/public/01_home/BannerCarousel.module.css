@@ -63,6 +63,7 @@ a.slide {
   flex-direction: column;
   gap: 0.5rem; /* Better spacing like in the mockup */
   max-width: 900px;
+  animation: slideUpFade 1.2s ease-out forwards;
 }
 
 .title {
@@ -217,5 +218,16 @@ a.slide {
   .banner {
     aspect-ratio: 1 / 1; /* Square on very small screens if needed, or keep 4/3 */
     max-height: 40vh;
+  }
+}
+
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
