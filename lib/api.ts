@@ -368,6 +368,7 @@ export async function getPolicyCategories(): Promise<PolicyCategory[]> {
     }
 }
 
+
 export async function getPolicyProjects(categoryId: number): Promise<PolicyProject[]> {
     if (!API_BASE_URL) {
         console.error('NEXT_PUBLIC_API_URL is not defined');
@@ -386,6 +387,44 @@ export async function getPolicyProjects(categoryId: number): Promise<PolicyProje
         return res.json();
     } catch (error) {
         console.error(`Error fetching policy projects for category ${categoryId}:`, error);
+        return [];
+    }
+}
+
+// ===== History / Council Directory =====
+
+export interface HistoryTerm {
+    id: number;
+    term: string;
+    startYear: string;
+    endYear: string;
+    presidentName: string;
+    presidentImage: string;
+    originalPresidentImage?: string;
+    secretaryName: string;
+    secretaryImage: string;
+    originalSecretaryImage?: string;
+    createdAt?: string;
+}
+
+export async function getHistory(): Promise<HistoryTerm[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/history`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch history: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching history:', error);
         return [];
     }
 }

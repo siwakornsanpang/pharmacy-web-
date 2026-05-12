@@ -1,12 +1,20 @@
 import styles from "../subpage.module.css";
+import CouncildirectoryContent from "@/components/public/02_about/council-directory/CouncildirectoryContent";
+import { getHistory } from "@/lib/api";
 
-export default function CouncilDirectoryPage() {
+export default async function CouncilDirectoryPage() {
+    const historyData = await getHistory();
+
     return (
-        <>
-            <h2 className={`${styles.contentTitle} ThaiFont`}>ทำเนียบสภา</h2>
-            <div className={styles.emptyPage}>
-                <p>เนื้อหาส่วนนี้กำลังอยู่ระหว่างการจัดทำ</p>
+        <main className={styles.mainContainer}>
+            <h2 className={`${styles.contentTitle} ThaiFont`}>
+                ทำเนียบสภา
+            </h2>
+
+            <div className={styles.contentWrapper}>
+                <CouncildirectoryContent initialData={historyData} />
             </div>
-        </>
+        </main>
     );
 }
+
