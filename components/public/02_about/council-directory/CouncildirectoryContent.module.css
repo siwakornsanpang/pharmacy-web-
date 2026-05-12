@@ -1,17 +1,16 @@
 .wrapper {
     width: 100%;
-    min-height: 80vh;
-    padding: 40px 20px;
+    min-height: 200px; /* Reduced from 80vh */
+    padding: 40px 16px 80px; /* More padding at bottom, less overall empty space */
     background: #fdfbf0;
-    /* Matches Image 2 background */
     font-family: "Prompt", sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
+    box-sizing: border-box;
 }
 
 /* EMPTY STATE */
-
 .emptyBox {
     width: 100%;
     max-width: 800px;
@@ -25,7 +24,6 @@
 }
 
 /* TIMELINE SCROLLER */
-
 .scrollSection {
     width: 100%;
     max-width: 1000px;
@@ -42,7 +40,6 @@
     color: #1a1a1a;
     white-space: nowrap;
     font-family: "Mali", cursive, "Prompt", sans-serif;
-    /* Stylish/Handwritten feel */
 }
 
 .scrollContainer {
@@ -52,7 +49,6 @@
     padding: 10px 0;
 }
 
-/* Fading edges */
 .scrollContainer::before,
 .scrollContainer::after {
     content: "";
@@ -81,34 +77,23 @@
     animation: scroll 20s linear infinite;
 }
 
-
 .scrollSection:hover .scrollContent {
     animation-play-state: paused;
 }
 
 @keyframes scroll {
-    from {
-        transform: translateX(0);
-    }
-
-    to {
-        /* This should match half of the total width of the content if we duplicated once, 
-           but since we duplicated multiple times for safety, we translate based on the pattern */
-        transform: translateX(-25%);
-    }
+    from { transform: translateX(0); }
+    to { transform: translateX(-25%); }
 }
 
 /* TERM ITEM */
-
 .termItem {
     width: 65px;
     height: 65px;
     min-width: 65px;
     border: 2px solid #737300;
-    /* Green border as requested */
     border-radius: 50%;
     background: white;
-    /* White background as requested */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -124,21 +109,16 @@
     transform: scale(1.1) translateY(-5px);
     background: #737300;
     color: white;
-    box-shadow: 0 10px 20px rgba(115, 115, 0, 0.2);
 }
 
 .active {
     background: #737300;
     border-color: #737300;
     color: white;
-    box-shadow: 0 5px 15px rgba(115, 115, 0, 0.3);
     transform: scale(1.1);
 }
 
-
-
 /* DETAIL CARD */
-
 .detailCard {
     width: 100%;
     max-width: 1100px;
@@ -148,23 +128,21 @@
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.05);
     animation: fadeInScale 0.5s ease-out;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 @keyframes fadeInScale {
-    from {
-        opacity: 0;
-        transform: scale(0.98) translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: scale(1) translateY(0);
-    }
+    from { opacity: 0; transform: scale(0.98) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 
 .cardHeader {
     text-align: center;
     margin-bottom: 50px;
+    width: 100%;
 }
 
 .termTitle {
@@ -186,8 +164,9 @@
 
 .peopleGrid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr); /* Force 2 columns */
     gap: 40px;
+    width: 100%;
 }
 
 .personCard {
@@ -198,6 +177,8 @@
     background: #fafafa;
     border-radius: 30px;
     transition: transform 0.3s ease;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .personCard:hover {
@@ -214,11 +195,14 @@
     padding: 5px 15px;
     background: rgba(24, 146, 95, 0.1);
     border-radius: 8px;
+    text-align: center;
+    width: fit-content;
 }
 
 .imageBox {
-    width: 280px;
-    height: 350px;
+    width: 100%;
+    max-width: 280px;
+    aspect-ratio: 4 / 5;
     border-radius: 24px;
     overflow: hidden;
     box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
@@ -237,34 +221,59 @@
     font-weight: 700;
     color: #1a1a1a;
     text-align: center;
+    word-break: break-word;
 }
 
 /* RESPONSIVE */
 
 @media (max-width: 1024px) {
     .detailCard {
-        padding: 40px;
+        padding: 40px 20px;
+    }
+    
+    .peopleGrid {
+        gap: 20px;
+    }
+
+    .personCard {
+        padding: 20px 10px;
     }
 
     .imageBox {
-        width: 220px;
-        height: 280px;
+        max-width: 200px;
+    }
+
+    .personName {
+        font-size: 20px;
     }
 }
 
 @media (max-width: 768px) {
     .peopleGrid {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr; /* Stack only on mobile */
+        max-width: 450px;
+        margin: 0 auto;
     }
 
-    .scrollTitle {
+    .wrapper {
+        padding: 30px 12px;
+    }
+
+    .detailCard {
+        padding: 30px 15px;
+    }
+
+    .termTitle {
+        font-size: 28px;
+    }
+
+    .imageBox {
+        max-width: 240px;
+    }
+}
+
+@media (max-width: 480px) {
+    .termTitle {
         font-size: 24px;
-    }
-
-    .termItem {
-        width: 55px;
-        height: 55px;
-        min-width: 55px;
-        font-size: 18px;
     }
 }

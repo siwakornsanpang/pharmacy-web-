@@ -6,12 +6,12 @@ import styles from "./CouncildirectoryContent.module.css";
 export interface CouncilTerm {
     id: number;
     term: string;
-    start_year: string;
-    end_year: string;
-    president_name: string;
-    president_image: string;
-    secretary_name: string;
-    secretary_image: string;
+    startYear: string;
+    endYear: string;
+    presidentName: string;
+    presidentImage: string;
+    secretaryName: string;
+    secretaryImage: string;
 }
 
 interface Props {
@@ -72,33 +72,33 @@ export default function CouncildirectoryContent({
                     <div className={styles.cardHeader}>
                         <h2 className={styles.termTitle}>วาระที่ {selectedTerm.term}</h2>
                         <div className={styles.yearBadge}>
-                            พ.ศ. {selectedTerm.start_year} - {selectedTerm.end_year}
+                            พ.ศ. {selectedTerm.startYear} - {selectedTerm.endYear}
                         </div>
                     </div>
 
                     <div className={styles.peopleGrid}>
                         {/* PRESIDENT */}
                         <div className={styles.personCard}>
-                            <div className={styles.roleLabel}>นายกสภาเภสัชกรรม</div>
                             <div className={styles.imageBox}>
                                 <img
-                                    src={selectedTerm.president_image || "/images/placeholder-person.png"}
-                                    alt={selectedTerm.president_name}
+                                    src={selectedTerm.presidentImage || "/images/placeholder-person.png"}
+                                    alt={selectedTerm.presidentName}
                                 />
                             </div>
-                            <h3 className={styles.personName}>{selectedTerm.president_name}</h3>
+                            <div className={styles.roleLabel}>นายกสภาเภสัชกรรม</div>
+                            <h3 className={styles.personName}>{selectedTerm.presidentName}</h3>
                         </div>
 
                         {/* SECRETARY */}
                         <div className={styles.personCard}>
-                            <div className={styles.roleLabel}>เลขาธิการสภาเภสัชกรรม</div>
                             <div className={styles.imageBox}>
                                 <img
-                                    src={selectedTerm.secretary_image || "/images/placeholder-person.png"}
-                                    alt={selectedTerm.secretary_name}
+                                    src={selectedTerm.secretaryImage || "/images/placeholder-person.png"}
+                                    alt={selectedTerm.secretaryName}
                                 />
                             </div>
-                            <h3 className={styles.personName}>{selectedTerm.secretary_name}</h3>
+                            <div className={styles.roleLabel}>เลขาธิการสภาเภสัชกรรม</div>
+                            <h3 className={styles.personName}>{selectedTerm.secretaryName}</h3>
                         </div>
                     </div>
                 </div>
