@@ -1,13 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Autoplay, EffectCoverflow, Navigation } from "swiper/modules";
-
-import "swiper/css";
-import "swiper/css/effect-coverflow";
-import "swiper/css/navigation";
-
 import styles from "./CommitteeContent.module.css";
 
 export type CouncilMember = {
@@ -25,7 +18,6 @@ export type CouncilMember = {
 interface CommitteeContentProps {
     initialMembers?: CouncilMember[];
 }
-
 
 const API_URL = "/api/proxy";
 
@@ -76,7 +68,7 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
         }
 
         getCouncil();
-    }, []);
+    }, [initialMembers]);
 
     const { appointed, elected } = useMemo(() => {
         const raw = [...members];
@@ -93,14 +85,15 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
 
         if (appointedByType.length > 0 || electedByType.length > 0) {
             return {
-                appointed: appointedByType.slice(0, 12),
-                elected: electedByType.slice(0, 12),
+                appointed: appointedByType,
+                elected: electedByType,
             };
         }
 
+        // Fallback split if no types are provided
         return {
-            appointed: raw.slice(0, 12),
-            elected: raw.slice(12, 24),
+            appointed: raw.slice(0, Math.ceil(raw.length / 2)),
+            elected: raw.slice(Math.ceil(raw.length / 2)),
         };
     }, [members]);
 
@@ -185,15 +178,16 @@ function CommitteeCarousel({
     members,
     typeLabel,
     onSelect,
-    reverse = false,
 }: {
     title: string;
     members: CouncilMember[];
     typeLabel: string;
     onSelect: (member: CouncilMember) => void;
-    reverse?: boolean;
 }) {
     if (members.length === 0) return null;
+
+    // Duplicate members list for seamless looping (x3 to be safe)
+    const displayMembers = [...members, ...members, ...members];
 
     return (
         <div className={styles.carouselSection}>
@@ -202,74 +196,44 @@ function CommitteeCarousel({
                 <span>{members.length} ท่าน</span>
             </div>
 
-            <Swiper
-                modules={[Autoplay, EffectCoverflow, Navigation]}
-                effect="coverflow"
-                centeredSlides
-                loop={false}
-                rewind
-                grabCursor
-                navigation
-                speed={900}
-                slidesPerView={4}
-                spaceBetween={40}
-                coverflowEffect={{
-                    rotate: 0,
-                    stretch: 0,
-                    depth: 100,
-                    modifier: 1.5,
-                    slideShadows: false,
-                }}
-                autoplay={{
-                    delay: 2800,
-                    disableOnInteraction: false,
-                    pauseOnMouseEnter: true,
-                    reverseDirection: reverse,
-                }}
-                breakpoints={{
-                    0: { slidesPerView: 1.2, spaceBetween: 16 },
-                    640: { slidesPerView: 2.3, spaceBetween: 20 },
-                    1024: { slidesPerView: 3, spaceBetween: 30 },
-                    1440: { slidesPerView: 4, spaceBetween: 40 },
-                }}
-                className={styles.swiper}
-            >
-                {members.map((member, index) => (
-                    <SwiperSlide
-                        key={`${typeLabel}-${member.id}-${index}`}
-                        className={styles.slide}
-                    >
-                        <article className={styles.card}>
+            <div className={styles.marqueeContainer}>
+                <div className={styles.marqueeTrack}>
+                    {displayMembers.map((member, index) => (
+                        <div 
+                            key={`${typeLabel}-${member.id}-${index}`}
+                            className={styles.marqueeItem}
+                        >
+                            <article className={styles.card}>
+                                <div className={styles.imageBox}>
+                                    <img
+                                        src={member.imageUrl}
+                                        alt={`${member.prefix}${member.name}`}
+                                    />
+                                </div>
 
-                            <div className={styles.imageBox}>
-                                <img
-                                    src={member.imageUrl}
-                                    alt={`${member.prefix}${member.name}`}
-                                />
-                            </div>
+                                <div className={styles.cardContent}>
+                                    <span className={styles.typeBadge}>{typeLabel}</span>
 
-                            <div className={styles.cardContent}>
-                                <span className={styles.typeBadge}>{typeLabel}</span>
+                                    <h4>
+                                        {member.prefix}
+                                        {member.name}
+                                    </h4>
 
-                                <h4>
-                                    {member.prefix}
-                                    {member.name}
-                                </h4>
+                                    <p className={styles.position}>{member.position}</p>
 
-                                <p className={styles.position}>{member.position}</p>
-
-                                <button
-                                    type="button"
-                                    className={styles.moreButton}
-                                    onClick={() => onSelect(member)}
-                                >
-                                    ดูประวัติ
-                                </button>
-                            </div>
-                        </article>
-                    </SwiperSlide>
-                ))}
-            </Swiper>
+                                    <button
+                                        type="button"
+                                        className={styles.moreButton}
+                                        onClick={() => onSelect(member)}
+                                    >
+                                        ดูประวัติ
+                                    </button>
+                                </div>
+                            </article>
+                        </div>
+                    ))}
+                </div>
+            </div>
         </div>
     );
 }

@@ -47,40 +47,24 @@
 .card {
     position: relative;
     width: 100%;
-    min-height: 430px;
-    background: linear-gradient(135deg, #ffffff 0%, #f9f9f4 100%);
-    border: 1px solid rgba(123, 132, 41, 0.12);
-    border-radius: 40px;
-    padding: 0 20px 20px;
+    height: 400px; /* Fixed height instead of min-height */
+    background: #ffffff;
+    border: 1px solid rgba(115, 115, 0, 0.1);
+    border-radius: 30px;
+    padding: 0 16px 16px;
     box-shadow: 
-        0 10px 25px rgba(0, 0, 0, 0.03),
-        0 20px 50px rgba(123, 132, 41, 0.08);
+        0 8px 24px rgba(0, 0, 0, 0.04),
+        0 15px 45px rgba(115, 115, 0, 0.04);
     overflow: hidden;
-
-    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    transform: translateZ(0);
-    will-change: transform;
-}
-
-.card::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-        linear-gradient(135deg,
-            rgba(255, 255, 255, 0.96),
-            rgba(247, 248, 243, 0.5)),
-        repeating-linear-gradient(-45deg,
-            rgba(123, 132, 41, 0.045) 0,
-            rgba(123, 132, 41, 0.045) 1px,
-            transparent 1px,
-            transparent 10px);
-    z-index: 0;
+    transition: all 0.4s ease;
+    display: flex;
+    flex-direction: column;
 }
 
 .slide:hover .card {
-    box-shadow: 0 28px 70px rgba(0, 0, 0, 0.12);
-    border-color: rgba(123, 132, 41, 0.22);
+    box-shadow: 0 25px 60px rgba(115, 115, 0, 0.1);
+    border-color: rgba(115, 115, 0, 0.3);
+    transform: translateY(-8px);
 }
 
 .order {
@@ -99,66 +83,73 @@
 .imageBox {
     position: relative;
     z-index: 1;
-    height: 190px;
+    height: 150px; /* Adjusted fixed height */
     display: flex;
     align-items: flex-end;
     justify-content: center;
-    margin-bottom: 4px;
+    margin-bottom: 0px;
+    flex-shrink: 0;
 }
 
 .imageBox img {
     max-width: 100%;
-    max-height: 190px;
+    max-height: 150px;
     object-fit: contain;
-    filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.15));
+    filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.1));
     transition: transform 0.4s ease;
-}
-
-.slide:hover .imageBox img {
-    transform: scale(1.05) translateY(-5px);
 }
 
 .cardContent {
     position: relative;
     z-index: 2;
-    min-height: 220px;
+    height: 220px; /* Fixed height for content area */
     background: #ffffff;
-    border-radius: 32px;
-    padding: 24px 20px;
+    border-radius: 24px;
+    padding: 20px 16px;
     text-align: center;
-    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
-    border: 1px solid rgba(123, 132, 41, 0.05);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.04);
+    border: 1px solid rgba(115, 115, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .typeBadge {
     display: inline-flex;
-    margin-bottom: 10px;
+    margin: 0 auto 10px;
     font-size: 11px;
     color: #ffffff;
-    background: #7b8429;
-    padding: 5px 12px;
+    background: #737300;
+    padding: 4px 12px;
     border-radius: 999px;
+    font-weight: 600;
 }
 
 .cardContent h4 {
     margin: 0;
-    font-size: 18px;
+    font-size: 17px;
     color: #202020;
     font-weight: 700;
-    line-height: 1.45;
-}
-
-.position {
-    margin: 10px 0 0;
-    font-size: 15px;
-    color: #6b7280;
-    line-height: 1.6;
-    min-height: 48px;
+    line-height: 1.4;
+    height: 48px; /* Fixed height for name (approx 2 lines) */
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+.position {
+    margin: 4px 0 0;
+    font-size: 14px;
+    color: #6b7280;
+    line-height: 1.5;
+    height: 42px; /* Fixed height for position (approx 2 lines) */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
 
 .bioPreview {
     margin: 12px 0 0;
@@ -173,88 +164,61 @@
 }
 
 .moreButton {
-    margin-top: 20px;
+    margin-top: 14px; /* Reduced from 24px */
     width: 100%;
-    height: 48px;
-    border: 1.5px solid rgba(123, 132, 41, 0.3);
+    height: 44px; /* Reduced from 50px */
+
+    border: 1.5px solid rgba(115, 115, 0, 0.4);
     background: #ffffff;
-    color: #7b8429;
-    border-radius: 16px;
+    color: #737300;
+    border-radius: 18px;
     font-size: 15px;
     font-weight: 700;
     cursor: pointer;
-
     transition: all 0.3s ease;
-    transform: translateZ(0);
-    backface-visibility: hidden;
 }
 
 .moreButton:hover {
-    background: #7b8429;
+    background: #737300;
     color: #ffffff;
-    border-color: #7b8429;
-    transform: none;
+    border-color: #737300;
 }
 
 .moreButton:active {
     transform: none;
 }
 
-/* Swiper Slides */
-.swiper :global(.swiper-slide) {
-    opacity: 0.3;
-    transform: scale(0.82);
-    transition: 0.35s ease;
+.marqueeContainer {
+    width: 100%;
+    overflow: hidden;
+    padding: 30px 0 60px;
 }
 
-.swiper :global(.swiper-slide-prev),
-.swiper :global(.swiper-slide-next) {
-    opacity: 0.68;
-    transform: scale(0.92);
+.marqueeTrack {
+    display: flex;
+    gap: 40px;
+    width: max-content;
+    animation: scrollCommittee 60s linear infinite;
 }
 
-.swiper :global(.swiper-slide-active) {
-    opacity: 1;
-    transform: scale(1.08);
-    z-index: 5;
+.marqueeContainer:hover .marqueeTrack {
+    animation-play-state: paused;
 }
 
-.swiper :global(.swiper-button-prev),
-.swiper :global(.swiper-button-next) {
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
-    background: #ffffff;
-    border: 1px solid rgba(104, 104, 5, 0.2);
-
-    color: #686805 !important;
-
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-
-    transition:
-        background-color 0.25s ease,
-        border-color 0.25s ease,
-        transform 0.25s ease;
+.marqueeItem {
+    width: 300px;
+    flex-shrink: 0;
 }
 
-.swiper :global(.swiper-button-prev::after),
-.swiper :global(.swiper-button-next::after) {
-    font-size: 28px;
-    font-weight: 700;
-    color: #686805 !important;
+@keyframes scrollCommittee {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(calc(-100% / 3));
+    }
 }
 
-.swiper :global(.swiper-button-prev:hover),
-.swiper :global(.swiper-button-next:hover) {
-    background: #f7f8f3;
-    border-color: #686805;
-    transform: scale(1.05);
-}
-
-.swiper :global(.swiper-button-prev:hover::after),
-.swiper :global(.swiper-button-next:hover::after) {
-    color: #686805 !important;
-}
 
 /* Modal and Remaining Styles */
 .modalOverlay {
