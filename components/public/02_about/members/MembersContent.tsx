@@ -123,15 +123,6 @@ const MembersContent = () => {
     name: provinceMapping[key]
   })).sort((a, b) => a.name.localeCompare(b.name, 'th'));
 
-  // ฟังก์ชันสำหรับดึงสถานะความหนาแน่นตามจำนวนคน
-  const getDensityStatus = (count: number) => {
-    if (count > 3000) return "หนาแน่นสูง";
-    if (count > 1000) return "มาก";
-    if (count > 500) return "ปานกลาง";
-    if (count > 200) return "ปกติ";
-    return "น้อย";
-  };
-
   // ปิด Dropdown ค้นหาเมื่อคลิกนอกพื้นที่
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -167,6 +158,9 @@ const MembersContent = () => {
   const topProvinces = [...data]
     .sort((a, b) => b.count - a.count)
     .slice(0, 5);
+
+  // คำนวณจำนวนเภสัชกรรวมทั้งประเทศ
+  const totalCount = data.reduce((sum, item) => sum + item.count, 0);
 
   // จัดการเมื่อเมาส์เคลื่อนที่บนแผนที่ (แสดง Tooltip)
   const handleMouseMove = (e: React.MouseEvent, id: string, name: string, count: number) => {
@@ -250,57 +244,104 @@ const MembersContent = () => {
             onMoveEnd={handleMoveEnd}
           >
             <Geographies geography={geoUrl}>
-              {({ geographies }: { geographies: any[] }) =>
-                geographies.map((geo) => {
-                  const provinceId = geo.properties.name || geo.properties.NAME || geo.properties.name_en || "";
-                  const provinceStats = getProvinceData(provinceId);
-                  const count = provinceStats?.count || 0;
-                  const isSelected = selectedProvince?.id.trim().toLowerCase() === provinceId.trim().toLowerCase();
-                  const isHovered = hoveredData?.id.trim().toLowerCase() === provinceId.trim().toLowerCase();
+              {({ geographies }: { geographies: any[] }) => {
+                // แยกจังหวัดที่ Active (ถูกเลือกหรือกำลัง Hover) ออกมา
+                const activeGeos = geographies.filter(geo => {
+                  const id = (geo.properties.name || geo.properties.NAME || geo.properties.name_en || "").trim().toLowerCase();
+                  return id === selectedProvince?.id.trim().toLowerCase() || id === hoveredData?.id.trim().toLowerCase();
+                });
 
-                  return (
-                    <Geography
-                      key={geo.rsmKey}
-                      geography={geo}
-                      onMouseMove={(e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count)}
-                      onMouseLeave={() => setHoveredData(null)}
-                      onClick={() => {
-                        const thaiName = provinceMapping[provinceId] || provinceId;
-                        if (provinceStats) setSelectedProvince({ ...provinceStats, name: thaiName });
-                        else setSelectedProvince({ id: provinceId, name: thaiName, count: 0 });
-                      }}
-                      strokeLinejoin="round"
-                      strokeLinecap="round"
-                      style={{
-                        default: {
-                          fill: provinceStats ? colorScale(count) : "#ffffff",
-                          outline: "none",
-                          stroke: isHovered || isSelected ? "#737300" : "#94a3b8",
-                          strokeWidth: 0.5,
-                          transition: "all 300ms cubic-bezier(0.4, 0, 0.2, 1)",
-                          zIndex: isSelected ? 10 : 1
-                        },
-                        hover: {
-                          fill: provinceStats ? colorScale(count) : "#f8fafc",
-                          filter: "brightness(0.95) drop-shadow(0 0 6px rgba(115, 115, 0, 0.4))",
-                          outline: "none",
-                          stroke: "#737300",
-                          strokeWidth: 0.5,
-                          cursor: "pointer",
-                          transition: "all 200ms cubic-bezier(0.4, 0, 0.2, 1)",
-                          zIndex: 20
-                        },
-                        pressed: {
-                          fill: "#879127",
-                          outline: "none",
-                          stroke: "#ffffff",
-                          strokeWidth: 0.5,
-                        },
-                      }}
-                    />
-                  );
-                })
-              }
+                return (
+                  <>
+                    {/* Layer 1: แผนที่พื้นฐาน (วาดเฉพาะจังหวัดที่ไม่ได้ Active) */}
+                    {geographies.map((geo) => {
+                      const provinceId = geo.properties.name || geo.properties.NAME || geo.properties.name_en || "";
+                      const provinceStats = getProvinceData(provinceId);
+                      const count = provinceStats?.count || 0;
+                      const isSelected = selectedProvince?.id.trim().toLowerCase() === provinceId.trim().toLowerCase();
+                      const isHovered = hoveredData?.id.trim().toLowerCase() === provinceId.trim().toLowerCase();
+
+                      // ถ้าเป็นจังหวัดที่ Active ให้ข้ามไปวาดใน Layer 2 แทน เพื่อไม่ให้เกิดภาพซ้อน
+                      if (isSelected || isHovered) return null;
+
+                      return (
+                        <Geography
+                          key={geo.rsmKey}
+                          geography={geo}
+                          onMouseEnter={(e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count)}
+                          onMouseMove={(e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count)}
+                          onMouseLeave={() => setHoveredData(null)}
+                          onClick={() => {
+                            const thaiName = provinceMapping[provinceId] || provinceId;
+                            if (provinceStats) setSelectedProvince({ ...provinceStats, name: thaiName });
+                            else setSelectedProvince({ id: provinceId, name: thaiName, count: 0 });
+                          }}
+                          strokeLinejoin="round"
+                          strokeLinecap="round"
+                          style={{
+                            default: {
+                              fill: provinceStats ? colorScale(count) : "#ffffff",
+                              outline: "none",
+                              stroke: "#94a3b8",
+                              strokeWidth: 0.5,
+                              transition: "all 300ms ease",
+                            },
+                            hover: {
+                              fill: "#fbbf24", // ส้มอ่อน (Amber) สำหรับ Hover
+                              outline: "none",
+                              stroke: "#737300",
+                              strokeWidth: 0.5,
+                              cursor: "pointer",
+                            },
+                            pressed: { fill: "#879127", outline: "none" },
+                          }}
+                        />
+                      );
+                    })}
+
+                    {/* Layer 2: จังหวัดที่กำลัง Active (วาดทับด้านบนสุดเพียงอันเดียว) */}
+                    {activeGeos.map((activeGeo) => {
+                      const provinceId = activeGeo.properties.name || activeGeo.properties.NAME || activeGeo.properties.name_en || "";
+                      const provinceStats = getProvinceData(provinceId);
+                      const count = provinceStats?.count || 0;
+                      const isSelected = selectedProvince?.id.trim().toLowerCase() === provinceId.trim().toLowerCase();
+
+                      const activeStyle = {
+                        fill: isSelected ? "#d97706" : "#fbbf24", // Select ส้มเข้ม, Hover ส้มอ่อน
+                        outline: "none",
+                        stroke: "none",
+                        strokeWidth: 0,
+                        filter: isSelected 
+                          ? "drop-shadow(0px 8px 20px rgba(0,0,0,0.4))" 
+                          : "drop-shadow(0px 4px 10px rgba(0,0,0,0.15))",
+                        transform: isSelected ? "scale(1.05)" : "scale(1)",
+                        transformOrigin: "center",
+                        transition: "all 200ms ease",
+                      };
+
+                      return (
+                        <Geography
+                          key={`active-${activeGeo.rsmKey}`}
+                          geography={activeGeo}
+                          onMouseEnter={!isSelected ? (e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count) : undefined}
+                          onMouseMove={!isSelected ? (e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count) : undefined}
+                          onMouseLeave={() => setHoveredData(null)}
+                          onClick={() => {
+                            const thaiName = provinceMapping[provinceId] || provinceId;
+                            if (provinceStats) setSelectedProvince({ ...provinceStats, name: thaiName });
+                            else setSelectedProvince({ id: provinceId, name: thaiName, count: 0 });
+                          }}
+                          style={{
+                            default: activeStyle,
+                            hover: activeStyle,
+                            pressed: activeStyle
+                          }}
+                        />
+                      );
+                    })}
+                  </>
+                );
+              }}
             </Geographies>
           </ZoomableGroup>
         </ComposableMap>
@@ -385,6 +426,17 @@ const MembersContent = () => {
         <div className={`${styles.statsCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.1s' }}>
           <div className={styles.cardGlow} />
 
+          {/* สรุปยอดรวมทั้งประเทศแบบตัวใหญ่ */}
+          <div className={styles.totalSummarySection}>
+            <span className={styles.totalSummaryLabel}>เภสัชกรทั้งหมด</span>
+            <div className={styles.totalSummaryValueWrapper}>
+              <span className={styles.totalSummaryNumber}>{totalCount.toLocaleString()}</span>
+              <span className={styles.totalSummaryUnit}>คน</span>
+            </div>
+          </div>
+
+          <div className={styles.cardDivider} />
+
           <h4 className={styles.statsHeader}>ข้อมูลรายจังหวัด</h4>
           <h2 className={styles.statsTitle}>
             {selectedProvince?.name || "ประเทศไทย"}
@@ -402,16 +454,18 @@ const MembersContent = () => {
 
             <div className={styles.statsProgressInfo}>
               <div className={styles.statsProgressHeader}>
-                <span className={styles.statsProgressLabel}>จำนวนเภสัชกรในพื้นที่</span>
+                <span className={styles.statsProgressLabel}>สัดส่วนจากทั้งหมด</span>
                 <span className={styles.statsProgressStatus}>
-                  {selectedProvince ? getDensityStatus(selectedProvince.count) : "ปกติ"}
+                  {selectedProvince && totalCount > 0 
+                    ? `${((selectedProvince.count / totalCount) * 100).toFixed(2)}%` 
+                    : "0.00%"}
                 </span>
               </div>
               <div className={styles.progressBar}>
                 <div
                   className={styles.progressFill}
                   style={{
-                    width: `${Math.min((selectedProvince?.count || 0) / 30, 100)}%`
+                    width: `${selectedProvince && totalCount > 0 ? (selectedProvince.count / totalCount) * 100 : 0}%`
                   }}
                 />
               </div>

@@ -74,8 +74,8 @@
 .mapWrapper {
     flex: 1.5;
     position: relative;
-    background-color: #f1f5f9;
-    /* Light ocean/slate blue background */
+    background-color: #e0f2fe;
+    /* Sea Blue background */
     border-radius: 2.5rem;
     overflow: hidden;
     min-height: 750px;
@@ -214,21 +214,61 @@
     transform: translateY(-4px);
 }
 
-.statsHeader {
+.totalSummarySection {
+    margin-bottom: 2rem;
+    padding: 1rem 0;
+}
+
+.totalSummaryLabel {
     color: #475569;
-    font-size: 1.125rem;
-    /* Increased size */
+    font-size: 1.25rem;
+    font-weight: 800;
+    margin-bottom: 0.75rem;
+    display: block;
+    letter-spacing: -0.01em;
+}
+
+.totalSummaryValueWrapper {
+    display: flex;
+    align-items: baseline;
+    gap: 1rem;
+}
+
+.totalSummaryNumber {
+    font-size: 6rem;
+    font-weight: 950;
+    color: #464a1e;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    text-shadow: 0 4px 12px rgba(70, 74, 30, 0.1);
+}
+
+.totalSummaryUnit {
+    font-size: 1.75rem;
+    font-weight: 900;
+    color: #64748b;
+}
+
+.cardDivider {
+    height: 1px;
+    background-color: #e2e8f0;
+    margin: 1.5rem 0 2.5rem 0;
+}
+
+.statsHeader {
+    color: #94a3b8;
+    font-size: 0.75rem;
     font-weight: 800;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.1em;
     margin-bottom: 0.5rem;
 }
 
 .statsTitle {
-    font-size: 2.5rem;
+    font-size: 1.75rem;
     font-weight: 900;
-    color: #0f172a;
-    margin-bottom: 1rem;
+    color: #1e293b;
+    margin-bottom: 0.75rem;
     letter-spacing: -0.02em;
 }
 
@@ -245,9 +285,9 @@
 }
 
 .statsNumber {
-    font-size: 5.5rem;
+    font-size: 3.5rem;
     font-weight: 900;
-    color: #464a1e;
+    color: #737300;
     line-height: 1;
     letter-spacing: -0.04em;
 }
@@ -273,9 +313,7 @@
 }
 
 .statsProgressInfo {
-    margin-top: 2rem;
-    padding-top: 2rem;
-    border-top: 1px dashed #e2e8f0;
+    margin-top: 1.5rem;
 }
 
 .statsProgressHeader {
@@ -293,13 +331,14 @@
 }
 
 .statsProgressStatus {
-    font-size: 11px;
-    font-weight: 800;
-    color: #464a1e;
-    background-color: #f4f7dc;
-    padding: 0.375rem 1rem;
-    border-radius: 9999px;
-    text-transform: uppercase;
+    font-size: 1.25rem;
+    font-weight: 900;
+    color: #ffffff;
+    background: linear-gradient(135deg, #aeb93a, #737300);
+    padding: 0.5rem 1.25rem;
+    border-radius: 1rem;
+    box-shadow: 0 4px 12px rgba(115, 115, 0, 0.2);
+    text-transform: none;
 }
 
 .progressBar {
