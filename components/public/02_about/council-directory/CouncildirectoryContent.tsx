@@ -19,22 +19,56 @@ interface Props {
 }
 
 export default function CouncildirectoryContent({
-    initialData,
+    initialData = [],
 }: Props) {
-    const sortedData = [...initialData].sort(
+    const [data, setData] = useState<CouncilTerm[]>(initialData);
+    const [loading, setLoading] = useState(initialData.length === 0);
+    const [selectedTerm, setSelectedTerm] = useState<CouncilTerm | null>(null);
+
+    const sortedData = [...data].sort(
         (a, b) => Number(a.id) - Number(b.id)
     );
 
+    // Fetch on client if SSR data is missing
+    useEffect(() => {
+        if (initialData.length > 0) {
+            setLoading(false);
+            return;
+        }
 
-    const [selectedTerm, setSelectedTerm] =
-        useState<CouncilTerm | null>(null);
+        async function fetchHistory() {
+            try {
+                setLoading(true);
+                const res = await fetch("/api/proxy/history", {
+                    cache: "no-store",
+                });
+                if (!res.ok) throw new Error("Failed to fetch");
+                const json = await res.json();
+                setData(Array.isArray(json) ? json : []);
+            } catch (error) {
+                console.error("Client fetch error:", error);
+                setData([]);
+            } finally {
+                setLoading(false);
+            }
+        }
+        fetchHistory();
+    }, [initialData]);
 
     // Initialize with the latest term if available
     useEffect(() => {
         if (sortedData.length > 0 && !selectedTerm) {
             setSelectedTerm(sortedData[0]);
         }
-    }, [sortedData]);
+    }, [sortedData, selectedTerm]);
+
+    if (loading) {
+        return (
+            <section className={styles.wrapper}>
+                <div className={styles.loading}>กำลังโหลดข้อมูล...</div>
+            </section>
+        );
+    }
 
     return (
         <section className={styles.wrapper}>

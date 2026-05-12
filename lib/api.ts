@@ -31,7 +31,7 @@ export interface News {
     isHighlight: boolean;
 }
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "https://pharmacy-api-6w5d.onrender.com";
 
 // Helper function for fetch with timeout
 async function fetchWithTimeout(url: string, options: any = {}, timeout = 15000) {

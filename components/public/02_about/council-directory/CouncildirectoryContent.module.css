@@ -10,8 +10,8 @@
     box-sizing: border-box;
 }
 
-/* EMPTY STATE */
-.emptyBox {
+/* EMPTY & LOADING STATE */
+.emptyBox, .loading {
     width: 100%;
     max-width: 800px;
     text-align: center;
