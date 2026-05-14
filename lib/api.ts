@@ -428,3 +428,72 @@ export async function getHistory(): Promise<HistoryTerm[]> {
         return [];
     }
 }
+// ===== Honor / Hall of Fame =====
+
+export interface HonorAward {
+    id: number;
+    order: number;
+    name: string;
+    description: string;
+    createdAt: string;
+    recipientCount: number;
+}
+
+export interface HonorRecipient {
+    id: number;
+    awardId: number;
+    order: number;
+    prefix: string;
+    name: string;
+    awardName: string;
+    workName: string;
+    awardDetail: string;
+    imageUrl: string;
+    originalImageUrl: string;
+    videoUrl: string;
+    createdAt: string;
+}
+
+export async function getHonorAwards(): Promise<HonorAward[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/honor-awards`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch honor awards: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching honor awards:', error);
+        return [];
+    }
+}
+
+export async function getHonorRecipients(): Promise<HonorRecipient[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/honor`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch honor recipients: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching honor recipients:', error);
+        return [];
+    }
+}

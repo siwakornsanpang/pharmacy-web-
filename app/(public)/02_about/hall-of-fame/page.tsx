@@ -1,12 +1,16 @@
 import styles from "../subpage.module.css";
+import HalloffameContent from "@/components/public/02_about/hall-of-fame/HalloffameContent";
 
-export default function HallOfFamePage() {
+export default async function HallOfFamePage() {
     return (
-        <>
-            <h2 className={`${styles.contentTitle} ThaiFont`}>หอเกียรติประวัติ</h2>
-            <div className={styles.emptyPage}>
-                <p>เนื้อหาส่วนนี้กำลังอยู่ระหว่างการจัดทำ</p>
+        <main className={styles.mainContainer}>
+            <h2 className={`${styles.contentTitle} ThaiFont`}>
+                หอเกียรติประวัติ
+            </h2>
+
+            <div className={styles.contentWrapper}>
+                <HalloffameContent />
             </div>
-        </>
+        </main>
     );
 }
