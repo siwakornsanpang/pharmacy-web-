@@ -62,23 +62,23 @@ export async function getWebSettings(): Promise<WebSettings> {
         };
     }
 
-    try {
-        const res = await fetchWithTimeout(`${API_BASE_URL}/web-settings`, {
-            next: { revalidate: 60 }, // Cache for 1 minute
-        });
-
-        if (!res.ok) {
-            throw new Error(`Failed to fetch settings: ${res.statusText}`);
-        }
-
-        return res.json();
-    } catch (error) {
-        console.error('Error fetching web settings:', error);
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
         return {
             siteNameTh: 'สภาเภสัชกรรม',
             siteNameEn: 'The Pharmacy Council of Thailand',
         };
     }
+
+    const res = await fetchWithTimeout(`${API_BASE_URL}/web-settings`, {
+        next: { revalidate: 60 }, // Cache for 1 minute
+    });
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch settings: ${res.statusText}`);
+    }
+
+    return res.json();
 }
 
 export async function getNews(): Promise<News[]> {
@@ -415,20 +415,20 @@ export async function getHistory(): Promise<HistoryTerm[]> {
         return [];
     }
 
-    try {
-        const res = await fetchWithTimeout(`${API_BASE_URL}/history`, {
-            next: { revalidate: 60 },
-        });
-
-        if (!res.ok) {
-            throw new Error(`Failed to fetch history: ${res.statusText}`);
-        }
-
-        return res.json();
-    } catch (error) {
-        console.error('Error fetching history:', error);
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
         return [];
     }
+
+    const res = await fetchWithTimeout(`${API_BASE_URL}/history`, {
+        next: { revalidate: 60 },
+    });
+
+    if (!res.ok) {
+        throw new Error(`Failed to fetch history: ${res.statusText}`);
+    }
+
+    return res.json();
 }
 // ===== Honor / Hall of Fame =====
 
@@ -462,20 +462,15 @@ export async function getHonorAwards(): Promise<HonorAward[]> {
         return [];
     }
 
-    try {
-        const res = await fetchWithTimeout(`${API_BASE_URL}/honor-awards`, {
-            next: { revalidate: 60 },
-        });
+    const res = await fetchWithTimeout(`${API_BASE_URL}/honor-awards`, {
+        next: { revalidate: 60 },
+    });
 
-        if (!res.ok) {
-            throw new Error(`Failed to fetch honor awards: ${res.statusText}`);
-        }
-
-        return res.json();
-    } catch (error) {
-        console.error('Error fetching honor awards:', error);
-        return [];
+    if (!res.ok) {
+        throw new Error(`Failed to fetch honor awards: ${res.statusText}`);
     }
+
+    return res.json();
 }
 
 export async function getHonorRecipients(): Promise<HonorRecipient[]> {
@@ -484,18 +479,13 @@ export async function getHonorRecipients(): Promise<HonorRecipient[]> {
         return [];
     }
 
-    try {
-        const res = await fetchWithTimeout(`${API_BASE_URL}/honor`, {
-            next: { revalidate: 60 },
-        });
+    const res = await fetchWithTimeout(`${API_BASE_URL}/honor`, {
+        next: { revalidate: 60 },
+    });
 
-        if (!res.ok) {
-            throw new Error(`Failed to fetch honor recipients: ${res.statusText}`);
-        }
-
-        return res.json();
-    } catch (error) {
-        console.error('Error fetching honor recipients:', error);
-        return [];
+    if (!res.ok) {
+        throw new Error(`Failed to fetch honor recipients: ${res.statusText}`);
     }
+
+    return res.json();
 }
