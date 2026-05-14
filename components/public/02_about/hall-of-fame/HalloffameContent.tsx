@@ -3,7 +3,9 @@
 import { useEffect, useState } from "react";
 import styles from "./HalloffameContent.module.css";
 import { motion } from "framer-motion";
-import { getHonorAwards, getHonorRecipients, HonorAward, HonorRecipient } from "@/lib/api";
+import { HonorAward, HonorRecipient } from "@/lib/api";
+
+const API_URL = "/api/proxy";
 
 export default function HalloffameContent() {
     const [awards, setAwards] = useState<HonorAward[]>([]);
@@ -18,10 +20,36 @@ export default function HalloffameContent() {
             try {
                 setLoading(true);
                 setError(null);
-                const [awardsData, recipientsData] = await Promise.all([
-                    getHonorAwards(),
-                    getHonorRecipients(),
+
+                const cleanApiUrl = API_URL.replace(/\/$/, "");
+
+                const [awardsRes, recipientsRes] = await Promise.all([
+                    fetch(`${cleanApiUrl}/honor-awards`, { cache: "no-store" }),
+                    fetch(`${cleanApiUrl}/honor`, { cache: "no-store" }),
                 ]);
+
+                if (!awardsRes.ok || !recipientsRes.ok) {
+                    throw new Error(`เกิดข้อผิดพลาดในการโหลดข้อมูล (Status: ${awardsRes.status}/${recipientsRes.status})`);
+                }
+
+                const [awardsJson, recipientsJson] = await Promise.all([
+                    awardsRes.json(),
+                    recipientsRes.json(),
+                ]);
+
+                // Robust data extraction (handling both direct arrays and nested .data arrays)
+                const awardsData = Array.isArray(awardsJson)
+                    ? awardsJson
+                    : Array.isArray(awardsJson.data)
+                        ? awardsJson.data
+                        : [];
+
+                const recipientsData = Array.isArray(recipientsJson)
+                    ? recipientsJson
+                    : Array.isArray(recipientsJson.data)
+                        ? recipientsJson.data
+                        : [];
+
                 setAwards(awardsData);
                 setRecipients(recipientsData);
             } catch (err: any) {
