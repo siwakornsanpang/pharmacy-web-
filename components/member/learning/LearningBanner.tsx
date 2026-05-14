@@ -18,7 +18,7 @@ export default function LearningBanner({ onBack }: LearningBannerProps) {
                     </button>
                 )}
                 <div className={styles.bannerContent}>
-                    <h1 className={`${styles.bannerTitle} ThaiFont`}>ศูนย์การเรียนรู้ออนไลน์</h1>
+                    <h1 className={`${styles.bannerTitle} ThaiFont`}>การศึกษา</h1>
                     <p className={`${styles.bannerSubtitle} ThaiFont`}>
                         ยกระดับทักษะและวิชาชีพเภสัชกรรม ด้วยคอร์สเรียนออนไลน์ที่หลากหลายและทันสมัย
                     </p>
