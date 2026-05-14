@@ -79,22 +79,30 @@ export default function CouncildirectoryContent({
                 </div>
             )}
 
-            {/* TIMELINE SCROLLER */}
+            {/* DROPDOWN SELECTOR */}
             {sortedData.length > 0 && (
-                <div className={styles.scrollSection}>
+                <div className={styles.dropdownSection}>
                     <h3 className={styles.scrollTitle}>วาระ:</h3>
-                    <div className={styles.scrollContainer}>
-                        <div className={styles.scrollContent}>
-                            {/* Duplicated List for Infinite Loop (Need enough items to fill width) */}
-                            {[...sortedData, ...sortedData, ...sortedData, ...sortedData].map((item, idx) => (
-                                <button
-                                    key={`${item.id}-${idx}`}
-                                    className={`${styles.termItem} ${selectedTerm?.id === item.id ? styles.active : ""}`}
-                                    onClick={() => setSelectedTerm(item)}
-                                >
-                                    {item.term}
-                                </button>
+                    <div className={styles.selectWrapper}>
+                        <select
+                            className={styles.termSelect}
+                            value={selectedTerm?.id || ""}
+                            onChange={(e) => {
+                                const termId = Number(e.target.value);
+                                const term = sortedData.find((t) => t.id === termId);
+                                if (term) setSelectedTerm(term);
+                            }}
+                        >
+                            {sortedData.map((item) => (
+                                <option key={item.id} value={item.id}>
+                                    วาระที่ {item.term} (พ.ศ. {item.startYear} - {item.endYear})
+                                </option>
                             ))}
+                        </select>
+                        <div className={styles.selectArrow}>
+                            <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
                         </div>
                     </div>
                 </div>

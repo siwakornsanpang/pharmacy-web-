@@ -112,16 +112,16 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
     return (
         <section className={styles.wrapper}>
             <CommitteeCarousel
-                title="กรรมการแต่งตั้งสภา"
-                members={appointed}
-                typeLabel="แต่งตั้ง"
+                title="กรรมการเลือกตั้งสภา"
+                members={elected}
+                typeLabel="เลือกตั้ง"
                 onSelect={setSelected}
             />
 
             <CommitteeCarousel
-                title="กรรมการเลือกตั้งสภา"
-                members={elected}
-                typeLabel="เลือกตั้ง"
+                title="กรรมการแต่งตั้งสภา"
+                members={appointed}
+                typeLabel="แต่งตั้ง"
                 onSelect={setSelected}
             />
 
@@ -144,11 +144,7 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
                         </div>
 
                         <div className={styles.modalContent}>
-                            <span className={styles.modalBadge}>
-                                {appointed.some((item) => item.id === selected.id)
-                                    ? "แต่งตั้งสภา"
-                                    : "เลือกตั้งสภา"}
-                            </span>
+
 
                             <h3>
                                 {selected.prefix}
@@ -186,9 +182,6 @@ function CommitteeCarousel({
 }) {
     if (members.length === 0) return null;
 
-    // Duplicate members list for seamless looping (x3 to be safe)
-    const displayMembers = [...members, ...members, ...members];
-
     return (
         <div className={styles.carouselSection}>
             <div className={styles.sectionHead}>
@@ -196,43 +189,39 @@ function CommitteeCarousel({
                 <span>{members.length} ท่าน</span>
             </div>
 
-            <div className={styles.marqueeContainer}>
-                <div className={styles.marqueeTrack}>
-                    {displayMembers.map((member, index) => (
-                        <div 
-                            key={`${typeLabel}-${member.id}-${index}`}
-                            className={styles.marqueeItem}
-                        >
-                            <article className={styles.card}>
-                                <div className={styles.imageBox}>
-                                    <img
-                                        src={member.imageUrl}
-                                        alt={`${member.prefix}${member.name}`}
-                                    />
-                                </div>
+            <div className={styles.gridContainer}>
+                {members.map((member) => (
+                    <div
+                        key={`${typeLabel}-${member.id}`}
+                        className={styles.gridItem}
+                    >
+                        <article className={styles.card}>
+                            <div className={styles.imageBox}>
+                                <img
+                                    src={member.imageUrl}
+                                    alt={`${member.prefix}${member.name}`}
+                                />
+                            </div>
 
-                                <div className={styles.cardContent}>
-                                    <span className={styles.typeBadge}>{typeLabel}</span>
+                            <div className={styles.cardContent}>
+                                <h4>
+                                    {member.prefix}
+                                    {member.name}
+                                </h4>
 
-                                    <h4>
-                                        {member.prefix}
-                                        {member.name}
-                                    </h4>
+                                <p className={styles.position}>{member.position}</p>
 
-                                    <p className={styles.position}>{member.position}</p>
-
-                                    <button
-                                        type="button"
-                                        className={styles.moreButton}
-                                        onClick={() => onSelect(member)}
-                                    >
-                                        ดูประวัติ
-                                    </button>
-                                </div>
-                            </article>
-                        </div>
-                    ))}
-                </div>
+                                <button
+                                    type="button"
+                                    className={styles.moreButton}
+                                    onClick={() => onSelect(member)}
+                                >
+                                    ดูประวัติ
+                                </button>
+                            </div>
+                        </article>
+                    </div>
+                ))}
             </div>
         </div>
     );
