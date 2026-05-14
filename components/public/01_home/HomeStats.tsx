@@ -3,7 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import styles from "./HomeStats.module.css";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
+import { API_BASE_URL } from "@/lib/api";
 
 interface AnimatedNumberProps {
   value: number;
@@ -83,8 +83,8 @@ export default function HomeStats() {
   useEffect(() => {
     const fetchStats = async () => {
       try {
-        if (API_URL) {
-          const res = await fetch(`${API_URL}/pharmacists`);
+        if (API_BASE_URL) {
+          const res = await fetch(`${API_BASE_URL}/pharmacists`);
           if (res.ok) {
             const data = await res.json();
             if (Array.isArray(data)) {

@@ -63,8 +63,8 @@ const nextConfig: NextConfig = {
         { source: "/tools/:path*", destination: "/07_tools/:path*" },
         { source: "/store", destination: "/08_store" },
         { source: "/store/:path*", destination: "/08_store/:path*" },
-      ],
-      fallback: [
+
+        // API Proxy
         {
           source: "/api/proxy/:path*",
           destination: "https://pharmacy-api-6w5d.onrender.com/:path*",

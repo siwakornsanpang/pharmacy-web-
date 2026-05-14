@@ -9,6 +9,7 @@ export default function HalloffameContent() {
     const [awards, setAwards] = useState<HonorAward[]>([]);
     const [recipients, setRecipients] = useState<HonorRecipient[]>([]);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
     const [selectedAward, setSelectedAward] = useState<HonorAward | null>(null);
     const [selectedRecipient, setSelectedRecipient] = useState<HonorRecipient | null>(null);
 
@@ -16,14 +17,16 @@ export default function HalloffameContent() {
         async function fetchData() {
             try {
                 setLoading(true);
+                setError(null);
                 const [awardsData, recipientsData] = await Promise.all([
                     getHonorAwards(),
                     getHonorRecipients(),
                 ]);
                 setAwards(awardsData);
                 setRecipients(recipientsData);
-            } catch (error) {
-                console.error("Failed to fetch Hall of Fame data:", error);
+            } catch (err: any) {
+                console.error("Failed to fetch Hall of Fame data:", err);
+                setError(err.message || "เกิดข้อผิดพลาดในการโหลดข้อมูล");
             } finally {
                 setLoading(false);
             }
@@ -59,6 +62,22 @@ export default function HalloffameContent() {
         return (
             <div className={styles.loadingWrapper}>
                 <div className={styles.loader}>กำลังโหลดข้อมูล...</div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className={styles.loadingWrapper}>
+                <div className={styles.error} style={{ color: '#ff4444', textAlign: 'center', padding: '40px' }}>
+                    <p>{error}</p>
+                    <button 
+                        onClick={() => window.location.reload()} 
+                        style={{ marginTop: '20px', padding: '8px 16px', background: '#737300', color: 'white', borderRadius: '5px' }}
+                    >
+                        ลองใหม่อีกครั้ง
+                    </button>
+                </div>
             </div>
         );
     }
