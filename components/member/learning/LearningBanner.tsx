@@ -1,12 +1,22 @@
 "use client";
 
-import React from 'react';
+import { ChevronLeft } from 'lucide-react';
 import styles from "./LearningBanner.module.css";
 
-export default function LearningBanner() {
+interface LearningBannerProps {
+    onBack?: () => void;
+}
+
+export default function LearningBanner({ onBack }: LearningBannerProps) {
     return (
         <div className={styles.banner}>
             <div className={styles.bannerOverlay}>
+                {onBack && (
+                    <button onClick={onBack} className={styles.backBtn}>
+                        <ChevronLeft size={20} />
+                        <span>กลับสู่หน้าหลัก</span>
+                    </button>
+                )}
                 <div className={styles.bannerContent}>
                     <h1 className={`${styles.bannerTitle} ThaiFont`}>ศูนย์การเรียนรู้ออนไลน์</h1>
                     <p className={`${styles.bannerSubtitle} ThaiFont`}>

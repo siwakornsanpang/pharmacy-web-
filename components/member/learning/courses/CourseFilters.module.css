@@ -1,6 +1,6 @@
 .wrapper {
   width: 100%;
-  margin: 2rem auto;
+  margin: 0 auto 2.5rem;
   background: white;
   padding: 1.5rem 2rem;
   border-radius: 1.5rem;
@@ -14,7 +14,7 @@
   display: flex;
   align-items: baseline;
   gap: 0.75rem;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 }
 
 .title {
@@ -40,26 +40,30 @@
 .dropdown {
   position: relative;
   flex-shrink: 0;
+  min-width: 180px;
 }
 
 .dropdownButton {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
   height: 100%;
-  padding: 0.65rem 1rem;
+  padding: 0.75rem 1rem;
   background: #fff;
   border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   font-size: 0.875rem;
   color: #374151;
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.2s;
+  transition: all 0.2s;
 }
 
 .dropdownButton:hover {
   border-color: var(--primary-olive);
+  background: #f8fafc;
 }
 
 .dropdownIcon {
@@ -77,40 +81,41 @@
 
 .dropdownMenu {
   position: absolute;
-  top: calc(100% + 4px);
+  top: calc(100% + 6px);
   left: 0;
   min-width: 100%;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   list-style: none;
   margin: 0;
-  padding: 0.25rem 0;
+  padding: 0.5rem 0;
   z-index: 100;
 }
 
 .dropdownItem {
   display: block;
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.65rem 1.25rem;
   background: none;
   border: none;
   text-align: left;
-  font-size: 0.85rem;
-  color: #374151;
+  font-size: 0.9rem;
+  color: #4b5563;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: all 0.15s;
 }
 
 .dropdownItem:hover {
   background: #f9fafb;
+  color: var(--primary-olive);
 }
 
 .dropdownItemActive {
   color: var(--primary-olive);
   font-weight: 600;
-  background: #f5f5e0;
+  background: rgba(115, 115, 0, 0.05);
 }
 
 /* === Input === */
@@ -123,20 +128,20 @@
 
 .inputIcon {
   position: absolute;
-  left: 0.85rem;
+  left: 1rem;
   color: #9ca3af;
   pointer-events: none;
 }
 
 .input {
   width: 100%;
-  padding: 0.65rem 1rem 0.65rem 2.75rem;
+  padding: 0.75rem 1rem 0.75rem 3rem;
   border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   font-size: 0.875rem;
   color: #1f2937;
   outline: none;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition: all 0.2s;
   background-color: #fff;
 }
 
@@ -151,48 +156,41 @@
 
 /* === Search Button === */
 .searchButton {
-  padding: 0.65rem 2.5rem;
+  padding: 0 2.5rem;
   background: linear-gradient(90deg, rgba(197, 193, 120, 1) 0%, rgba(115, 115, 0, 1) 100%);
   color: #fff;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
+  border-radius: 0.75rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: opacity 0.2s;
+  transition: transform 0.2s, opacity 0.2s;
 }
 
 .searchButton:hover {
-  opacity: 0.9;
+  opacity: 0.95;
+  transform: translateY(-1px);
 }
 
 /* === Responsive === */
+@media (max-width: 1024px) {
+  .dropdown {
+    min-width: 140px;
+  }
+}
+
 @media (max-width: 768px) {
-  .wrapper {
-    margin: -2rem auto 2rem;
-    padding: 1.5rem;
-    width: 95%;
-  }
-
-  .header {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0.25rem;
-  }
-
   .searchRow {
     flex-direction: column;
     gap: 0.75rem;
   }
 
-  .dropdownButton {
+  .dropdown {
     width: 100%;
-    justify-content: space-between;
   }
 
   .searchButton {
-    width: 100%;
-    padding: 0.75rem;
+    padding: 0.85rem;
   }
 }

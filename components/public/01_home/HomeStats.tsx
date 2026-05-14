@@ -22,6 +22,12 @@ function AnimatedNumber({ value, duration = 2000 }: AnimatedNumberProps) {
       ([entry]) => {
         if (entry.isIntersecting) {
           setHasStarted(true);
+        } else {
+          // Reset when scrolling away
+          setHasStarted(false);
+          setCount(0);
+          startTimeRef.current = null;
+          countRef.current = 0;
         }
       },
       { threshold: 0.1 }
@@ -36,6 +42,8 @@ function AnimatedNumber({ value, duration = 2000 }: AnimatedNumberProps) {
 
   useEffect(() => {
     if (!hasStarted) return;
+
+    let animationFrameId: number;
 
     const animate = (timestamp: number) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
@@ -52,11 +60,12 @@ function AnimatedNumber({ value, duration = 2000 }: AnimatedNumberProps) {
       }
 
       if (progress < 1) {
-        requestAnimationFrame(animate);
+        animationFrameId = requestAnimationFrame(animate);
       }
     };
 
-    requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
   }, [value, duration, hasStarted]);
 
   return (

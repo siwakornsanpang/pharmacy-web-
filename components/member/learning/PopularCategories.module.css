@@ -1,6 +1,6 @@
 .section {
-    padding: 4rem 0;
-    background: #fdfdfd;
+    padding: 3rem 0;
+    background: #ffffff;
 }
 
 .container {
@@ -19,8 +19,8 @@
 
 .card {
     background: white;
-    padding: 2.5rem 1.5rem;
-    border-radius: 1.5rem;
+    padding: 1.5rem 1rem;
+    border-radius: 1.25rem;
     text-align: center;
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     cursor: pointer;
@@ -38,13 +38,13 @@
 }
 
 .iconWrapper {
-    width: 80px;
-    height: 80px;
+    width: 60px;
+    height: 60px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
     transition: all 0.3s ease;
 }
 
@@ -53,10 +53,10 @@
 }
 
 .catTitle {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
     font-weight: 700;
     color: #2d3436;
-    margin: 0 0 0.5rem 0;
+    margin: 0 0 0.25rem 0;
 }
 
 .catCount {
