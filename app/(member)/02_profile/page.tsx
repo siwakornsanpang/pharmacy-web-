@@ -5,6 +5,7 @@ import { useAuth } from "@/context/AuthContext";
 import ProfileBanner from "@/components/member/profile/ProfileBanner";
 import PharmacistInfoCard from "@/components/member/profile/PharmacistInfoCard";
 import CreditSection from "@/components/member/profile/CreditSection";
+import CertificateSection from "@/components/member/profile/CertificateSection";
 import MeetingSection from "@/components/member/profile/MeetingSection";
 import CourseSection from "@/components/member/profile/CourseSection";
 
@@ -22,6 +23,7 @@ export default function ProfilePage() {
             <main className={styles.contentBody}>
                 <PharmacistInfoCard userName={displayUserName} userId={displayUserId} />
                 <CreditSection />
+                <CertificateSection />
                 <MeetingSection />
                 <CourseSection />
             </main>

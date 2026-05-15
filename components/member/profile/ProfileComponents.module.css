@@ -350,6 +350,79 @@
     padding-top: 1.25rem;
 }
 
+/* Certificate Card */
+.certificateCard {
+    background: white;
+    border-radius: 24px;
+    padding: 2rem;
+    border: 1px solid #f2f2f2;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+    transition: all 0.3s ease;
+}
+
+.certificateCard:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.06);
+}
+
+.certHeader {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.certIconWrap {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: rgba(115, 115, 0, 0.1);
+    color: #737300;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.certTitle {
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+}
+
+.certDate {
+    font-size: 0.9rem;
+    color: #666;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.certAction {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #737300;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px dashed #eee;
+}
+
+.certAction:hover {
+    color: #5c5c00;
+    gap: 0.6rem;
+}
+
 /* Course Cards */
 .coursesGrid {
     display: grid;

@@ -1,0 +1,293 @@
+.section {
+    margin-bottom: 2.5rem;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.fireIcon {
+    color: #ef4444;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.15); }
+}
+
+.sectionTitle {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0;
+}
+
+.navBtns {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.navBtn {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 1.5px solid #e2e8f0;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #64748b;
+    transition: all 0.25s ease;
+}
+
+.navBtn:hover {
+    background: #737300;
+    border-color: #737300;
+    color: #fff;
+    box-shadow: 0 2px 10px rgba(115, 115, 0, 0.25);
+}
+
+.counter {
+    font-size: 0.8rem;
+    color: #94a3b8;
+    font-weight: 600;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* ─── Featured Card ─── */
+.featuredCard {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    background: #fff;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    border: 1px solid #f3f4f6;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+    transition: all 0.3s ease;
+}
+
+.featuredCard:hover {
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.1);
+}
+
+.featuredImageWrap {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    background: #f8fafc;
+}
+
+.featuredImage {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s ease;
+}
+
+.featuredCard:hover .featuredImage {
+    transform: scale(1.05);
+}
+
+.featuredBadge {
+    position: absolute;
+    top: 1.25rem;
+    left: 1.25rem;
+    padding: 0.4rem 1rem;
+    background: linear-gradient(135deg, #737300, #8b8b00);
+    color: white;
+    font-size: 0.8rem;
+    font-weight: 700;
+    border-radius: 2rem;
+    box-shadow: 0 2px 8px rgba(115, 115, 0, 0.3);
+}
+
+/* ─── Info ─── */
+.featuredInfo {
+    padding: 2rem 2rem 2rem 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.featuredCategory {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: #737300;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.5rem;
+}
+
+.featuredName {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 0.75rem;
+    line-height: 1.35;
+}
+
+.featuredRating {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+.ratingText {
+    font-size: 0.85rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.featuredDesc {
+    font-size: 0.9rem;
+    color: #64748b;
+    line-height: 1.7;
+    margin: 0 0 1.25rem;
+}
+
+.featuredPriceRow {
+    display: flex;
+    align-items: baseline;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.featuredPrice {
+    font-size: 2rem;
+    font-weight: 900;
+    color: #737300;
+}
+
+.featuredOriginal {
+    font-size: 1.1rem;
+    color: #94a3b8;
+    text-decoration: line-through;
+}
+
+/* ─── Actions ─── */
+.featuredActions {
+    display: flex;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.addToCartBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.5rem;
+    border: 2px solid #737300;
+    background: transparent;
+    color: #737300;
+    border-radius: 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.addToCartBtn:hover {
+    background: #737300;
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(115, 115, 0, 0.2);
+}
+
+.buyNowBtn {
+    flex: 1;
+    padding: 0.85rem 1.5rem;
+    border: none;
+    background: linear-gradient(135deg, #737300, #8b8b00);
+    color: white;
+    border-radius: 0.85rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 14px rgba(115, 115, 0, 0.25);
+}
+
+.buyNowBtn:hover {
+    background: linear-gradient(135deg, #8b8b00, #a0a000);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(115, 115, 0, 0.35);
+}
+
+/* ─── Sold Progress ─── */
+.soldInfo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.progressBar {
+    flex: 1;
+    height: 6px;
+    background: #f1f5f9;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progressFill {
+    height: 100%;
+    background: linear-gradient(90deg, #c5c178, #737300);
+    border-radius: 10px;
+    transition: width 0.8s ease;
+}
+
+.soldText {
+    font-size: 0.78rem;
+    color: #94a3b8;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 900px) {
+    .featuredCard {
+        grid-template-columns: 1fr;
+        gap: 0;
+    }
+    .featuredInfo {
+        padding: 1.5rem;
+    }
+    .featuredName {
+        font-size: 1.25rem;
+    }
+    .featuredPrice {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .sectionTitle {
+        font-size: 1.2rem;
+    }
+    .featuredActions {
+        flex-direction: column;
+    }
+    .featuredInfo {
+        padding: 1.25rem;
+    }
+}
