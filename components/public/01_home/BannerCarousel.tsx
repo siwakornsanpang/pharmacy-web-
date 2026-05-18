@@ -57,11 +57,11 @@ export default function BannerCarousel({
           </>
         ) : (
           <>
-            <h1 className={styles.title}>สภาเภสัชกรรม</h1>
-            <h2 className={styles.subtitle}>The Pharmacy Council of Thailand</h2>
+            {/* <h1 className={styles.title}>สภาเภสัชกรรม</h1> */}
+            {/* <h2 className={styles.subtitle}>The Pharmacy Council of Thailand</h2>
             <p className={styles.slogan}>
               {slogan ? `“${slogan}”` : "“สภาเคียงข้าง สร้างวิชาชีพชั้นนำ ทำให้ประชาชนวางใจ”"}
-            </p>
+            </p> */}
           </>
         )}
       </div>
