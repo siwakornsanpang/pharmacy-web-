@@ -19,26 +19,12 @@
     border-color: #e5e7eb;
 }
 
-.card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 4px;
-    height: 100%;
-    background: linear-gradient(to bottom, #737300, #c5c178);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
 
-.card:hover::before {
-    opacity: 1;
-}
 
 .header {
     display: flex;
-    gap: 1rem;
-    align-items: flex-start;
+    gap: 1.25rem;
+    align-items: center;
 }
 
 .logoSection {
@@ -46,22 +32,46 @@
 }
 
 .companyLogo {
-    width: 54px;
-    height: 54px;
-    background: #f8fafc;
-    border-radius: 1rem;
+    width: 80px;
+    height: 80px;
+    border-radius: 1.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #94a3b8;
-    border: 1px solid #f1f5f9;
-    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.companyLogo.hospital {
+    background: #e0f2fe;
+    color: #0284c7;
+    border: 1.5px solid #bae6fd;
+}
+
+.companyLogo.factory {
+    background: #fffbeb;
+    color: #d97706;
+    border: 1.5px solid #fef3c7;
+}
+
+.companyLogo.pharmacy {
+    background: rgba(115, 115, 0, 0.06);
+    color: #737300;
+    border: 1.5px solid rgba(115, 115, 0, 0.15);
+}
+
+.companyLogo.default {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1.5px solid #e2e8f0;
 }
 
 .titleInfo {
     flex: 1;
     display: flex;
     flex-direction: column;
+    gap: 0.25rem;
+    padding-right: 10.5rem; /* Give room for absolute positioned salaryBadge on desktop */
 }
 
 .title {
@@ -70,13 +80,12 @@
     color: #1e293b;
     margin: 0;
     transition: color 0.2s;
-    line-height: 1.5;
+    line-height: 1.4;
 }
 
 .titleLink {
     text-decoration: none;
     display: block;
-    margin-bottom: 0.5rem;
 }
 
 .titleLink:hover .title {
@@ -101,23 +110,35 @@
 }
 
 .salaryBadge {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
     display: flex;
     align-items: center;
     gap: 0.35rem;
-    padding: 0.4rem 0.75rem;
+    padding: 0.45rem 1rem;
     background: #f0fdf4;
     color: #16a34a;
     border-radius: 2rem;
-    font-size: 0.8rem;
+    font-size: 0.85rem;
     font-weight: 700;
     white-space: nowrap;
+    box-shadow: 0 2px 8px rgba(22, 163, 74, 0.05);
+}
+
+.middleSection {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
 }
 
 .details {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
-    margin-top: 0.5rem;
 }
 
 .detailItem {
@@ -125,7 +146,7 @@
     align-items: center;
     gap: 0.4rem;
     color: #64748b;
-    font-size: 0.8rem;
+    font-size: 0.82rem;
 }
 
 .description {
@@ -217,4 +238,16 @@
     border-color: transparent;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(115, 115, 0, 0.2);
+}
+
+@media (max-width: 768px) {
+    .titleInfo {
+        padding-right: 0;
+    }
+
+    .salaryBadge {
+        position: static;
+        width: fit-content;
+        margin-top: 0.25rem;
+    }
 }

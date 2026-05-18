@@ -156,12 +156,44 @@
 }
 
 @media (max-width: 768px) {
+    .filterBar {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+        padding: 1rem 0;
+        width: 100%;
+    }
+    
+    .filterContainer {
+        width: 100%;
+    }
+
+    .filterWrapper {
+        width: 100%;
+        min-width: unset;
+        justify-content: space-between;
+        padding: 0.6rem 1rem;
+        border-radius: 0.85rem;
+    }
+
     .divider {
         display: none;
     }
     
     .dropdownMenu {
-        left: 50%;
-        transform: translateX(-50%);
+        left: 0;
+        right: 0;
+        transform: none;
+        width: 100%;
+        min-width: unset;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    }
+    
+    .clearBtn {
+        grid-column: span 2;
+        width: 100%;
+        text-align: center;
+        padding: 0.75rem;
+        border-radius: 0.85rem;
     }
 }
