@@ -112,10 +112,11 @@ const MembersContent = () => {
   const [data, setData] = useState<ProvinceData[]>([]); // ข้อมูลสถิติทุกจังหวัด
   const [selectedProvince, setSelectedProvince] = useState<ProvinceData | null>(null); // จังหวัดที่กำลังเลือก
   const [hoveredData, setHoveredData] = useState<{ id: string; name: string; count: number; x: number; y: number } | null>(null); // ข้อมูลขณะเอาเมาส์ชี้
-  const [position, setPosition] = useState({ coordinates: [100.5, 13.2], zoom: 1 }); // ตำแหน่งและระดับการซูมของแผนที่
+  const [position, setPosition] = useState({ coordinates: [100.5, 13.0], zoom: 1 }); // ตำแหน่งและระดับการซูมของแผนที่
   const [searchQuery, setSearchQuery] = useState(""); // ข้อความค้นหา
   const [isSearchOpen, setIsSearchOpen] = useState(false); // สถานะเปิด/ปิด Dropdown ค้นหา
   const containerRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number; time: number } | null>(null);
 
   // รายชื่อจังหวัดทั้งหมดสำหรับใช้ในการค้นหา
   const allProvincesList = Object.keys(provinceMapping).map(key => ({
@@ -188,6 +189,45 @@ const MembersContent = () => {
     setPosition((pos) => ({ ...pos, zoom: pos.zoom / 1.5 }));
   };
 
+  // จัดการเมื่อแตะหน้าจอบนมือถือ (Touch Capture) เพื่อแก้ปัญหาการถูก ZoomableGroup หรือ Browser scrolling กลืน/กวน Event
+  const handleMapTouchStartCapture = (e: React.TouchEvent) => {
+    const touch = e.touches[0];
+    touchStartRef.current = {
+      x: touch.clientX,
+      y: touch.clientY,
+      time: Date.now()
+    };
+  };
+
+  const handleMapTouchEndCapture = (e: React.TouchEvent) => {
+    if (!touchStartRef.current) return;
+    const touch = e.changedTouches[0];
+    const dx = touch.clientX - touchStartRef.current.x;
+    const dy = touch.clientY - touchStartRef.current.y;
+    const dt = Date.now() - touchStartRef.current.time;
+    
+    // หากนิ้วเลื่อนน้อยกว่า 30px และกดยกเร็วภายใน 500ms ถือเป็น Tap (คลิกสัมผัส)
+    if (Math.sqrt(dx * dx + dy * dy) < 30 && dt < 500) {
+      const element = document.elementFromPoint(touch.clientX, touch.clientY);
+      if (element) {
+        const provinceId = element.getAttribute("data-province-id");
+        if (provinceId) {
+          if (e.cancelable) {
+            e.preventDefault(); // ป้องกันการเบิ้ลคลิกบนอุปกรณ์มือถือ
+          }
+          const provinceStats = getProvinceData(provinceId);
+          const thaiName = provinceMapping[provinceId] || provinceId;
+          if (provinceStats) {
+            setSelectedProvince({ ...provinceStats, name: thaiName });
+          } else {
+            setSelectedProvince({ id: provinceId, name: thaiName, count: 0 });
+          }
+        }
+      }
+    }
+    touchStartRef.current = null;
+  };
+
   // จัดการเมื่อการซูมหรือเลื่อนแผนที่สิ้นสุดลง
   const handleMoveEnd = (newPosition: { coordinates: [number, number]; zoom: number }) => {
     setPosition(newPosition);
@@ -212,7 +252,11 @@ const MembersContent = () => {
       )}
 
       {/* ส่วนของแผนที่ */}
-      <div className={`${styles.mapWrapper} ${styles.animateFadeInUp}`}>
+      <div 
+        className={`${styles.mapWrapper} ${styles.animateFadeInUp}`}
+        onTouchStartCapture={handleMapTouchStartCapture}
+        onTouchEndCapture={handleMapTouchEndCapture}
+      >
         {/* ปุ่มควบคุมการซูม */}
         <div className={styles.zoomControls}>
           <button onClick={handleZoomIn} className={styles.zoomButton} title="ซูมเข้า">
@@ -221,7 +265,7 @@ const MembersContent = () => {
           <button onClick={handleZoomOut} className={styles.zoomButton} title="ซูมออก">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           </button>
-          <button onClick={() => setPosition({ coordinates: [100.5, 13.2], zoom: 1 })} className={styles.zoomButton} title="คืนค่าเริ่มต้น">
+          <button onClick={() => setPosition({ coordinates: [100.5, 13.0], zoom: 1 })} className={styles.zoomButton} title="คืนค่าเริ่มต้น">
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><polyline points="3 3 3 8 8 8"></polyline></svg>
           </button>
         </div>
@@ -229,13 +273,16 @@ const MembersContent = () => {
         <ComposableMap
           projection="geoMercator"
           projectionConfig={{
-            scale: 3500,
-            center: [100.5, 13.2],
+            scale: 3200,
+            center: [100.5, 13.0],
           }}
+          width={800}
+          height={800}
           style={{ 
             width: "100%", 
             height: "100%",
-            filter: "drop-shadow(0px 15px 25px rgba(0, 0, 0, 0.1)) drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.05))"
+            filter: "drop-shadow(0px 15px 25px rgba(0, 0, 0, 0.1)) drop-shadow(0px 5px 10px rgba(0, 0, 0, 0.05))",
+            touchAction: "none"
           }}
         >
           <ZoomableGroup
@@ -268,6 +315,7 @@ const MembersContent = () => {
                         <Geography
                           key={geo.rsmKey}
                           geography={geo}
+                          data-province-id={provinceId}
                           onMouseEnter={(e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count)}
                           onMouseMove={(e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count)}
                           onMouseLeave={() => setHoveredData(null)}
@@ -323,6 +371,7 @@ const MembersContent = () => {
                         <Geography
                           key={`active-${activeGeo.rsmKey}`}
                           geography={activeGeo}
+                          data-province-id={provinceId}
                           onMouseEnter={!isSelected ? (e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count) : undefined}
                           onMouseMove={!isSelected ? (e: React.MouseEvent) => handleMouseMove(e, provinceId, provinceId, count) : undefined}
                           onMouseLeave={() => setHoveredData(null)}
@@ -423,92 +472,94 @@ const MembersContent = () => {
           )}
         </div>
 
-        <div className={`${styles.statsCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.1s' }}>
-          <div className={styles.cardGlow} />
+        <div className={styles.statsCardsContainer}>
+          <div className={`${styles.statsCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.1s' }}>
+            <div className={styles.cardGlow} />
 
-          {/* สรุปยอดรวมทั้งประเทศแบบตัวใหญ่ */}
-          <div className={styles.totalSummarySection}>
-            <span className={styles.totalSummaryLabel}>เภสัชกรทั้งหมด</span>
-            <div className={styles.totalSummaryValueWrapper}>
-              <span className={styles.totalSummaryNumber}>{totalCount.toLocaleString()}</span>
-              <span className={styles.totalSummaryUnit}>คน</span>
-            </div>
-          </div>
-
-          <div className={styles.cardDivider} />
-
-          <h4 className={styles.statsHeader}>ข้อมูลรายจังหวัด</h4>
-          <h2 className={styles.statsTitle}>
-            {selectedProvince?.name || "ประเทศไทย"}
-          </h2>
-
-          <div className={styles.statsMain}>
-            <div className={styles.statsCountWrapper}>
-              <span className={styles.statsNumber}>
-                {selectedProvince?.count.toLocaleString() || 0}
-              </span>
-              <div className={styles.statsUnitWrapper}>
-                <span className={styles.statsUnit}>คน</span>
+            {/* สรุปยอดรวมทั้งประเทศแบบตัวใหญ่ */}
+            <div className={styles.totalSummarySection}>
+              <span className={styles.totalSummaryLabel}>เภสัชกรทั้งหมด</span>
+              <div className={styles.totalSummaryValueWrapper}>
+                <span className={styles.totalSummaryNumber}>{totalCount.toLocaleString()}</span>
+                <span className={styles.totalSummaryUnit}>คน</span>
               </div>
             </div>
 
-            <div className={styles.statsProgressInfo}>
-              <div className={styles.statsProgressHeader}>
-                <span className={styles.statsProgressLabel}>สัดส่วนจากทั้งหมด</span>
-                <span className={styles.statsProgressStatus}>
-                  {selectedProvince && totalCount > 0 
-                    ? `${((selectedProvince.count / totalCount) * 100).toFixed(2)}%` 
-                    : "0.00%"}
+            <div className={styles.cardDivider} />
+
+            <h4 className={styles.statsHeader}>ข้อมูลรายจังหวัด</h4>
+            <h2 className={styles.statsTitle}>
+              {selectedProvince?.name || "ประเทศไทย"}
+            </h2>
+
+            <div className={styles.statsMain}>
+              <div className={styles.statsCountWrapper}>
+                <span className={styles.statsNumber}>
+                  {selectedProvince?.count.toLocaleString() || 0}
                 </span>
-              </div>
-              <div className={styles.progressBar}>
-                <div
-                  className={styles.progressFill}
-                  style={{
-                    width: `${selectedProvince && totalCount > 0 ? (selectedProvince.count / totalCount) * 100 : 0}%`
-                  }}
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* รายการ 5 อันดับสูงสุด */}
-        <div className={`${styles.rankingCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.2s' }}>
-          <div className={styles.rankingHeader}>
-            <div className={styles.rankingTitleWrapper}>
-              <div className={`${styles.rankingIndicator} ${styles.animatePulseGlow}`} />
-              <div className={styles.rankingTitleMain}>
-                <div className={styles.rankingTitleBig}>5 อันดับ</div>
-                <div className={styles.rankingTitleSub}>จังหวัดที่มีเภสัชกรมากที่สุด</div>
-              </div>
-            </div>
-          </div>
-          <div className={styles.rankingList}>
-            {topProvinces.map((p, index) => (
-              <div
-                key={p.id}
-                onClick={() => setSelectedProvince({ ...p, name: provinceMapping[p.id] || p.name })}
-                className={`${styles.rankingItem} ${selectedProvince?.id === p.id
-                  ? styles.rankingItemActive
-                  : styles.rankingItemDefault
-                  }`}
-              >
-                <div className={styles.rankingItemLeft}>
-                  <span className={`${styles.rankingIndex} ${selectedProvince?.id === p.id ? styles.rankingIndexActive : styles.rankingIndexDefault
-                    }`}>0{index + 1}</span>
-                  <span className={`${styles.rankingName} ${selectedProvince?.id === p.id ? styles.rankingNameActive : styles.rankingNameDefault
-                    }`}>{provinceMapping[p.id] || p.name}</span>
+                <div className={styles.statsUnitWrapper}>
+                  <span className={styles.statsUnit}>คน</span>
                 </div>
-                <div className={`${styles.rankingCountBox} ${selectedProvince?.id === p.id ? styles.rankingCountBoxActive : styles.rankingCountBoxDefault
-                  }`}>
-                  <span className={`${styles.rankingCount} ${selectedProvince?.id === p.id ? styles.rankingCountActive : styles.rankingCountDefault
-                    }`}>
-                    {p.count.toLocaleString()}
+              </div>
+
+              <div className={styles.statsProgressInfo}>
+                <div className={styles.statsProgressHeader}>
+                  <span className={styles.statsProgressLabel}>สัดส่วนจากทั้งหมด</span>
+                  <span className={styles.statsProgressStatus}>
+                    {selectedProvince && totalCount > 0 
+                      ? `${((selectedProvince.count / totalCount) * 100).toFixed(2)}%` 
+                      : "0.00%"}
                   </span>
                 </div>
+                <div className={styles.progressBar}>
+                  <div
+                    className={styles.progressFill}
+                    style={{
+                      width: `${selectedProvince && totalCount > 0 ? (selectedProvince.count / totalCount) * 100 : 0}%`
+                    }}
+                  />
+                </div>
               </div>
-            ))}
+            </div>
+          </div>
+
+          {/* รายการ 5 อันดับสูงสุด */}
+          <div className={`${styles.rankingCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.2s' }}>
+            <div className={styles.rankingHeader}>
+              <div className={styles.rankingTitleWrapper}>
+                <div className={`${styles.rankingIndicator} ${styles.animatePulseGlow}`} />
+                <div className={styles.rankingTitleMain}>
+                  <div className={styles.rankingTitleBig}>5 อันดับ</div>
+                  <div className={styles.rankingTitleSub}>จังหวัดที่มีเภสัชกรมากที่สุด</div>
+                </div>
+              </div>
+            </div>
+            <div className={styles.rankingList}>
+              {topProvinces.map((p, index) => (
+                <div
+                  key={p.id}
+                  onClick={() => setSelectedProvince({ ...p, name: provinceMapping[p.id] || p.name })}
+                  className={`${styles.rankingItem} ${selectedProvince?.id === p.id
+                    ? styles.rankingItemActive
+                    : styles.rankingItemDefault
+                    }`}
+                >
+                  <div className={styles.rankingItemLeft}>
+                    <span className={`${styles.rankingIndex} ${selectedProvince?.id === p.id ? styles.rankingIndexActive : styles.rankingIndexDefault
+                      }`}>0{index + 1}</span>
+                    <span className={`${styles.rankingName} ${selectedProvince?.id === p.id ? styles.rankingNameActive : styles.rankingNameDefault
+                      }`}>{provinceMapping[p.id] || p.name}</span>
+                  </div>
+                  <div className={`${styles.rankingCountBox} ${selectedProvince?.id === p.id ? styles.rankingCountBoxActive : styles.rankingCountBoxDefault
+                    }`}>
+                    <span className={`${styles.rankingCount} ${selectedProvince?.id === p.id ? styles.rankingCountActive : styles.rankingCountDefault
+                      }`}>
+                      {p.count.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>

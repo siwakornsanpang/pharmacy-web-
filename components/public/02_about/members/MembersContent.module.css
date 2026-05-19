@@ -17,6 +17,30 @@
     }
 }
 
+@media (max-width: 1024px) {
+    .container {
+        padding: 1.5rem;
+        border-radius: 1.75rem;
+        gap: 1.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 1.25rem;
+        border-radius: 1.5rem;
+        gap: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0.875rem;
+        border-radius: 1.25rem;
+        gap: 1rem;
+    }
+}
+
 /* === Tooltip === */
 .tooltip {
     position: absolute;
@@ -81,6 +105,28 @@
     min-height: 750px;
     border: 1px solid #e2e8f0;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+    touch-action: none;
+}
+
+@media (max-width: 1280px) {
+    .mapWrapper {
+        min-height: 550px;
+        border-radius: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .mapWrapper {
+        min-height: 450px;
+        border-radius: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .mapWrapper {
+        min-height: 350px;
+        border-radius: 1.25rem;
+    }
 }
 
 .zoomControls {
@@ -91,6 +137,14 @@
     flex-direction: column;
     gap: 0.75rem;
     z-index: 20;
+}
+
+@media (max-width: 768px) {
+    .zoomControls {
+        top: 1rem;
+        left: 1rem;
+        gap: 0.5rem;
+    }
 }
 
 .zoomButton {
@@ -108,6 +162,14 @@
     cursor: pointer;
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 768px) {
+    .zoomButton {
+        width: 2.25rem;
+        height: 2.25rem;
+        border-radius: 0.5rem;
+    }
 }
 
 .zoomButton:hover {
@@ -183,6 +245,101 @@
     font-weight: 600;
 }
 
+@media (max-width: 1024px) {
+    .legend {
+        bottom: 1.25rem;
+        right: 1.25rem;
+        padding: 1rem 1.25rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+}
+
+@media (max-width: 768px) {
+    .legend {
+        position: absolute;
+        bottom: 1rem;
+        right: 1rem;
+        padding: 0.75rem 1rem;
+        border-radius: 1rem;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+        border: 1px solid rgba(226, 232, 240, 0.9);
+        background-color: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(8px);
+        max-width: 175px;
+    }
+    
+    .legendTitle {
+        font-size: 10px;
+        margin-bottom: 0.5rem;
+        text-align: left;
+    }
+
+    .legendList {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+    }
+    
+    .legendItem {
+        gap: 0.5rem;
+    }
+    
+    .legendColorBox {
+        width: 1.5rem;
+        height: 0.625rem;
+        border-radius: 0.15rem;
+    }
+    
+    .legendText {
+        gap: 0.5rem;
+    }
+    
+    .legendLabel {
+        font-size: 10px;
+        min-width: 65px;
+    }
+    
+    .legendDesc {
+        font-size: 9px;
+        color: #64748b;
+        font-weight: 500;
+    }
+}
+
+@media (max-width: 480px) {
+    .legend {
+        bottom: 0.75rem;
+        right: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        border-radius: 0.75rem;
+        max-width: 130px;
+    }
+    
+    .legendTitle {
+        font-size: 9px;
+        margin-bottom: 0.35rem;
+    }
+
+    .legendList {
+        gap: 0.25rem;
+    }
+    
+    .legendColorBox {
+        width: 1.25rem;
+        height: 0.5rem;
+    }
+    
+    .legendLabel {
+        font-size: 9px;
+        min-width: 55px;
+    }
+    
+    .legendDesc {
+        display: none;
+    }
+}
+
 /* === Sidebar Section === */
 .statsSection {
     width: 100%;
@@ -207,6 +364,27 @@
     position: relative;
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@media (max-width: 1024px) {
+    .statsCard {
+        padding: 2rem;
+        border-radius: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .statsCard {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .statsCard {
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+    }
 }
 
 .statsCard:hover {
@@ -235,7 +413,7 @@
 }
 
 .totalSummaryNumber {
-    font-size: 6rem;
+    font-size: clamp(3.5rem, 10vw, 6rem);
     font-weight: 950;
     color: #464a1e;
     line-height: 0.9;
@@ -285,7 +463,7 @@
 }
 
 .statsNumber {
-    font-size: 3.5rem;
+    font-size: clamp(2rem, 6vw, 3.5rem);
     font-weight: 900;
     color: #737300;
     line-height: 1;
@@ -364,6 +542,43 @@
     border-radius: 2.5rem;
     border: 1px solid #e2e8f0;
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+}
+
+@media (max-width: 1024px) {
+    .rankingCard {
+        padding: 2rem;
+        border-radius: 1.75rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .rankingCard {
+        padding: 1.5rem;
+        border-radius: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .rankingCard {
+        padding: 1.25rem;
+        border-radius: 1.25rem;
+    }
+}
+
+.statsCardsContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    width: 100%;
+}
+
+@media (min-width: 768px) and (max-width: 1279px) {
+    .statsCardsContainer {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1.5rem;
+        align-items: start;
+    }
 }
 
 .rankingHeader {
@@ -548,28 +763,37 @@
     position: relative;
     z-index: 30;
     width: 100%;
+    max-width: 450px;
+    margin: 0 auto;
 }
 
 .searchInputContainer {
     display: flex;
     align-items: center;
     background-color: #ffffff;
-    border-radius: 1.5rem;
-    padding: 1rem 1.5rem;
+    border-radius: 1.25rem;
+    padding: 0.625rem 1.25rem;
     border: 1px solid #e2e8f0;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .searchInputContainer:focus-within {
-    border-color: #aeb93a;
-    box-shadow: 0 0 0 4px rgba(174, 185, 58, 0.1);
+    border-color: #737300;
+    box-shadow: 0 0 0 4px rgba(115, 115, 0, 0.1);
     transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+    .searchInputContainer {
+        padding: 0.5rem 1rem;
+        border-radius: 1rem;
+    }
 }
 
 .searchIcon {
     color: #94a3b8;
-    margin-right: 1rem;
+    margin-right: 0.75rem;
     flex-shrink: 0;
 }
 
@@ -577,7 +801,7 @@
     border: none;
     outline: none;
     flex: 1;
-    font-size: 1.125rem;
+    font-size: 1rem;
     color: #0f172a;
     background: transparent;
     font-family: inherit;
