@@ -3,7 +3,6 @@
 import React from 'react';
 import CareersBanner from '@/components/member/careers/CareersBanner';
 import JobSearchBanner from '@/components/member/careers/JobSearchBanner';
-import JobFilters from '@/components/member/careers/JobFilters';
 import JobListing from '@/components/member/careers/JobListing';
 import styles from "./careers.module.css";
 
@@ -65,11 +64,10 @@ const MOCK_JOBS = [
 export default function CareersPage() {
     const [searchQuery, setSearchQuery] = React.useState({ query: '', location: '' });
     const [activeFilters, setActiveFilters] = React.useState({
-        salary: '',
-        experience: '',
-        type: '',
-        format: ''
+        organization: ''
     });
+
+    const uniqueOrganizations = Array.from(new Set(MOCK_JOBS.map(job => job.company)));
 
     const handleSearch = (query: string, location: string) => {
         setSearchQuery({ query, location });
@@ -80,7 +78,7 @@ export default function CareersPage() {
     };
 
     const clearFilters = () => {
-        setActiveFilters({ salary: '', experience: '', type: '', format: '' });
+        setActiveFilters({ organization: '' });
     };
 
     const filteredJobs = MOCK_JOBS.filter(job => {
@@ -88,20 +86,9 @@ export default function CareersPage() {
                             job.company.toLowerCase().includes(searchQuery.query.toLowerCase());
         const matchesLocation = job.location.toLowerCase().includes(searchQuery.location.toLowerCase());
         
-        const matchesType = activeFilters.type ? job.type === activeFilters.type : true;
-        const matchesFormat = activeFilters.format ? job.workFormat === activeFilters.format : true;
-        
-        // Basic salary filtering (simplified for demo)
-        let matchesSalary = true;
-        if (activeFilters.salary) {
-            const jobMaxSalary = parseInt(job.salary.split('-')[1]?.replace(/,/g, '') || '0');
-            if (activeFilters.salary === '30000') matchesSalary = jobMaxSalary < 30000;
-            else if (activeFilters.salary === '50000') matchesSalary = jobMaxSalary >= 30000 && jobMaxSalary <= 50000;
-            else if (activeFilters.salary === '80000') matchesSalary = jobMaxSalary >= 50000 && jobMaxSalary <= 80000;
-            else if (activeFilters.salary === '80001') matchesSalary = jobMaxSalary > 80000;
-        }
+        const matchesOrganization = activeFilters.organization ? job.company === activeFilters.organization : true;
 
-        return matchesQuery && matchesLocation && matchesType && matchesFormat && matchesSalary;
+        return matchesQuery && matchesLocation && matchesOrganization;
     });
 
     return (
@@ -113,15 +100,12 @@ export default function CareersPage() {
                     <JobSearchBanner onSearch={handleSearch} />
                 </div>
 
-                <div className={styles.filterSection}>
-                    <JobFilters 
-                        filters={activeFilters} 
-                        onChange={handleFilterChange} 
-                        onClear={clearFilters}
-                    />
-                </div>
-                
-                <JobListing jobs={filteredJobs} />
+                <JobListing 
+                    jobs={filteredJobs} 
+                    organizationFilter={activeFilters.organization}
+                    onFilterChange={(value) => handleFilterChange('organization', value)}
+                    organizations={uniqueOrganizations}
+                />
             </div>
         </div>
     );

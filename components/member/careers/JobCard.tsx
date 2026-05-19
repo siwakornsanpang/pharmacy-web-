@@ -111,8 +111,7 @@ export default function JobCard({ job }: JobCardProps) {
             </div>
 
             <div className={styles.actions}>
-                <button className={styles.viewBtn}>ดูรายละเอียด</button>
-                <button className={styles.applyBtn}>สมัครงาน</button>
+                <a href={`#job-${job.id}`} className={styles.viewBtn}>ดูรายละเอียด</a>
             </div>
         </div>
     );

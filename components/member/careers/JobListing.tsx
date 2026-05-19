@@ -7,6 +7,9 @@ import styles from './JobListing.module.css';
 
 interface JobListingProps {
     jobs: any[];
+    organizationFilter?: string;
+    onFilterChange?: (value: string) => void;
+    organizations?: string[];
 }
 
 const SORT_OPTIONS = [
@@ -15,15 +18,20 @@ const SORT_OPTIONS = [
     { value: 'salary_asc', label: 'เงินเดือน (ต่ำ-สูง)' },
 ];
 
-export default function JobListing({ jobs }: JobListingProps) {
+export default function JobListing({ jobs, organizationFilter = '', onFilterChange, organizations = [] }: JobListingProps) {
     const [isSortOpen, setIsSortOpen] = useState(false);
+    const [isOrgOpen, setIsOrgOpen] = useState(false);
     const [sortBy, setSortBy] = useState('latest');
     const sortRef = useRef<HTMLDivElement>(null);
+    const orgRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
             if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
                 setIsSortOpen(false);
+            }
+            if (orgRef.current && !orgRef.current.contains(event.target as Node)) {
+                setIsOrgOpen(false);
             }
         }
         document.addEventListener("mousedown", handleClickOutside);
@@ -36,8 +44,50 @@ export default function JobListing({ jobs }: JobListingProps) {
         <section className={styles.section}>
             <div className={styles.sectionHeader}>
                 <div className={styles.headerLeft}>
-                    <div className={styles.sortContainer} ref={sortRef}>
-                        <span className={`${styles.sortLabel} ThaiFont`}>เรียงตาม:</span>
+                        <div className={styles.sortContainer} ref={orgRef}>
+                            <span className={`${styles.sortLabel} ThaiFont`}>องค์กร:</span>
+                            <div className={styles.dropdownWrapper}>
+                                <button 
+                                    className={`${styles.sortSelect} ThaiFont`}
+                                    onClick={() => setIsOrgOpen(!isOrgOpen)}
+                                >
+                                    <span>{organizationFilter || 'ทั้งหมด'}</span>
+                                    <ChevronDown size={16} className={`${styles.chevron} ${isOrgOpen ? styles.chevronRotate : ''}`} />
+                                </button>
+                                
+                                {isOrgOpen && (
+                                    <ul className={styles.dropdownMenu}>
+                                        <li>
+                                            <button
+                                                className={`${styles.dropdownItem} ${!organizationFilter ? styles.active : ''} ThaiFont`}
+                                                onClick={() => {
+                                                    onFilterChange?.('');
+                                                    setIsOrgOpen(false);
+                                                }}
+                                            >
+                                                ทั้งหมด
+                                            </button>
+                                        </li>
+                                        {organizations.map(org => (
+                                            <li key={org}>
+                                                <button
+                                                    className={`${styles.dropdownItem} ${organizationFilter === org ? styles.active : ''} ThaiFont`}
+                                                    onClick={() => {
+                                                        onFilterChange?.(org);
+                                                        setIsOrgOpen(false);
+                                                    }}
+                                                >
+                                                    {org}
+                                                </button>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className={styles.sortContainer} ref={sortRef}>
+                            <span className={`${styles.sortLabel} ThaiFont`}>เรียงตาม:</span>
                         <div className={styles.dropdownWrapper}>
                             <button 
                                 className={`${styles.sortSelect} ThaiFont`}
@@ -66,8 +116,8 @@ export default function JobListing({ jobs }: JobListingProps) {
                             )}
                         </div>
                     </div>
-                    <h2 className={`${styles.resultCount} ThaiFont`}>พบงานทั้งหมด {jobs.length} ตำแหน่ง</h2>
                 </div>
+                <h2 className={`${styles.resultCount} ThaiFont`}>พบงานทั้งหมด {jobs.length} ตำแหน่ง</h2>
             </div>
             
             <div className={styles.jobGrid}>
