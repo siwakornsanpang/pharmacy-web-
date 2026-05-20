@@ -9,15 +9,15 @@ import CourseCard from '@/components/member/learning/courses/CourseCard';
 import CourseFilters from '@/components/member/learning/courses/CourseFilters';
 
 const ALL_COURSES = [
-    { id: 1, title: "การจัดการความดันโลหิตสูงในผู้ป่วยสูงอายุ", category: "เภสัชกรรมโรงพยาบาล", type: "online", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต" },
-    { id: 2, title: "ทักษะการสื่อสารเพื่อการดูแลผู้ป่วยเบาหวาน", category: "เภสัชกรรมชุมชน", type: "online", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต" },
-    { id: 3, title: "เภสัชกรรมคลินิกในโรคไตเรื้อรัง", category: "เภสัชกรรมชุมชน", type: "onsite", duration: "3 ชม.", cpe: "3.0 หน่วยกิต" },
-    { id: 4, title: "การบริบาลทางเภสัชกรรมในผู้ป่วยมะเร็ง", category: "เภสัชกรรมโรงพยาบาล", type: "online", duration: "2 ชม.", cpe: "2.0 หน่วยกิต" },
-    { id: 5, title: "การประเมินความปลอดภัยของผลิตภัณฑ์สมุนไพร", category: "การผลิตและควบคุม", type: "onsite", duration: "4 ชม.", cpe: "4.0 หน่วยกิต" },
-    { id: 6, title: "กฎหมายและจรรยาบรรณวิชาชีพเภสัชกรรม 2024", category: "กฎหมายและจริยธรรม", type: "online", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต" },
-    { id: 7, title: "เทคโนโลยี AI ในงานเภสัชกรรมสมัยใหม่", category: "เภสัชศาสตร์นวัตกรรม", type: "online", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต" },
-    { id: 8, title: "การจัดการคลังยาและโลจิสติกส์การแพทย์", category: "การบริหารงานคลัง", type: "onsite", duration: "3 ชม.", cpe: "3.0 หน่วยกิต" },
-    { id: 9, title: "จิตวิทยาการบริการสำหรับเภสัชกรชุมชน", category: "เภสัชกรรมชุมชน", type: "online", duration: "2 ชม.", cpe: "2.0 หน่วยกิต" },
+    { id: 1, title: "การจัดการความดันโลหิตสูงในผู้ป่วยสูงอายุ", category: "เภสัชกรรมโรงพยาบาล", type: "online", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=600&auto=format&fit=crop" },
+    { id: 2, title: "ทักษะการสื่อสารเพื่อการดูแลผู้ป่วยเบาหวาน", category: "เภสัชกรรมชุมชน", type: "online", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=600&auto=format&fit=crop" },
+    { id: 3, title: "เภสัชกรรมคลินิกในโรคไตเรื้อรัง", category: "เภสัชกรรมชุมชน", type: "onsite", duration: "3 ชม.", cpe: "3.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=600&auto=format&fit=crop" },
+    { id: 4, title: "การบริบาลทางเภสัชกรรมในผู้ป่วยมะเร็ง", category: "เภสัชกรรมโรงพยาบาล", type: "online", duration: "2 ชม.", cpe: "2.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?q=80&w=600&auto=format&fit=crop" },
+    { id: 5, title: "การประเมินความปลอดภัยของผลิตภัณฑ์สมุนไพร", category: "การผลิตและควบคุม", type: "onsite", duration: "4 ชม.", cpe: "4.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=600&auto=format&fit=crop" },
+    { id: 6, title: "กฎหมายและจรรยาบรรณวิชาชีพเภสัชกรรม 2024", category: "กฎหมายและจริยธรรม", type: "online", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=600&auto=format&fit=crop" },
+    { id: 7, title: "เทคโนโลยี AI ในงานเภสัชกรรมสมัยใหม่", category: "เภสัชศาสตร์นวัตกรรม", type: "online", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop" },
+    { id: 8, title: "การจัดการคลังยาและโลจิสติกส์การแพทย์", category: "การบริหารงานคลัง", type: "onsite", duration: "3 ชม.", cpe: "3.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop" },
+    { id: 9, title: "จิตวิทยาการบริการสำหรับเภสัชกรชุมชน", category: "เภสัชกรรมชุมชน", type: "online", duration: "2 ชม.", cpe: "2.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop" },
 ];
 
 const CATEGORIES = [
@@ -29,12 +29,6 @@ const CATEGORIES = [
     "เภสัชศาสตร์นวัตกรรม",
     "การบริหารงานคลัง",
     "เภสัชกรรมคลินิก"
-];
-
-const COURSE_TYPES = [
-    { value: 'all', label: 'ทุกประเภท' },
-    { value: 'online', label: 'คอร์สออนไลน์' },
-    { value: 'onsite', label: 'อบรมสัมมนา' },
 ];
 
 const getCategoryColor = (category: string) => {
@@ -57,7 +51,6 @@ function CoursesContent() {
     
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
-    const [selectedType, setSelectedType] = useState("all");
 
     useEffect(() => {
         const catParam = searchParams.get('category');
@@ -69,8 +62,7 @@ function CoursesContent() {
     const filteredCourses = ALL_COURSES.filter(course => {
         const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory = selectedCategory === "ทั้งหมด" || course.category === selectedCategory;
-        const matchesType = selectedType === "all" || course.type === selectedType;
-        return matchesSearch && matchesCategory && matchesType;
+        return matchesSearch && matchesCategory;
     });
 
     return (
@@ -81,12 +73,9 @@ function CoursesContent() {
                 <div className={styles.container}>
                     <CourseFilters 
                         categories={CATEGORIES}
-                        courseTypes={COURSE_TYPES}
                         selectedCategory={selectedCategory}
-                        selectedType={selectedType}
                         searchTerm={searchTerm}
                         onCategoryChange={setSelectedCategory}
-                        onTypeChange={setSelectedType}
                         onSearchChange={setSearchTerm}
                     />
                 </div>

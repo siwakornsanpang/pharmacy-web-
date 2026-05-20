@@ -71,7 +71,13 @@ export default function FeaturedCourse() {
                             <ChevronRight size={24} />
                         </button>
                         <div className={styles.imageSide}>
-                            {/* Grey placeholder */}
+                            <Image 
+                                src={course.image} 
+                                alt={course.title} 
+                                fill 
+                                className={styles.image} 
+                                priority
+                            />
                         </div>
                         
                         <div className={styles.contentSide}>

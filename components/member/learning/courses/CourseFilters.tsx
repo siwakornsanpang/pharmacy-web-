@@ -1,32 +1,25 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Search, ChevronDown, ListFilter, LayoutGrid } from 'lucide-react';
+import { Search, ChevronDown, ListFilter } from 'lucide-react';
 import styles from './CourseFilters.module.css';
 
 interface CourseFiltersProps {
     categories: string[];
-    courseTypes: { value: string; label: string }[];
     selectedCategory: string;
-    selectedType: string;
     searchTerm: string;
     onCategoryChange: (category: string) => void;
-    onTypeChange: (type: string) => void;
     onSearchChange: (term: string) => void;
 }
 
 export default function CourseFilters({
     categories,
-    courseTypes,
     selectedCategory,
-    selectedType,
     searchTerm,
     onCategoryChange,
-    onTypeChange,
     onSearchChange
 }: CourseFiltersProps) {
     const [catDropdownOpen, setCatDropdownOpen] = useState(false);
-    const [typeDropdownOpen, setTypeDropdownOpen] = useState(false);
 
     return (
         <div className={styles.wrapper}>
@@ -43,7 +36,6 @@ export default function CourseFilters({
                         className={styles.dropdownButton}
                         onClick={() => {
                             setCatDropdownOpen(!catDropdownOpen);
-                            setTypeDropdownOpen(false);
                         }}
                     >
                         <ListFilter size={16} className={styles.dropdownIcon} />
@@ -63,40 +55,6 @@ export default function CourseFilters({
                                         }}
                                     >
                                         {cat}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
-                </div>
-
-                {/* Type Dropdown */}
-                <div className={styles.dropdown}>
-                    <button
-                        type="button"
-                        className={styles.dropdownButton}
-                        onClick={() => {
-                            setTypeDropdownOpen(!typeDropdownOpen);
-                            setCatDropdownOpen(false);
-                        }}
-                    >
-                        <LayoutGrid size={16} className={styles.dropdownIcon} />
-                        <span>{courseTypes.find(t => t.value === selectedType)?.label}</span>
-                        <ChevronDown size={16} className={`${styles.chevron} ${typeDropdownOpen ? styles.chevronRotate : ''}`} />
-                    </button>
-                    {typeDropdownOpen && (
-                        <ul className={styles.dropdownMenu}>
-                            {courseTypes.map(type => (
-                                <li key={type.value}>
-                                    <button
-                                        type="button"
-                                        className={`${styles.dropdownItem} ${type.value === selectedType ? styles.dropdownItemActive : ''}`}
-                                        onClick={() => {
-                                            onTypeChange(type.value);
-                                            setTypeDropdownOpen(false);
-                                        }}
-                                    >
-                                        {type.label}
                                     </button>
                                 </li>
                             ))}

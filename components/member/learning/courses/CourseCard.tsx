@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Clock, Award, ArrowRight } from 'lucide-react';
 import styles from './CourseCard.module.css';
 
@@ -11,14 +12,20 @@ interface CourseCardProps {
     category: string;
     duration: string;
     cpe: string;
+    image: string;
     getCategoryColor: (category: string) => string;
 }
 
-export default function CourseCard({ id, title, category, duration, cpe, getCategoryColor }: CourseCardProps) {
+export default function CourseCard({ id, title, category, duration, cpe, image, getCategoryColor }: CourseCardProps) {
     return (
         <Link href={`/learning/${id}`} className={styles.card}>
             <div className={styles.imageWrapper}>
-                <div className={styles.placeholderImage}></div>
+                <Image 
+                    src={image} 
+                    alt={title} 
+                    fill 
+                    className={styles.image} 
+                />
                 <div
                     className={styles.badge}
                     style={{ backgroundColor: getCategoryColor(category) }}

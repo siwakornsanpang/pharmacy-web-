@@ -22,16 +22,9 @@ const CATEGORIES = [
     "เภสัชกรรมคลินิก"
 ];
 
-const COURSE_TYPES = [
-    { value: 'all', label: 'ทุกประเภท' },
-    { value: 'online', label: 'คอร์สออนไลน์' },
-    { value: 'onsite', label: 'อบรมสัมมนา' },
-];
-
 export default function LearningPage() {
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
-    const [selectedType, setSelectedType] = useState("all");
 
     return (
         <div className={styles.page}>
@@ -40,12 +33,9 @@ export default function LearningPage() {
             <div className={styles.container} style={{ marginTop: '3rem', marginBottom: '4rem' }}>
                 <CourseFilters 
                     categories={CATEGORIES}
-                    courseTypes={COURSE_TYPES}
                     selectedCategory={selectedCategory}
-                    selectedType={selectedType}
                     searchTerm={searchTerm}
                     onCategoryChange={setSelectedCategory}
-                    onTypeChange={setSelectedType}
                     onSearchChange={setSearchTerm}
                 />
             </div>
