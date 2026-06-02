@@ -13,6 +13,7 @@
 
 ## สารบัญ
 
+0. [เปรียบเทียบ Pharmacy vs Conference vs Target](#0-เปรียบเทียบ-pharmacy-vs-conference-vs-target)
 1. [Feature หลักทั้งหมด](#1-feature-หลักทั้งหมด)
 2. [โครงสร้าง Folder](#2-โครงสร้าง-folder)
 3. [Routing และ Pages](#3-routing-และ-pages)
@@ -21,6 +22,121 @@
 6. [Potential Conflicts & วิธีแก้](#6-potential-conflicts--วิธีแก้)
 7. [สิ่งที่ขาดหายไปและคำแนะนำเพิ่มเติม](#7-สิ่งที่ขาดหายไปและคำแนะนำเพิ่มเติม)
 8. [แผนดำเนินการ (Revised)](#8-แผนดำเนินการ-revised)
+
+---
+
+## 0. เปรียบเทียบ Pharmacy vs Conference vs Target
+
+> **Quick Reference** — อ่านส่วนนี้เพื่อเข้าใจภาพรวมความแตกต่างระหว่าง 3 ระบบก่อนเริ่ม implement
+
+### 0.1 Auth (การยืนยันตัวตน)
+
+| มิติ | Pharmacy (เดิม) | Conference (เดิม) | Target (เป้าหมาย) |
+|------|----------------|-----------------|------------------|
+| **วิธี** | Cookie-based (`isLoggedIn`, `auth_token`) | JWT ใน `localStorage` | **Cookie-based เดิมของ Pharmacy** |
+| **ตาราง users** | `users` → `cms_users` | `users` → `conf_users` | `cms_users` + `conf_users` แยกกัน |
+| **JWT payload** | `{ type: 'cms' }` | `{ type: 'conference' }` | แยก namespace: `cms` vs `conference` |
+| **Login route** | `/auth/login` | `/auth/conference/login` | แยก namespace ชัดเจน |
+| **Registration flow** | — | pending_approval → active/rejected | **Option A (แนะนำ)**: pharmacy login แล้วเข้า conference ได้เลย |
+| **Backoffice roles** | admin/editor/viewer | admin/organizer/reviewer/staff/verifier | รวมเข้า `authGuard.ts` เดียว |
+| **Rate Limit** | ❌ ยังไม่มี | 30 req/min (email-based) | ใช้ limit ของ conference (600 global, 30 auth) |
+
+> **ตัดสินใจ Option A**: ถ้า pharmacist login แล้วให้เข้า conference ได้ทันที — ลด friction และไม่ต้องทำ auth flow ซ้ำ
+
+### 0.2 Database
+
+| มิติ | Pharmacy (เดิม) | Conference (เดิม) | Target (เป้าหมาย) |
+|------|----------------|-----------------|------------------|
+| **จำนวน DB** | 1 PostgreSQL | 1 PostgreSQL แยก | **1 PostgreSQL เดียว รวมกัน** |
+| **Schema file** | ฝังใน `db/index.ts` | `schema.ts` | `pharmacy.schema.ts` + `conference.schema.ts` |
+| **ชื่อตาราง users** | `users` | `users` | **rename** → `cms_users` + `conf_users` |
+| **จำนวน tables** | ~22 tables | 33 tables | รวม ~55 tables |
+| **DB Driver** | `pg` (node-postgres) | `postgres` (postgres.js) | **migrate เป็น `postgres.js`** |
+| **Module system** | CommonJS | ESM | **migrate เป็น ESM** |
+
+### 0.3 File Upload
+
+| มิติ | Pharmacy (เดิม) | Conference (เดิม) | Target (เป้าหมาย) |
+|------|----------------|-----------------|------------------|
+| **Storage** | Supabase Storage | ~~Google Drive~~ | **Supabase Storage ทั้งหมด** |
+| **Buckets pharmacy** | `pharmacy-public`, `pharmacy-private` | — | คงเดิม |
+| **Buckets conference** | — | Google Drive folders | `conference-abstracts` (Private), `conference-speakers` (Public), `conference-documents` (Private), `conference-receipts` (Private), `conference-events` (Public) |
+| **Migration งาน** | — | ต้อง migrate ไฟล์เก่าจาก Drive | เขียน migration script: Drive → Supabase |
+
+> ❌ **ยกเลิก Google Drive API** — ต้อง migrate ไฟล์เก่าก่อน production
+
+### 0.4 Frontend (pharmacy-web)
+
+| มิติ | Pharmacy (เดิม) | Conference (เดิม) | Target (เป้าหมาย) |
+|------|----------------|-----------------|------------------|
+| **Repo** | `01_pharmacy-web` | `conference-web` (แยก) | **รวมเข้า `01_pharmacy-web`** |
+| **Auth method** | Cookie | localStorage JWT | **Cookie (pharmacy เดิม)** |
+| **Design system** | pharmacy design system | conference-web components | **pharmacy design system (ออกแบบ UI ใหม่ทั้งหมด)** |
+| **Route /meeting** | stub เปล่า | แยก domain | `/meeting`, `/meeting/[id]`, `/meeting/[id]/checkout`, `/meeting/[id]/payment`, `/meeting/[id]/success` |
+| **Route /member** | stub เปล่า | — | `/member-meeting`, `/member-meeting/abstract`, `/member-meeting/eligibility` |
+| **State management** | — | — | เพิ่ม `@tanstack/react-query` + `zustand` |
+| **Form validation** | — | react-hook-form + Zod v4 | เพิ่ม react-hook-form + Zod v4 |
+| **Payment UI** | — | Stripe Elements | เพิ่ม `@stripe/react-stripe-js` |
+
+### 0.5 Backend API (03_backend-api)
+
+| มิติ | Pharmacy (เดิม) | Conference (เดิม) | Target (เป้าหมาย) |
+|------|----------------|-----------------|------------------|
+| **Repo** | `03_backend-api` | `conference-api` (แยก) | **รวมเข้า `03_backend-api`** |
+| **Module** | CommonJS | ESM | **ESM** |
+| **DB Driver** | `pg` | `postgres.js` | **`postgres.js`** |
+| **Zod version** | — | v3.24.1 | **v4.x (migrate จาก v3)** |
+| **Email** | — | NipaMail | เพิ่ม `emailService.ts` + `emailTemplates.ts` |
+| **Payment** | — | Stripe + Pay Solutions + KTB | เพิ่ม payment services ทั้งหมด |
+| **PDF** | — | pdfkit + ~~puppeteer~~ | **pdfkit อย่างเดียว** (ตัด puppeteer ออก) |
+| **Upload** | Supabase | Google Drive | **Supabase ทั้งหมด** |
+
+#### API Routes เปรียบเทียบ
+
+| Route Group | Pharmacy (เดิม) | Conference (เดิม) | Target |
+|-------------|----------------|-----------------|--------|
+| **Auth** | `/auth/login`, `/auth/logout` | `/auth/conference/*` | แยก namespace ทั้งคู่ |
+| **Events** | ❌ | `/api/events`, `/api/events/:id` | `/api/conference/events/*` |
+| **Tickets** | ❌ | `/api/tickets` | `/api/conference/events/:id/tickets` |
+| **Payments** | ❌ | `/api/payments/*` | `/api/conference/payments/*` |
+| **Abstracts** | ❌ | `/api/abstracts/*` | `/api/conference/abstracts/*` |
+| **Upload** | `/api/upload` | `/api/upload` | `/api/upload/conference` (แยก bucket) |
+| **Backoffice** | `/api/backoffice/*` | `/api/backoffice/conference/*` | รวมทั้งสองชุด |
+
+### 0.6 Backoffice (02_back-office)
+
+| มิติ | Pharmacy (เดิม) | Conference (เดิม) | Target (เป้าหมาย) |
+|------|----------------|-----------------|------------------|
+| **Repo** | `02_back-office` | backoffice แยก | **รวมเข้า `02_back-office`** |
+| **Auth** | JWT cookie จาก 03_backend-api | JWT แยก | **JWT เดิม + เช็ค `role`** |
+| **Modules** | council-web, pharmacist-web, register, setting | events, registrations, abstracts, ... | คงเดิม + เพิ่ม `/conference/` module |
+| **QR Scanner** | ❌ | ❌ | เพิ่ม `html5-qrcode` สำหรับ check-in |
+| **Charts** | ❌ | ❌ | เพิ่ม `recharts` สำหรับ dashboard |
+
+### 0.7 Zod Version
+
+| ส่วน | เดิม | Target |
+|------|------|--------|
+| `conference-web` (frontend) | v4.2.1 | v4.x ✅ |
+| `conference-api` (backend) | v3.24.1 | **migrate → v4.x** ⚠️ |
+| `pharmacy-web` (frontend) | ไม่มี | ติดตั้ง v4.x |
+| `03_backend-api` (backend) | ไม่มี | ติดตั้ง v4.x |
+
+> ⚠️ Zod v3 → v4 มีการเปลี่ยน error handling format — ต้องรัน test หลัง migrate
+
+### 0.8 สรุป Conflicts หลัก (Quick Reference)
+
+| ระดับ | ปัญหา | วิธีแก้ |
+|-------|-------|--------|
+| 🔴 Critical | `users` table ชนกันทั้งสองระบบ | rename → `cms_users` + `conf_users` |
+| 🔴 Critical | CommonJS → ESM | migrate `package.json` + imports ทั้ง codebase |
+| 🔴 Critical | `pg` → `postgres.js` driver | เปลี่ยน `db/index.ts` + drizzle import path |
+| 🟡 Moderate | Zod v3 → v4 | migrate conference-api schemas |
+| 🟡 Moderate | Auth: localStorage → Cookie | conference pages ใช้ pharmacy cookie auth |
+| 🟡 Moderate | CORS origins หลายต้นทาง | รวม origins ใน env `CORS_ORIGIN` |
+| 🟢 Minor | Stripe webhook ต้องการ raw body | เพิ่ม `addContentTypeParser` เฉพาะ `/webhook` route |
+| 🟢 Minor | pdfkit (CommonJS) ใน ESM | ใช้ dynamic import |
+| 🟢 Minor | puppeteer (~300MB) ไม่จำเป็น | ตัดออกเลย |
 
 ---
 

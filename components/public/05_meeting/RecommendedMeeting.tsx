@@ -1,8 +1,13 @@
-import { MapPin, Calendar, Users, Building2, ChevronLeft, ChevronRight } from "lucide-react";
+"use client";
+
+import { useRouter } from "next/navigation";
+import { MapPin, Calendar, Users, ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./RecommendedMeeting.module.css";
 import { FaGraduationCap } from "react-icons/fa";
 
 export default function RecommendedMeeting() {
+  const router = useRouter();
+
   return (
     <section className={styles.recommendSection}>
       <div className={styles.sectionHeader}>
@@ -17,7 +22,14 @@ export default function RecommendedMeeting() {
         </div>
       </div>
 
-      <div className={styles.recommendCard}>
+      <div
+        className={styles.recommendCard}
+        onClick={() => router.push("/meeting/1")}
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => e.key === "Enter" && router.push("/meeting/1")}
+        aria-label="ดูรายละเอียดงานประชุมแนะนำ"
+      >
         <img src="/images/public/meeting/meeting1.jpg" className={styles.recommendImage} alt="Meeting preview" />
         <div className={styles.recommendContent}>
           <div className={styles.titleWrapper}>
@@ -46,18 +58,11 @@ export default function RecommendedMeeting() {
             <div className={styles.participantsInfo}>
               <div className={styles.infoItem}>
                 <Users size={20} className={styles.grayIcon} />
-                <span className="ThaiFont">ผู้เข้าร่วม :</span>
-                <div className={styles.tags}>
-                  <span className="ThaiFont">บุคคลทั่วไป</span>
-                  <span className={`${"ThaiFont"} ${styles.pharmacistTag}`}>เภสัชกร</span>
-                </div>
-                <span className="ThaiFont">จำนวน : 100 คน</span>
+                <span className="ThaiFont" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  รับสมัคร :
+                  <span className={styles.countAvailable}>62/100 คน</span>
+                </span>
               </div>
-            </div>
-
-            <div className={styles.infoItem}>
-              <Building2 size={20} className={styles.grayIcon} />
-              <p className="ThaiFont">หน่วยงาน : ราชวิทยาลัย</p>
             </div>
           </div>
         </div>

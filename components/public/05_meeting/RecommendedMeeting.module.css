@@ -47,6 +47,15 @@
     margin-top: 1.5rem;
     border: 1px solid #f2f2f2;
     box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+.recommendCard:hover {
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    border-color: #dde2c0;
+    transform: translateY(-2px);
 }
 
 .recommendImage {
@@ -55,6 +64,11 @@
     height: 260px;
     object-fit: cover;
     border-radius: 18px;
+    transition: transform 0.4s ease;
+}
+
+.recommendCard:hover .recommendImage {
+    transform: scale(1.03);
 }
 
 .recommendContent {
@@ -221,4 +235,26 @@
     .sliderIndicators {
         margin-top: 1.5rem;
     }
+}
+
+.countAvailable {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: 1px solid #a7f3d0;
+    display: inline-block;
+}
+
+.countFull {
+    background: #fef2f2;
+    color: #991b1b;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: 1px solid #fecaca;
+    display: inline-block;
 }

@@ -2,44 +2,30 @@
     margin-top: 5rem;
 }
 
-.tabContainer {
+.listContainer {
     display: flex;
-    gap: 3rem;
-    border-bottom: 1px solid #eef0f2;
-    margin-bottom: 2.5rem;
-    overflow-x: auto;
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-
-.tabContainer::-webkit-scrollbar {
-    display: none;
-}
-
-.tab {
-    padding-bottom: 16px;
-    color: #9ca3af;
-    font-size: 1.2rem;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-}
-
-.activeTab {
-    color: #1a1a1a;
-    border-bottom: 3.5px solid #8a8a00;
-    font-weight: 700;
-    white-space: nowrap;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .meetingItem {
     display: flex;
     align-items: flex-start;
-    gap: 2rem;
-    padding: 3rem 0;
-    border-bottom: 1px solid #f5f6f7;
+    gap: 2.5rem;
+    background: #ffffff;
+    padding: 1.5rem 2rem;
+    border-radius: 24px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 0 4px 25px rgba(0, 0, 0, 0.04);
     transition: all 0.3s ease;
-    flex-wrap: wrap;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.meetingItem:hover {
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+    border-color: #dde2c0;
+    transform: translateY(-2px);
 }
 
 .pastItem {
@@ -139,35 +125,37 @@
     flex-wrap: wrap;
 }
 
-.tags {
-    display: flex;
-    gap: 10px;
-    margin: 0 4px;
-}
-
-.tags span {
-    background: #f0f1ed;
-    color: #4b5563;
-    padding: 4px 16px;
-    border-radius: 20px;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
-.pharmacistTag {
-    background: #fcf3e0 !important;
-    color: #1a1a1a !important;
-}
-
 .meetingImage {
     max-width: 320px;
     width: 100%;
     height: 200px;
     object-fit: cover;
-    border-radius: 20px;
+    border-radius: 18px;
     box-shadow: 0 6px 18px rgba(0, 0, 0, 0.05);
+    transition: transform 0.4s ease;
 }
 
+.meetingItem:hover .meetingImage {
+    transform: scale(1.03);
+}
+
+/* === No Results === */
+.noResults {
+    text-align: center;
+    padding: 5rem 0;
+    color: #9ca3af;
+    font-size: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.noResultsIcon {
+    color: #d1d5db;
+}
+
+/* === Responsive === */
 @media (max-width: 1024px) {
     .meetingItem {
         gap: 1.5rem;
@@ -185,7 +173,7 @@
     .meetingItem {
         flex-direction: column-reverse;
         gap: 1.5rem;
-        padding: 2rem 0;
+        padding: 1.25rem;
     }
     .meetingImage {
         max-width: 100%;
@@ -203,14 +191,6 @@
 }
 
 @media (max-width: 600px) {
-    .tabContainer {
-        gap: 1.5rem;
-    }
-    .tab {
-        font-size: 1.05rem;
-        padding-bottom: 12px;
-        white-space: nowrap;
-    }
     .meetingInfo h3 {
         font-size: 1.25rem;
     }
@@ -228,4 +208,26 @@
         font-size: 0.85rem;
         padding: 0.4rem 0.8rem;
     }
+}
+
+.countAvailable {
+    background: #ecfdf5;
+    color: #065f46;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: 1px solid #a7f3d0;
+    display: inline-block;
+}
+
+.countFull {
+    background: #fef2f2;
+    color: #991b1b;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    border: 1px solid #fecaca;
+    display: inline-block;
 }
