@@ -258,3 +258,55 @@
     border: 1px solid #fecaca;
     display: inline-block;
 }
+
+.sliderWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.recommendCard {
+    margin-top: 0 !important;
+    width: 100%;
+}
+
+.cardArrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid #eef2f6;
+    background: #ffffff;
+    color: #8a8a00;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.25s ease;
+    z-index: 10;
+}
+
+.cardArrow:hover {
+    background: #fdfdf0;
+    border-color: #8a8a00;
+    transform: translateY(-50%) scale(1.08);
+}
+
+.cardArrowLeft {
+    left: -20px;
+}
+
+.cardArrowRight {
+    right: -20px;
+}
+
+@media (max-width: 900px) {
+    .cardArrow {
+        display: none; /* Hide card overlay arrows on tablet/mobile and fall back to dots/header buttons */
+    }
+}

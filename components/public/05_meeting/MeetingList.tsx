@@ -69,13 +69,13 @@ export default function MeetingList({ meetings, searchTerm = "", onSearchChange 
               <div className={styles.meetingInfo}>
                 <div className={styles.titleWrapper}>
                   <h3 className="ThaiFont">{item.title}</h3>
-                  {item.cpe && item.tags.includes("เภสัชกร") && (
-                    <div className={styles.cpeBadge}>
-                      <FaGraduationCap className={styles.cpeIcon} />
-                      <span>CPE {item.cpe} หน่วยกิต</span>
-                    </div>
-                  )}
                 </div>
+                {item.cpe && item.tags.includes("เภสัชกร") && (
+                  <div className={styles.cpeBadge}>
+                    <FaGraduationCap className={styles.cpeIcon} />
+                    <span>CPE {item.cpe} หน่วยกิต</span>
+                  </div>
+                )}
 
                 <div className={styles.infoItem}>
                   <HiOutlineLocationMarker size={18} className={styles.grayIcon} />

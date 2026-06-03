@@ -7,6 +7,7 @@ import MeetingList, { StaticMeeting } from "@/components/public/05_meeting/Meeti
 import MeetingPagination from "@/components/public/05_meeting/MeetingPagination";
 import styles from "./meeting.module.css";
 import { Search } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const meetings: StaticMeeting[] = [
     {
@@ -209,11 +210,21 @@ function PublicMeetingContent() {
                 </div>
 
                 <RecommendedMeeting />
-                <MeetingList 
-                    meetings={paginatedMeetings} 
-                    searchTerm={searchTerm} 
-                    onSearchChange={handleSearchChange} 
-                />
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentPage}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15 }}
+                        transition={{ duration: 0.2, ease: "easeInOut" }}
+                    >
+                        <MeetingList 
+                            meetings={paginatedMeetings} 
+                            searchTerm={searchTerm} 
+                            onSearchChange={handleSearchChange} 
+                        />
+                    </motion.div>
+                </AnimatePresence>
                 <MeetingPagination 
                     currentPage={currentPage} 
                     totalPages={totalPages} 

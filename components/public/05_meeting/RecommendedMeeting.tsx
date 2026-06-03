@@ -50,14 +50,16 @@ const recommendedMeetings: RecommendedMeetingItem[] = [
 export default function RecommendedMeeting() {
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
+    if (isHovered) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev === recommendedMeetings.length - 1 ? 0 : prev + 1));
     }, 5000); // auto slide every 5 seconds
 
     return () => clearInterval(timer);
-  }, []);
+  }, [isHovered]);
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? recommendedMeetings.length - 1 : prev - 1));
@@ -84,58 +86,74 @@ export default function RecommendedMeeting() {
         </div>
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={activeIndex}
-          initial={{ opacity: 0, x: 15 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -15 }}
-          transition={{ duration: 0.25, ease: "easeInOut" }}
-          className={styles.recommendCard}
-          onClick={() => router.push(`/meeting/${current.id}`)}
-          role="button"
-          tabIndex={0}
-          onKeyDown={(e) => e.key === "Enter" && router.push(`/meeting/${current.id}`)}
-          aria-label={`ดูรายละเอียด: ${current.title}`}
-        >
-          <img src={current.image} className={styles.recommendImage} alt={current.title} />
-          <div className={styles.recommendContent}>
-            <div className={styles.titleWrapper}>
-              <h3 className="ThaiFont">{current.title}</h3>
-              {current.cpe && (
-                <div className={styles.cpeBadge}>
-                  <FaGraduationCap className={styles.cpeIcon} />
-                  <span>CPE {current.cpe} หน่วยกิต</span>
-                </div>
-              )}
-            </div>
+      <div 
+        className={styles.sliderWrapper}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
+        {/* Left Card Arrow */}
+        <button className={`${styles.cardArrow} ${styles.cardArrowLeft}`} onClick={handlePrev} aria-label="ก่อนหน้า">
+          <ChevronLeft size={24} />
+        </button>
 
-            <div className={styles.infoItem}>
-              <MapPin size={20} className={styles.grayIcon} />
-              <p className="ThaiFont">สถานที่ : {current.location}</p>
-            </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeIndex}
+            initial={{ opacity: 0, x: 15 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -15 }}
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className={styles.recommendCard}
+            onClick={() => router.push(`/meeting/${current.id}`)}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => e.key === "Enter" && router.push(`/meeting/${current.id}`)}
+            aria-label={`ดูรายละเอียด: ${current.title}`}
+          >
+            <img src={current.image} className={styles.recommendImage} alt={current.title} />
+            <div className={styles.recommendContent}>
+              <div className={styles.titleWrapper}>
+                <h3 className="ThaiFont">{current.title}</h3>
+                {current.cpe && (
+                  <div className={styles.cpeBadge}>
+                    <FaGraduationCap className={styles.cpeIcon} />
+                    <span>CPE {current.cpe} หน่วยกิต</span>
+                  </div>
+                )}
+              </div>
 
-            <div className={styles.infoItem}>
-              <Calendar size={20} className={styles.grayIcon} />
-              <p className="ThaiFont">วันที่จัดประชุม : {current.date}</p>
-            </div>
+              <div className={styles.infoItem}>
+                <MapPin size={20} className={styles.grayIcon} />
+                <p className="ThaiFont">สถานที่ : {current.location}</p>
+              </div>
 
-            <div className={styles.recommendFooter}>
-              <div className={styles.participantsInfo}>
-                <div className={styles.infoItem}>
-                  <Users size={20} className={styles.grayIcon} />
-                  <span className="ThaiFont" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                    รับสมัคร :
-                    <span className={isFull ? styles.countFull : styles.countAvailable}>
-                      {current.count}
+              <div className={styles.infoItem}>
+                <Calendar size={20} className={styles.grayIcon} />
+                <p className="ThaiFont">วันที่จัดประชุม : {current.date}</p>
+              </div>
+
+              <div className={styles.recommendFooter}>
+                <div className={styles.participantsInfo}>
+                  <div className={styles.infoItem}>
+                    <Users size={20} className={styles.grayIcon} />
+                    <span className="ThaiFont" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      รับสมัคร :
+                      <span className={isFull ? styles.countFull : styles.countAvailable}>
+                        {current.count}
+                      </span>
                     </span>
-                  </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        </motion.div>
-      </AnimatePresence>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Right Card Arrow */}
+        <button className={`${styles.cardArrow} ${styles.cardArrowRight}`} onClick={handleNext} aria-label="ถัดไป">
+          <ChevronRight size={24} />
+        </button>
+      </div>
 
       <div className={styles.sliderIndicators}>
         {recommendedMeetings.map((_, index) => (
