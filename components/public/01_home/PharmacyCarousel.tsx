@@ -94,7 +94,7 @@ export default function PharmacyCarousel() {
       <Container className={styles.sectionInner}>
         {/* Header */}
         <div className={styles.headerGroup}>
-          <h2 className={styles.sectionTitle}>6 สาขาวิชาชีพเภสัชกร</h2>
+          <h2 className={styles.sectionTitle}>6 สายงานวิชาชีพเภสัชกร</h2>
           <p className={styles.sectionSubtitle}>
             วิชาชีพเภสัชกรมีความหลากหลายในการปฏิบัติงานเพื่อดูแลประชาชนในมิติต่าง ๆ
           </p>
@@ -150,9 +150,6 @@ export default function PharmacyCarousel() {
           </button>
 
           <div className={styles.slideContent} key={activeIndex}>
-            <span className={styles.counter}>
-              {String(activeIndex + 1).padStart(2, '0')} / {String(slides.length).padStart(2, '0')}
-            </span>
             <h3 className={styles.slideTitle}>{slides[activeIndex].title}</h3>
             <p className={styles.slideDesc}>{slides[activeIndex].desc}</p>
           </div>

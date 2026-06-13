@@ -15,7 +15,7 @@ const PHARMACIST_ROLES: PharmacistRole[] = [
     image: "/images/public/home/image1.png",
   },
   {
-    title: "ให้ข้อมูลยา",
+    title: "ให้ข้อมูลยาและผลิตภัณฑ์เสริมอาหาร",
     desc: "เป็นผู้เชี่ยวชาญด้านยา\nให้ข้อมูล ที่ถูกต้องแก่\nบุคลากรทาง\nการแพทย์",
     image: "/images/public/home/image2.png",
   },
@@ -25,7 +25,7 @@ const PHARMACIST_ROLES: PharmacistRole[] = [
     image: "/images/public/home/image3.png",
   },
   {
-    title: "ดูแลจัดการด้านยา",
+    title: "บริหารจัดการด้านยา",
     desc: "ตรวจสอบใบสั่งยา ประเมินความเหมาะสม\nป้องกัน แก้ไขปัญหาด้านยา\nและจ่ายยาอย่างปลอดภัย",
     image: "/images/public/home/image4.png",
   },

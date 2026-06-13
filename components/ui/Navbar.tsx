@@ -7,11 +7,17 @@ import { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import { getWebSettings } from "@/lib/api";
 
+interface NavLink {
+    name: string;
+    href: string;
+    hasDropdown?: boolean;
+}
+
 // --- Navigation Configuration ---
-const navLinks = [
+const navLinks: NavLink[] = [
     { name: "หน้าแรก", href: "/" },
     { name: "เกี่ยวกับองค์กร", href: "/about" },
-    { name: "หน่วยงาน", href: "/department", hasDropdown: true },
+    { name: "หน่วยงาน", href: "/department" },
     { name: "งานบริการ", href: "/service" },
     { name: "งานประชุม", href: "/meeting" },
     { name: "ข่าวสาร", href: "/news" },

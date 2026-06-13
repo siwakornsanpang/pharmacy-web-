@@ -13,14 +13,22 @@ const searchOptions = [
 export default function LicenseSearch() {
   const [searchType, setSearchType] = useState('license');
   const [query, setQuery] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   const selectedOption = searchOptions.find(o => o.value === searchType)!;
 
   const handleSearch = () => {
-    if (!query.trim()) return;
-    // TODO: implement actual search
-    console.log('Search:', searchType, query);
+    if (searchType === 'name') {
+      if (!firstName.trim() && !lastName.trim()) return;
+      // TODO: implement actual search
+      console.log('Search:', searchType, { firstName: firstName.trim(), lastName: lastName.trim() });
+    } else {
+      if (!query.trim()) return;
+      // TODO: implement actual search
+      console.log('Search:', searchType, query.trim());
+    }
   };
 
   return (
@@ -62,18 +70,45 @@ export default function LicenseSearch() {
           )}
         </div>
 
-        {/* Search input */}
-        <div className={styles.inputWrap}>
-          <Search size={18} className={styles.inputIcon} />
-          <input
-            type="text"
-            className={styles.input}
-            placeholder={`ค้นหา${selectedOption.label}`}
-            value={query}
-            onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSearch()}
-          />
-        </div>
+        {/* Search inputs */}
+        {searchType === 'name' ? (
+          <>
+            <div className={styles.inputWrap}>
+              <Search size={18} className={styles.inputIcon} />
+              <input
+                type="text"
+                className={styles.input}
+                placeholder="ชื่อ"
+                value={firstName}
+                onChange={e => setFirstName(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSearch()}
+              />
+            </div>
+            <div className={styles.inputWrap}>
+              <Search size={18} className={styles.inputIcon} />
+              <input
+                type="text"
+                className={styles.input}
+                placeholder="นามสกุล"
+                value={lastName}
+                onChange={e => setLastName(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && handleSearch()}
+              />
+            </div>
+          </>
+        ) : (
+          <div className={styles.inputWrap}>
+            <Search size={18} className={styles.inputIcon} />
+            <input
+              type="text"
+              className={styles.input}
+              placeholder={`ค้นหา${selectedOption.label}`}
+              value={query}
+              onChange={e => setQuery(e.target.value)}
+              onKeyDown={e => e.key === 'Enter' && handleSearch()}
+            />
+          </div>
+        )}
 
         {/* Search button */}
         <button

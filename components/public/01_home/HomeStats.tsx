@@ -147,6 +147,9 @@ export default function HomeStats() {
             <div className={styles.statDecoration}>03</div>
           </div>
         </div>
+        <div className={styles.updateTimeContainer}>
+          อัพเดทข้อมูล ณ วันที่ 14 มิถุนายน 2569 เวลา 13:00 น.
+        </div>
       </div>
     </section>
   );

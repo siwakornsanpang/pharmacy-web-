@@ -49,7 +49,7 @@ export default async function Home() {
       <PopularServices services={popularServices} />
       <PharmacistRolesSection />
 
-      {/* 4. 6 สาขาวิชาชีพเภสัชกร */}
+      {/* 4. 6 สายงานวิชาชีพเภสัชกร */}
       <PharmacyCarousel />
       <HomeStats />
 
