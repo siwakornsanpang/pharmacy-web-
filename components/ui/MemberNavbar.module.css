@@ -9,7 +9,7 @@
 
 /* Top Banner — same green as public Navbar */
 .topBanner {
-    background-color: #686805;
+    background-color: #737300;
     color: white;
     padding: 0.75rem 2rem;
     display: flex;
@@ -104,7 +104,7 @@
     gap: 0.75rem;
    
     padding-left: 1.5rem;
-    background-color: #8D8B3A;
+    background-color: #737300;
     border-radius: 999px;
     padding: 5px;
     padding-left: 20px;

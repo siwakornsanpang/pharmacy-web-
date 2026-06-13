@@ -17,18 +17,19 @@
     background: url('/images/public/meeting/meeting-banner.png') center/cover no-repeat;
     overflow: hidden;
     display: flex;
-    align-items: flex-end;
+    flex-direction: column;
 }
 
 .bannerOverlay {
-    position: absolute;
-    inset: 0;
+    flex-grow: 1;
     z-index: 2;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(30, 40, 20, 0.5) 40%, rgba(0, 0, 0, 0.2) 100%);
     padding: 2rem 5% 3.5rem;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    gap: 2rem;
+    width: 100%;
 }
 
 .backBtn {
@@ -781,5 +782,44 @@
     }
     .countdownDateRow {
         font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 1rem 0.5rem 3rem;
+    }
+    .sectionCard {
+        padding: 1.25rem 1rem;
+        border-radius: 14px;
+    }
+    .statsCountNumber {
+        font-size: 2.4rem;
+    }
+    .statsCountTotal {
+        font-size: 1.5rem;
+    }
+    .statsCountSeparator {
+        font-size: 1.5rem;
+    }
+    .cpeCardIconWrapper {
+        width: 48px;
+        height: 48px;
+        border-radius: 10px;
+    }
+    .cpeCardIcon {
+        font-size: 1.5rem;
+    }
+    .cpeCardValue strong {
+        font-size: 2.2rem;
+    }
+    .cpeCardValue {
+        font-size: 1.1rem;
+    }
+    .cpeCardLabel {
+        font-size: 0.8rem;
+    }
+    .mapIframe {
+        height: 180px !important;
     }
 }

@@ -17,7 +17,7 @@
    Top Banner (Green Section)
    ========================================== */
 .topBanner {
-    background-color: #686805;
+    background-color: #737300;
     color: white;
     padding: 0.75rem 2rem;
     display: flex;
@@ -162,12 +162,12 @@
 
 .langDropdownItem:hover {
     background-color: #f9fdf3;
-    color: #686805;
+    color: #737300;
 }
 
 .langDropdownItemActive {
     background-color: #f0f4e0;
-    color: #686805;
+    color: #737300;
     font-weight: 600;
 }
 
@@ -175,7 +175,7 @@
     content: "";
     width: 6px;
     height: 6px;
-    background-color: #686805;
+    background-color: #737300;
     border-radius: 50%;
 }
 

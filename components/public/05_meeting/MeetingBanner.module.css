@@ -75,11 +75,25 @@
     .bannerOverlay {
         padding: 0 5% 3rem;
     }
+    
+    .bannerContent {
+        bottom: 3rem;
+        left: 5%;
+    }
 }
 
 @media (max-width: 480px) {
+    .banner {
+        height: 200px;
+    }
+    
     .bannerOverlay {
         padding: 0 1rem 2rem;
+    }
+    
+    .bannerContent {
+        bottom: 2rem;
+        left: 1rem;
     }
 }
 
