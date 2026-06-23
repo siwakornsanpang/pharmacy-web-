@@ -6,7 +6,7 @@
     border-radius: 20px;
     padding: 2.5rem 2rem;
     position: sticky;
-    top: 190px; /* เพิ่มระยะห่างด้านบนเพื่อหลบเมนูด้านบน */
+    top: 130px; /* เพิ่มระยะห่างด้านบนเพื่อหลบเมนูด้านบน */
     z-index: 10;
     align-self: flex-start;
 }
@@ -49,7 +49,7 @@
 
 
 /* === Responsive (มือถือ/แท็บเล็ต) === */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .sidebar {
         width: 100%;
         position: static;

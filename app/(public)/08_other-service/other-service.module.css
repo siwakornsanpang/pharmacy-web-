@@ -84,6 +84,10 @@
     border-radius: 12px;
     padding: 1.5rem;
     flex-shrink: 0;
+    position: sticky;
+    top: 130px;
+    z-index: 10;
+    align-self: flex-start;
 }
 
 .sidebarTitle {
@@ -220,7 +224,7 @@
 }
 
 /* Responsive */
-@media (max-width: 900px) {
+@media (max-width: 768px) {
     .contentLayout {
         flex-direction: column;
         gap: 2rem;
@@ -228,6 +232,7 @@
 
     .sidebar {
         width: 100%;
+        position: static;
     }
 }
 

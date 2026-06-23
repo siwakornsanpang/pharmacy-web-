@@ -56,15 +56,16 @@
 }
 
 .badge {
-    color: white;
-    padding: 0.35rem 0.85rem;
-    border-radius: 0.5rem;
+    color: var(--badge-color, white);
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
     font-size: 0.7rem;
     font-weight: 600;
     letter-spacing: 0.025em;
     text-transform: uppercase;
     background-color: var(--badge-bg, #737300);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--badge-border, transparent);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .title {
@@ -109,4 +110,27 @@
 
 .dateIcon {
     opacity: 0.7;
+}
+
+.readMoreWrapper {
+    margin-top: auto;
+    padding-top: 1.25rem;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.readMoreBtn {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #737300;
+    border: 1px solid #d1d5db;
+    padding: 0.4rem 1.25rem;
+    border-radius: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.card:hover .readMoreBtn {
+    background-color: #737300;
+    border-color: #737300;
+    color: white;
 }

@@ -13,7 +13,7 @@ export default function PopularServices({ services }: PopularServicesProps) {
   return (
     <section className={styles.section}>
       <div className={styles.sectionCon}>
-        <h2 className={`${styles.title} ThaiFont`}>บริการยอดนิยม</h2>
+        <h2 className={`${styles.title} ThaiFont`}>บริการเภสัชกร</h2>
         <div className={styles.popularGrid}>
           {services.map((service) => (
             <Link

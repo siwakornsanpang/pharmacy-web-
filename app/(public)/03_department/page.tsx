@@ -48,7 +48,7 @@ export default async function DepartmentPage() {
             </header>
 
             {/* Stats Section */}
-            <DepartmentStats agencies={agencies} />
+            {/* <DepartmentStats agencies={agencies} /> */}
 
             {/* หน่วยงานในกำกับ */}
             <DepartmentAgencies

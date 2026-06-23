@@ -9,13 +9,9 @@ export default function AppHeader() {
   const pathname = usePathname();
   const { isLoggedIn } = useAuth();
 
-  // Hide navbar on login page (login page has its own layout)
+  // Hide navbar on login page
   if (pathname === "/login") {
-    return (
-      <header className="sticky top-0 z-50">
-        <Navbar />
-      </header>
-    );
+    return null;
   }
 
   return (

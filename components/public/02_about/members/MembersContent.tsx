@@ -10,6 +10,7 @@ import {
 import { scaleLinear } from "d3-scale";
 
 import styles from "./MembersContent.module.css";
+import { Clock } from "lucide-react";
 
 // URL สำหรับโหลดไฟล์ GeoJSON ของแผนที่ประเทศไทย
 const geoUrl = "/data/thailand.json";
@@ -475,6 +476,12 @@ const MembersContent = () => {
         <div className={styles.statsCardsContainer}>
           <div className={`${styles.statsCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.1s' }}>
             <div className={styles.cardGlow} />
+
+            {/* ข้อมูลอัพเดทล่าสุด */}
+            <div className={styles.lastUpdated}>
+              <Clock size={16} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }} />
+              อัพเดทข้อมูล ณ วันที่ 14 มิถุนายน 2569
+            </div>
 
             {/* สรุปยอดรวมทั้งประเทศแบบตัวใหญ่ */}
             <div className={styles.totalSummarySection}>

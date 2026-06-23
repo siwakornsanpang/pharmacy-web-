@@ -40,7 +40,7 @@ export default async function ContactContent() {
                 <div className={styles.bannerOverlay}>
                     <div className={styles.bannerContent}>
                         <h1 className={styles.bannerTitle}>ติดต่อ</h1>
-                        <p className={styles.bannerSubtitle}>ติดต่อสอบถาม</p>
+                        <p className={styles.bannerSubtitle}>ช่องทางการติดต่อสภาเภสัชกรรม</p>
                     </div>
                 </div>
             </header>

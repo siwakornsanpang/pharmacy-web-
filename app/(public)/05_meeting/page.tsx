@@ -6,7 +6,7 @@ import RecommendedMeeting from "@/components/public/05_meeting/RecommendedMeetin
 import MeetingList, { StaticMeeting } from "@/components/public/05_meeting/MeetingList";
 import MeetingPagination from "@/components/public/05_meeting/MeetingPagination";
 import styles from "./meeting.module.css";
-import { Search } from "lucide-react";
+import { Search, ListFilter, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const meetings: StaticMeeting[] = [
@@ -172,11 +172,19 @@ const ITEMS_PER_PAGE = 4;
 
 function PublicMeetingContent() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [inputValue, setInputValue] = useState("");
+    const [dropdownOpen, setDropdownOpen] = useState(false);
     const [currentPage, setCurrentPage] = useState(1);
 
     const handleSearchChange = (val: string) => {
+        setInputValue(val);
         setSearchTerm(val);
-        setCurrentPage(1); // Reset to page 1 on new search
+        setCurrentPage(1);
+    };
+
+    const handleSearchSubmit = () => {
+        setSearchTerm(inputValue);
+        setCurrentPage(1);
     };
 
     const filteredMeetings = meetings.filter((item) =>
@@ -195,21 +203,65 @@ function PublicMeetingContent() {
             <MeetingBanner />
 
             <div className={styles.container}>
-                {/* Search box — above Recommended section */}
+                {/* Search Section */}
                 <div className={styles.searchSection}>
-                    <div className={styles.searchInputWrapper}>
-                        <Search size={20} className={styles.searchIcon} />
-                        <input
-                            type="text"
-                            placeholder="ค้นหาตามชื่อการประชุม..."
-                            value={searchTerm}
-                            className={`${styles.searchInput} ThaiFont`}
-                            onChange={(e) => handleSearchChange(e.target.value)}
-                        />
+                    <div className={styles.searchHeader}>
+                        <h2 className={styles.searchTitle}>ค้นหาการประชุม</h2>
+                        <span className={styles.searchSubtitle}>งานประชุมและอบรมสัมมนา</span>
+                    </div>
+
+                    <div className={styles.searchRow}>
+                        {/* Dropdown */}
+                        <div className={styles.dropdown}>
+                            <button
+                                type="button"
+                                className={`${styles.dropdownButton} ThaiFont`}
+                                onClick={() => setDropdownOpen(!dropdownOpen)}
+                            >
+                                <ListFilter size={16} className={styles.dropdownIcon} />
+                                <span>ชื่องานประชุม</span>
+                                <ChevronDown size={16} className={styles.chevron} />
+                            </button>
+                            {dropdownOpen && (
+                                <ul className={styles.dropdownMenu}>
+                                    <li>
+                                        <button
+                                            type="button"
+                                            className={`${styles.dropdownItem} ${styles.dropdownItemActive} ThaiFont`}
+                                            onClick={() => setDropdownOpen(false)}
+                                        >
+                                            ชื่องานประชุม
+                                        </button>
+                                    </li>
+                                </ul>
+                            )}
+                        </div>
+
+                        {/* Search input */}
+                        <div className={styles.inputWrap}>
+                            <Search size={18} className={styles.inputIcon} />
+                            <input
+                                type="text"
+                                className={`${styles.input} ThaiFont`}
+                                placeholder="ค้นหาชื่องานประชุม..."
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                onKeyDown={(e) => e.key === "Enter" && handleSearchSubmit()}
+                            />
+                        </div>
+
+                        {/* Search button */}
+                        <button
+                            type="button"
+                            className={`${styles.searchButton} ThaiFont`}
+                            onClick={handleSearchSubmit}
+                        >
+                            ค้นหา
+                        </button>
                     </div>
                 </div>
 
-                <RecommendedMeeting />
+                {searchTerm.trim() === "" && <RecommendedMeeting />}
                 <AnimatePresence mode="wait">
                     <motion.div
                         key={currentPage}

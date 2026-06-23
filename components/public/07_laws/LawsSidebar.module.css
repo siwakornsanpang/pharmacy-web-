@@ -3,12 +3,13 @@
     width: 300px;
     flex-shrink: 0;
     position: sticky;
-    top: 2rem;
+    top: 130px;
+    z-index: 10;
+    align-self: flex-start;
     background-color: #F9F9F9;
     padding: 1rem;
     border-radius: 24px;
     margin-bottom: 4rem;
-     top: 190px;
 }
 
 .title {
@@ -51,7 +52,7 @@
 }
 
 /* Responsive */
-@media (max-width: 1024px) {
+@media (max-width: 768px) {
     .sidebar {
         width: 100%;
         position: static;

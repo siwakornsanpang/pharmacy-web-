@@ -17,33 +17,33 @@ export default function Footer() {
                         <h1 className={styles.mainTitle}>ติดต่อสภาเภสัชกรรม</h1>
                         <div className={styles.contactInfo}>
                             <p className={styles.address}>
-                                สำนักงานเลขาธิการสภาเภสัชกรรม อาคารมหิตลาธิเบศร ชั้น 8 กระทรวงสาธารณสุข เลขที่ 88/19 หมู่ 4 ถนนติวานนท์ ตำบลตลาดขวัญ อำเภอเมือง จังหวัดนนทบุรี 11000
+                                สำนักงานเลขาธิการสภาเภสัชกรรม อาคารมหิตลาธิเบศร ชั้น 8 กระทรวงสาธารณสุข <br />เลขที่ 88/19 หมู่ 4 ถนนติวานนท์ ตำบลตลาดขวัญ อำเภอเมือง จังหวัดนนทบุรี 11000
                             </p>
 
                             <div className={styles.contactRow}>
                                 <span className={styles.contactLabel}>โทรศัพท์ : </span>
-                                <span>0 2591 9992 (คู่สายอัตโนมัติ)</span>
+                                <a href="tel:025919992" className={styles.contactLink}>0 2591 9992</a> (คู่สายอัตโนมัติ)
                             </div>
                             <div className={styles.contactRow}>
                                 <span className={styles.contactLabel}>โทรสาร : </span>
-                                <span>0 2591 9996</span>
+                                <a href="tel:025919996" className={styles.contactLink}>0 2591 9996</a>
                             </div>
                             <div className={styles.contactRow}>
                                 <span className={styles.contactLabel}>Email : </span>
-                                <span>pharthai@pharmacycouncil.org</span>
+                                <a href="mailto:pharthai@pharmacycouncil.org" className={styles.contactLink}>pharthai@pharmacycouncil.org</a>
                             </div>
 
                             <div className={styles.socialChannels}>
                                 <p className={styles.sectionTitle}>ช่องทางการติดต่อสภาเภสัชกรรม</p>
                                 <div className={styles.socialIcons}>
-                                    <div className={styles.socialIconCircle}><FaGlobe /></div>
-                                    <div className={styles.socialIconCircle}><FaFacebookF /></div>
-                                    <div className={styles.socialIconCircle}><SiLine /></div>
-                                    <div className={styles.socialIconCircle}><MdEmail /></div>
-                                    <div className={styles.socialIconCircle}><FaTiktok /></div>
-                                    <div className={styles.socialIconCircle}><FaYoutube /></div>
-                                    <div className={styles.socialIconCircle}><FaMapMarkerAlt /></div>
-                                    <div className={styles.socialIconCircle}><FaPhoneAlt /></div>
+                                    <a href="https://www.pharmacycouncil.org/" target="_blank" rel="noopener noreferrer" className={styles.socialIconCircle} title="เว็บไซต์สภาเภสัชกรรม"><FaGlobe /></a>
+                                    <a href="https://www.facebook.com/thaipharmacycouncil" target="_blank" rel="noopener noreferrer" className={styles.socialIconCircle} title="Facebook สภาเภสัชกรรม"><FaFacebookF /></a>
+                                    <div className={styles.socialIconCircle} title="Line สภาเภสัชกรรม"><SiLine /></div>
+                                    <a href="mailto:pharthai@pharmacycouncil.org" className={styles.socialIconCircle} title="Email สภาเภสัชกรรม"><MdEmail /></a>
+                                    <div className={styles.socialIconCircle} title="Tiktok สภาเภสัชกรรม"><FaTiktok /></div>
+                                    <a href="https://www.youtube.com/@pharmacycouncilth" target="_blank" rel="noopener noreferrer" className={styles.socialIconCircle} title="YouTube สภาเภสัชกรรม"><FaYoutube /></a>
+                                    <a href="https://www.google.com/maps/place/The+Pharmacy+Council+of+Thailand/@13.8473214,100.5276215,17z/data=!3m1!4b1!4m6!3m5!1s0x30e29b5cb4ca105b:0xb3aaa2c0ba72d485!8m2!3d13.8473162!4d100.5302018!16s%2Fg%2F1hc51mp0c?hl=en&entry=ttu&g_ep=EgoyMDI2MDYyMS4wIKXMDSoASAFQAw%3D%3D" target="_blank" rel="noopener noreferrer" className={styles.socialIconCircle} title="แผนที่สภาเภสัชกรรม"><FaMapMarkerAlt /></a>
+                                    <a href="tel:025919992" className={styles.socialIconCircle} title="โทรศัพท์สภาเภสัชกรรม"><FaPhoneAlt /></a>
                                 </div>
                             </div>
                         </div>
@@ -51,14 +51,6 @@ export default function Footer() {
 
                     {/* Right Content Wrapper */}
                     <div className={styles.rightContent}>
-                        {/* Statistics Section - Top Right */}
-                        <div className={styles.statsContainer}>
-                            <span>สถิติการเข้าชม </span>
-                            <span className={styles.statValue}>76,065,271</span>
-                            <span className={styles.statDivider}>|</span>
-                            <span>ออนไลน์ </span>
-                            <span className={styles.statValue}>1,402</span>
-                        </div>
 
                         {/* Extensions Block */}
                         <div className={styles.extensionSection}>

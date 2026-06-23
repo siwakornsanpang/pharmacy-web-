@@ -262,9 +262,25 @@ export default function MeetingDetailPage() {
               )}
             </div>
 
-            {/* Right Column: Sidebar (Countdown, Registration, CPE, Map) */}
+            {/* Right Column: Sidebar (CPE, Countdown & Location, Registration) */}
             <div className={styles.rightCol}>
-              {/* Countdown Card */}
+              {/* CPE Card */}
+              <div className={`${styles.sectionCard} ${styles.cpeCard}`}>
+                <h3 className="ThaiFont">หน่วยกิตการศึกษาต่อเนื่อง (CPE)</h3>
+                <div className={styles.cpeCardContent}>
+                  <div className={styles.cpeCardIconWrapper}>
+                    <FaGraduationCap className={styles.cpeCardIcon} />
+                  </div>
+                  <div className={styles.cpeCardTextWrapper}>
+                    <span className={`${styles.cpeCardValue} ThaiFont`}>
+                      <strong>{current.cpe}</strong> <span className={styles.cpeCardUnitLabel}>หน่วยกิต</span>
+                    </span>
+                    <span className={`${styles.cpeCardLabel} ThaiFont`}>หน่วยกิตที่ได้รับหลังสำเร็จการประชุม</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Countdown & Location Card */}
               <div className={`${styles.sectionCard} ${styles.countdownCard}`}>
                 <h3 className="ThaiFont text-center">วันเวลาและนับถอยหลัง</h3>
                 <div className={`${styles.countdownDateRow} ThaiFont`}>
@@ -287,6 +303,27 @@ export default function MeetingDetailPage() {
                   <div className={styles.countdownItem}>
                     <span className={styles.countdownNumber}>{timeRemaining.seconds}</span>
                     <span className={`${styles.countdownLabel} ThaiFont`}>วิ</span>
+                  </div>
+                </div>
+
+                {/* สถานที่จัดงาน */}
+                <div style={{ marginTop: "2rem", borderTop: "1px solid #eef2f6", paddingTop: "1.5rem" }}>
+                  <h4 className="ThaiFont" style={{ fontSize: "1.1rem", fontWeight: "750", color: "#0f172a", marginBottom: "0.75rem" }}>สถานที่จัดงาน</h4>
+                  <p className={`${styles.venueText} ThaiFont`} style={{ marginBottom: "1rem" }}>
+                    <MapPin size={16} className={styles.inlineIcon} />
+                    {current.location}
+                  </p>
+                  <div className={styles.mapContainer}>
+                    <iframe
+                      src={current.mapEmbedUrl}
+                      width="100%"
+                      height="200"
+                      style={{ border: 0 }}
+                      allowFullScreen={true}
+                      loading="lazy"
+                      referrerPolicy="no-referrer-when-downgrade"
+                      className={styles.mapIframe}
+                    ></iframe>
                   </div>
                 </div>
               </div>
@@ -327,43 +364,6 @@ export default function MeetingDetailPage() {
                     *กรุณา <Link href="/login" className={styles.loginLink}>เข้าสู่ระบบ</Link> เพื่อลงทะเบียนเข้าร่วม
                   </p>
                 )}
-              </div>
-
-              {/* CPE Card */}
-              <div className={`${styles.sectionCard} ${styles.cpeCard}`}>
-                <h3 className="ThaiFont">หน่วยกิตการศึกษาต่อเนื่อง (CPE)</h3>
-                <div className={styles.cpeCardContent}>
-                  <div className={styles.cpeCardIconWrapper}>
-                    <FaGraduationCap className={styles.cpeCardIcon} />
-                  </div>
-                  <div className={styles.cpeCardTextWrapper}>
-                    <span className={`${styles.cpeCardValue} ThaiFont`}>
-                      <strong>{current.cpe}</strong> <span className={styles.cpeCardUnitLabel}>หน่วยกิต</span>
-                    </span>
-                    <span className={`${styles.cpeCardLabel} ThaiFont`}>หน่วยกิตที่ได้รับหลังสำเร็จการประชุม</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Map Card */}
-              <div className={styles.sectionCard}>
-                <h3 className="ThaiFont">สถานที่จัดงาน</h3>
-                <p className={`${styles.venueText} ThaiFont`}>
-                  <MapPin size={16} className={styles.inlineIcon} />
-                  {current.location}
-                </p>
-                <div className={styles.mapContainer}>
-                  <iframe
-                    src={current.mapEmbedUrl}
-                    width="100%"
-                    height="220"
-                    style={{ border: 0 }}
-                    allowFullScreen={true}
-                    loading="lazy"
-                    referrerPolicy="no-referrer-when-downgrade"
-                    className={styles.mapIframe}
-                  ></iframe>
-                </div>
               </div>
             </div>
           </div>

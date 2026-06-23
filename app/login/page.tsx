@@ -161,10 +161,11 @@ export default function LoginPage() {
                   </button>
 
                   <div className={styles.formLinks}>
+                    <Link href="/register">ลงทะเบียน</Link>
                     <Link href="/forgot-password">ลืมรหัสผ่าน</Link>
-                    <Link href="/register">ลงทะเบียนใช้งานครั้งแรก</Link>
                   </div>
 
+                  {/*
                   <div className={styles.dividerOr}>
                     <span>หรือ</span>
                   </div>
@@ -185,6 +186,7 @@ export default function LoginPage() {
                       เข้าสู่ระบบด้วย ทางรัฐ
                     </button>
                   </div>
+                  */}
                 </form>
               </>
             ) : (
@@ -251,7 +253,7 @@ export default function LoginPage() {
         </div>
       </main>
 
-      {/* Footer */}
+      {/* Footer
       <footer className={styles.footer}>
         <div className={styles.footerContent}>
           <span className={styles.footerText}>ผ่านการรับรองมาตรฐานโดย</span>
@@ -261,6 +263,7 @@ export default function LoginPage() {
           </div>
         </div>
       </footer>
+      */}
     </div>
   );
 }

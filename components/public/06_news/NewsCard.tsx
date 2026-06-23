@@ -14,10 +14,22 @@ const categoryLabels: Record<string, string> = {
     procurement: 'ข่าวประกาศจัดซื้อจัดจ้าง',
 };
 
-const categoryColors: Record<string, string> = {
-    news: '#737300',      // Olive
-    recruitment: '#8D7B68', // Brownish
-    procurement: '#628E90', // Teal/Grey
+const categoryStyles: Record<string, { bg: string; text: string; border: string }> = {
+    news: {
+        bg: '#dbeafe',
+        text: '#1e40af',
+        border: '#bfdbfe',
+    },
+    recruitment: {
+        bg: '#dcfce7',
+        text: '#166534',
+        border: '#bbf7d0',
+    },
+    procurement: {
+        bg: '#ffedd5',
+        text: '#9a3412',
+        border: '#fed7aa',
+    },
 };
 
 export default function NewsCard({ news }: NewsCardProps) {
@@ -26,6 +38,8 @@ export default function NewsCard({ news }: NewsCardProps) {
         month: 'long',
         day: 'numeric',
     });
+
+    const styleInfo = categoryStyles[news.category] || categoryStyles.news;
 
     return (
         <Link href={`/news/${news.id}`} className={styles.card}>
@@ -47,7 +61,11 @@ export default function NewsCard({ news }: NewsCardProps) {
                 <div className={styles.badgeRow}>
                     <span
                         className={styles.badge}
-                        style={{ '--badge-bg': categoryColors[news.category] || '#737300' } as React.CSSProperties}
+                        style={{
+                            '--badge-bg': styleInfo.bg,
+                            '--badge-color': styleInfo.text,
+                            '--badge-border': styleInfo.border,
+                        } as React.CSSProperties}
                     >
                         {categoryLabels[news.category] || news.category}
                     </span>
@@ -60,6 +78,9 @@ export default function NewsCard({ news }: NewsCardProps) {
                 <p className={styles.excerpt}>
                     {news.excerpt}
                 </p>
+                <div className={styles.readMoreWrapper}>
+                    <span className={`${styles.readMoreBtn} ThaiFont`}>อ่านเพิ่มเติม</span>
+                </div>
             </div>
         </Link>
     );

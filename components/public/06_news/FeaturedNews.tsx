@@ -11,6 +11,24 @@ interface FeaturedNewsProps {
     news: News[];
 }
 
+const categoryStyles: Record<string, { bg: string; text: string; border: string }> = {
+    news: {
+        bg: '#dbeafe',
+        text: '#1e40af',
+        border: '#bfdbfe',
+    },
+    recruitment: {
+        bg: '#dcfce7',
+        text: '#166534',
+        border: '#bbf7d0',
+    },
+    procurement: {
+        bg: '#ffedd5',
+        text: '#9a3412',
+        border: '#fed7aa',
+    },
+};
+
 const categoryLabels: Record<string, string> = {
     news: 'ข่าวประชาสัมพันธ์',
     recruitment: 'ข่าวรับสมัครงานสภา',
@@ -43,6 +61,8 @@ export default function FeaturedNews({ news }: FeaturedNewsProps) {
     const current = news[currentIndex];
 
     if (!current) return null;
+
+    const styleInfo = categoryStyles[current.category] || categoryStyles.news;
 
     return (
         <div
@@ -81,7 +101,14 @@ export default function FeaturedNews({ news }: FeaturedNewsProps) {
                 </div>
                 <div className={`${styles.contentSection} ${styles.slideUp}`}>
                     <div className={styles.badgeRow}>
-                        <span className={styles.badge}>
+                        <span
+                            className={styles.badge}
+                            style={{
+                                '--badge-bg': styleInfo.bg,
+                                '--badge-color': styleInfo.text,
+                                '--badge-border': styleInfo.border,
+                            } as React.CSSProperties}
+                        >
                             {categoryLabels[current.category] || current.category}
                         </span>
                         <span className={styles.date}>
@@ -97,7 +124,7 @@ export default function FeaturedNews({ news }: FeaturedNewsProps) {
                     <p className={styles.content}>
                         {current.excerpt}
                     </p>
-                    <Link href={`/news/${current.id}`} className={styles.readMore}>
+                    <Link href={`/news/${current.id}`} className={`${styles.readMore} ThaiFont`}>
                         อ่านเพิ่มเติม
                     </Link>
                 </div>

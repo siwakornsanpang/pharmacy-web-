@@ -10,7 +10,7 @@ export default function ServiceBanner() {
         <div className={styles.bannerContent}>
           <h1 className={`${styles.bannerTitle} ThaiFont`}>งานบริการ</h1>
           <p className={`${styles.bannerSubtitle} ThaiFont`}>
-            สภาเภสัชกรรมให้บริการเพื่อประชาชนและเภสัชกร
+            งานบริการสำหรับประชาชนและผู้ประกอบวิชาชีพเภสัชกรรม
           </p>
         </div>
       </div>
