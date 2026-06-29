@@ -11,7 +11,7 @@ const MOCK_REVIEWS = [
         id: 1,
         name: "ภก. ธนภัทร ใจดี",
         role: "เภสัชกรโรงพยาบาล",
-        image: "/images/public/member/learning/reviews/review1.png",
+        image: "/images/public/learning/reviews/review1.png",
         comment: "คอร์สเรียนเนื้อหาดีมากครับ เข้าใจง่าย นำไปประยุกต์ใช้ในการปฏิบัติงานได้จริง ช่วยให้อัปเดตความรู้ใหม่ๆ ได้สะดวกมาก",
         rating: 5,
         courseName: "Pharmacotherapy in Elderly"
@@ -20,7 +20,7 @@ const MOCK_REVIEWS = [
         id: 2,
         name: "ภญ. วิมล เรียนรู้",
         role: "เภสัชกรชุมชน",
-        image: "/images/public/member/learning/reviews/review2.png",
+        image: "/images/public/learning/reviews/review2.png",
         comment: "สะดวกมากค่ะ เรียนที่ไหนเมื่อไหร่ก็ได้ ระบบเสถียรและใช้งานง่ายมาก ช่วยให้เก็บหน่วยกิต CPE ได้ครบตามกำหนดโดยไม่ต้องเดินทาง",
         rating: 5,
         courseName: "Community Pharmacy Management"
@@ -29,7 +29,7 @@ const MOCK_REVIEWS = [
         id: 3,
         name: "ภก. ดร. สิทธิชัย ก้าวหน้า",
         role: "อาจารย์เภสัชกร",
-        image: "/images/public/member/learning/reviews/review3.png",
+        image: "/images/public/learning/reviews/review3.png",
         comment: "ประทับใจวิทยากรทุกท่านเลยค่ะ อธิบายได้ละเอียดและชัดเจนมาก เป็นแพลตฟอร์มการเรียนรู้ที่มีคุณภาพสูงมากจริงๆ",
         rating: 4,
         courseName: "Advanced Pharmaceutical Care"

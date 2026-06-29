@@ -13,56 +13,68 @@
 .banner {
     position: relative;
     width: 100%;
-    min-height: 380px;
+    height: 350px;
     background: url('/images/public/meeting/meeting-banner.png') center/cover no-repeat;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
 }
 
 .bannerOverlay {
-    flex-grow: 1;
+    position: absolute;
+    inset: 0;
     z-index: 2;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.85) 0%, rgba(30, 40, 20, 0.5) 40%, rgba(0, 0, 0, 0.2) 100%);
-    padding: 2rem 5% 3.5rem;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    gap: 2rem;
-    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(30, 40, 20, 0.4) 35%, transparent 70%);
+    padding: 2rem 5% 4.5rem;
 }
 
 .backBtn {
-    align-self: flex-start;
-    display: flex;
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    display: inline-flex;
     align-items: center;
-    gap: 0.5rem;
-    padding: 0.6rem 1.2rem;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    border: 1px solid rgba(255, 255, 255, 0.25);
-    border-radius: 2rem;
-    color: white;
-    font-weight: 600;
+    gap: 0.4rem;
+    padding: 0.5rem 1.25rem 0.5rem 1rem;
+    background: rgba(46, 58, 31, 0.65); /* Dark Olive */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: #ffffff;
+    font-weight: 500;
     font-size: 0.95rem;
+    letter-spacing: 0.02em;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), inset 0 0 0 1px rgba(255, 255, 255, 0.05);
     z-index: 10;
-    margin-top: 1rem;
 }
 
 .backBtn:hover {
-    background: rgba(255, 255, 255, 0.2);
-    transform: translateX(-4px);
+    background: rgba(115, 115, 0, 0.9); /* Theme Olive #737300 */
     border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+    color: #ffffff;
+}
+
+.backBtn svg {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    opacity: 0.9;
+}
+
+.backBtn:hover svg {
+    transform: translateX(-4px);
+    opacity: 1;
 }
 
 .bannerContent {
+    position: absolute;
+    bottom: 4.5rem;
+    left: 10%;
     color: white;
-    max-width: 1200px;
+    max-width: 1000px;
     z-index: 5;
-    margin-top: auto;
     animation: slideUpFade 0.8s ease-out forwards;
 }
 
@@ -407,10 +419,15 @@
 
 @media (max-width: 768px) {
     .banner {
-        min-height: 300px;
+        height: 250px;
+        min-height: unset;
     }
     .bannerOverlay {
-        padding: 1.5rem 5% 2.5rem;
+        padding: 0 5% 3rem;
+    }
+    .bannerContent {
+        bottom: 3rem;
+        left: 5%;
     }
     .backBtn {
         top: 1rem;
@@ -714,10 +731,15 @@
 
 @media (max-width: 576px) {
     .banner {
-        min-height: 250px;
+        height: 200px;
+        min-height: unset;
     }
     .bannerOverlay {
-        padding: 1.5rem 1rem 2rem;
+        padding: 0 1rem 2rem;
+    }
+    .bannerContent {
+        bottom: 2rem;
+        left: 1rem;
     }
     .bannerTitle {
         font-size: 1.45rem;
@@ -733,7 +755,8 @@
     .backBtn {
         padding: 0.5rem 1rem;
         font-size: 0.85rem;
-        margin-top: 0.5rem;
+        top: 1rem;
+        left: 1rem;
     }
     .documentItem {
         flex-direction: column;

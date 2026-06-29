@@ -11,28 +11,28 @@ const INSTRUCTORS = [
         name: "ภญ. ดร. วิภาวดี เรียนรู้",
         title: "ผู้เชี่ยวชาญด้านเภสัชกรรมคลินิก",
         expertise: "Pharmacotherapy & Patient Care",
-        image: "/images/public/member/learning/instructors/female_1.png"
+        image: "/images/public/learning/instructors/female_1.png"
     },
     {
         id: 2,
         name: "ภก. สมชาย รักดี",
         title: "เภสัชกรเชี่ยวชาญพิเศษ",
         expertise: "Hospital Pharmacy Management",
-        image: "/images/public/member/learning/instructors/male_1.png"
+        image: "/images/public/learning/instructors/male_1.png"
     },
     {
         id: 3,
         name: "ภญ. นงลักษณ์ ใจดี",
         title: "รองศาสตราจารย์ ดร.",
         expertise: "Clinical Research & Drug Safety",
-        image: "/images/public/member/learning/instructors/female_2.png"
+        image: "/images/public/learning/instructors/female_2.png"
     },
     {
         id: 4,
         name: "ภก. อนันต์ กาญจนภา",
         title: "เภสัชกรนักวิจัย",
         expertise: "Digital Health & AI in Pharmacy",
-        image: "/images/public/member/learning/instructors/male_2.png"
+        image: "/images/public/learning/instructors/male_2.png"
     }
 ];
 

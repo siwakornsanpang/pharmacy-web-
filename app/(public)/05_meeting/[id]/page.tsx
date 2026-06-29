@@ -164,12 +164,10 @@ export default function MeetingDetailPage() {
       {/* Banner */}
       <div className={styles.banner}>
         <div className={styles.bannerOverlay}>
-          <div className={styles.bannerNavRow}>
-            <button onClick={handleBack} className={styles.backBtn}>
-              <ChevronLeft size={20} />
-              <span>กลับสู่หน้าหลัก</span>
-            </button>
-          </div>
+          <button onClick={handleBack} className={styles.backBtn}>
+            <ChevronLeft size={20} />
+            <span>กลับสู่หน้าหลัก</span>
+          </button>
           <div className={styles.bannerContent}>
             <h1 className={`${styles.bannerTitle} ThaiFont`}>{current.title}</h1>
             <div className={styles.bannerMeta}>

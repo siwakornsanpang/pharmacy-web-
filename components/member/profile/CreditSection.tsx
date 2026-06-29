@@ -1,6 +1,5 @@
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import styles from "./ProfileComponents.module.css";
+
 
 // 🔴 เอาบรรทัด Import SVG ออกไปได้เลย
 
@@ -28,9 +27,7 @@ export default function CreditSection() {
         <div className={styles.sectionSpacer}>
             <div className={styles.sectionHeader}>
                 <h2 className={styles.sectionTitle}>หน่วยกิตของฉัน</h2>
-                <Link href="/learning" className={styles.secondaryLink}>
-                    งานการศึกษา <ChevronRight size={18} />
-                </Link>
+
             </div>
             <div className={styles.creditsGrid}>
                 {CREDIT_DATA.map((item, index) => (

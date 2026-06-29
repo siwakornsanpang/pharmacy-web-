@@ -135,34 +135,39 @@
     object-fit: cover;
 }
 
+.userArea {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
 .avatarWrapper {
     position: relative;
     display: flex;
     align-items: center;
 }
 
-.logoutIconBtn {
-    position: absolute;
-    top: -5px;
-    right: -5px;
-    background: #ef4444;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
+.logoutBtn {
     display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    background-color: transparent;
+    border: 1.5px solid rgba(255, 255, 255, 0.45);
+    border-radius: 99px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 600;
     cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: transform 0.2s;
-    padding: 0;
+    transition: all 0.25s ease;
+    font-family: var(--font-kanit), sans-serif;
 }
 
-.logoutIconBtn:hover {
-    transform: scale(1.1);
-    background: #dc2626;
+.logoutBtn:hover {
+    background-color: #ef4444;
+    border-color: #ef4444;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    transform: translateY(-1px);
 }
 
 /* Lower Nav */

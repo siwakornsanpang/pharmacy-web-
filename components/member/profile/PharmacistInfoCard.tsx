@@ -12,8 +12,8 @@ export default function PharmacistInfoCard({ userName, userId }: PharmacistInfoC
     return (
         <section>
             <div className={styles.sectionHeader}>
-                <h2 className={styles.sectionTitle}>รายละเอียดข้อมูลส่วนตัว</h2>
-                <Link href="/profile" className={styles.manageLink}>
+                <h2 className={styles.sectionTitle}>รายละเอียดข้อมูลของเภสัชกร</h2>
+                <Link href="/profile/edit" className={styles.manageLink}>
                     จัดการข้อมูล <ChevronRight size={18} />
                 </Link>
             </div>
@@ -47,7 +47,7 @@ export default function PharmacistInfoCard({ userName, userId }: PharmacistInfoC
                 <div className={styles.statusWrapper}>
                     <div className={styles.statusBadge}>
                         <span className={styles.statusValue}>ปกติ</span>
-                        <span className={styles.statusLabel}>สถานะใบประกอบ</span>
+                        <span className={styles.statusLabel}>สถานะใบประกอบวิชาชีพ<br/>สภาเภสัชกรรม</span>
                     </div>
                 </div>
             </div>
