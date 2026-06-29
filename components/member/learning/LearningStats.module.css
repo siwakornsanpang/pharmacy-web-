@@ -159,6 +159,13 @@
   }
 }
 
+.updateTimeContainer {
+  text-align: right;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
 /* === Responsive === */
 @media (max-width: 1200px) {
   .statsGrid {

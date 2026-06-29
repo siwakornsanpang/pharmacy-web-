@@ -76,9 +76,9 @@ function AnimatedNumber({ value, duration = 2000, suffix = "" }: AnimatedNumberP
 
 export default function LearningStats() {
   const stats = [
-    { label: "คอร์สเรียนออนไลน์", value: 124, suffix: "+", decoration: "01" },
-    { label: "สมาชิกเข้าเรียน", value: 15800, suffix: "+", decoration: "02" },
-    { label: "วิทยากรผู้เชี่ยวชาญ", value: 85, suffix: "+", decoration: "03" },
+    { label: "คอร์สเรียนออนไลน์", value: 124, suffix: "+" },
+    { label: "สมาชิกเข้าเรียน", value: 15800, suffix: "+" },
+    { label: "วิทยากรผู้เชี่ยวชาญ", value: 85, suffix: "+" },
   ];
 
   return (
@@ -95,9 +95,11 @@ export default function LearningStats() {
                 </h3>
               </div>
               <p className={styles.statLabel}>{stat.label}</p>
-              <div className={styles.statDecoration}>{stat.decoration}</div>
             </div>
           ))}
+        </div>
+        <div className={styles.updateTimeContainer}>
+          อัพเดทข้อมูลล่าสุดเมื่อวันที่ 14 มิถุนายน 2569 เวลา 13:00 น.
         </div>
       </div>
     </section>

@@ -9,11 +9,13 @@
     padding: 0 1.5rem;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
+.sliderContainer {
     margin-top: 3rem;
+    padding-bottom: 3rem; /* Space for pagination */
+}
+
+.swiper {
+    padding: 1rem 0 3rem 0 !important;
 }
 
 .card {
@@ -26,6 +28,7 @@
     flex-direction: column;
     position: relative;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.02);
+    height: 100%;
 }
 
 .card:hover {
@@ -126,17 +129,7 @@
 }
 
 /* === Responsive === */
-@media (max-width: 1024px) {
-    .grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
 @media (max-width: 768px) {
-    .grid {
-        grid-template-columns: 1fr;
-    }
-    
     .section {
         padding: 4rem 0;
     }

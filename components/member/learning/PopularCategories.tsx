@@ -1,19 +1,19 @@
 "use client";
 
 import Link from 'next/link';
-import { Pill, FlaskConical, Stethoscope, Briefcase, Microscope, ClipboardList, HeartPulse, UserCheck } from 'lucide-react';
+import Image from 'next/image';
 import styles from './PopularCategories.module.css';
 import SectionHeader from '@/components/ui/SectionHeader';
 
 const categories = [
-    { id: 1, title: 'เภสัชกรรมชุมชน', count: 124, icon: <Pill size={28} />, color: '#4e73df' },
-    { id: 2, title: 'เภสัชกรรมโรงพยาบาล', count: 85, icon: <Stethoscope size={28} />, color: '#1cc88a' },
-    { id: 3, title: 'การผลิตและควบคุม', count: 42, icon: <FlaskConical size={28} />, color: '#f6c23e' },
-    { id: 4, title: 'กฎหมายและจริยธรรม', count: 56, icon: <Briefcase size={28} />, color: '#e74a3b' },
-    { id: 5, title: 'เภสัชวิเคราะห์', count: 38, icon: <Microscope size={28} />, color: '#36b9cc' },
-    { id: 6, title: 'การคุ้มครองผู้บริโภค', count: 29, icon: <UserCheck size={28} />, color: '#f6c23e' },
-    { id: 7, title: 'เภสัชศาสตร์นวัตกรรม', count: 15, icon: <HeartPulse size={28} />, color: '#4e73df' },
-    { id: 8, title: 'การบริหารงานคลัง', count: 22, icon: <ClipboardList size={28} />, color: '#1cc88a' }
+    { id: 1, title: 'เภสัชกรรมชุมชน', count: 124, image: '/images/public/learning/categories/cat1.png', color: '#4e73df' },
+    { id: 2, title: 'เภสัชกรรมโรงพยาบาล', count: 85, image: '/images/public/learning/categories/cat2.png', color: '#1cc88a' },
+    { id: 3, title: 'การผลิตและควบคุม', count: 42, image: '/images/public/learning/categories/cat3.png', color: '#f6c23e' },
+    { id: 4, title: 'กฎหมายและจริยธรรม', count: 56, image: '/images/public/learning/categories/cat4.png', color: '#e74a3b' },
+    { id: 5, title: 'เภสัชวิเคราะห์', count: 38, image: '/images/public/learning/categories/cat5.png', color: '#36b9cc' },
+    { id: 6, title: 'การคุ้มครองผู้บริโภค', count: 29, image: '/images/public/learning/categories/cat6.png', color: '#f6c23e' },
+    { id: 7, title: 'เภสัชศาสตร์นวัตกรรม', count: 15, image: '/images/public/learning/categories/cat7.png', color: '#4e73df' },
+    { id: 8, title: 'การบริหารงานคลัง', count: 22, image: '/images/public/learning/categories/cat8.png', color: '#1cc88a' }
 ];
 
 export default function PopularCategories() {
@@ -30,8 +30,10 @@ export default function PopularCategories() {
                             className={styles.card} 
                             style={{ '--hover-color': cat.color } as any}
                         >
-                            <div className={styles.iconWrapper} style={{ backgroundColor: `${cat.color}15`, color: cat.color }}>
-                                {cat.icon}
+                            <div className={styles.imageWrapper}>
+                                <div className={styles.imageInner}>
+                                    <img src={cat.image} alt={cat.title} className={styles.catImage} onError={(e) => { e.currentTarget.src = 'https://placehold.co/100x100?text=' + encodeURIComponent(cat.title) }} />
+                                </div>
                             </div>
                             <h3 className={styles.catTitle}>{cat.title}</h3>
                             <p className={styles.catCount}>{cat.count} คอร์สเรียน</p>

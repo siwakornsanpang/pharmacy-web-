@@ -42,11 +42,11 @@ export default function LearningPage() {
 
             <PopularCategories />
 
+            <ExperiencedInstructors />
+
             <FeaturedCourse />
 
             <PopularCourses />
-
-            <ExperiencedInstructors />
 
             <LearningStats />
 
