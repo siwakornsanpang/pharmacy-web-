@@ -1,10 +1,17 @@
-.section {
+.sectionCon {
     max-width: var(--max-width-2xl);
     width: 90%;
     margin: auto;
     padding: 40px 20px;
     overflow: hidden;
 }
+
+.section{
+       margin: auto;
+    padding: 40px 20px;
+    background: #ffffff;
+}
+
 
 .title {
     margin-bottom: 30px;

@@ -47,16 +47,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [isLoggedIn, isLoaded]);
 
   const login = () => {
+    localStorage.setItem("isLoggedIn", "true");
+    document.cookie = "isLoggedIn=true; path=/; max-age=" + (60 * 60 * 24 * 7);
     setIsLoggedIn(true);
-    // document.cookie is set in the useEffect above
-    router.push("/home");
+    window.location.href = "/home";
   };
 
   const logout = () => {
     setIsLoggedIn(false);
     localStorage.removeItem("isLoggedIn");
     document.cookie = "isLoggedIn=; path=/; max-age=0";
-    router.push("/home");
+    window.location.href = "/home";
   };
 
   if (!isLoaded) return null; // Avoid flicker

@@ -10,7 +10,7 @@ const SIDEBAR_LINKS = [
   { href: "/about/committee", label: "กรรมการสภา" },
   { href: "/about/hall-of-fame", label: "หอเกียรติประวัติ" },
   { href: "/about/members", label: "ข้อมูลสมาชิก" },
-  { href: "/about/policy", label: "นโยบายสภาเภสัชกรรม" },
+  // { href: "/about/policy", label: "นโยบายสภาเภสัชกรรม" },
 ];
 
 export default function AboutSidebar() {

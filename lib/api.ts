@@ -489,3 +489,64 @@ export async function getHonorRecipients(): Promise<HonorRecipient[]> {
 
     return res.json();
 }
+
+// ===== Public Projects =====
+
+export interface PublicProject {
+    id: number;
+    title: string;
+    content: string;
+    excerpt?: string | null;
+    thumbnailUrl?: string | null;
+    status: 'draft' | 'published';
+    category: string;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt?: string | null;
+}
+
+export async function getPublicProjects(): Promise<PublicProject[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/public-project`, {
+            next: { revalidate: 60 }, // Cache for 1 minute
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch public projects: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching public projects:', error);
+        return [];
+    }
+}
+
+export async function getPublicProjectById(id: string): Promise<PublicProject | null> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return null;
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/public-project/${id}`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            if (res.status === 404) return null;
+            throw new Error(`Failed to fetch public project item: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error(`Error fetching public project item ${id}:`, error);
+        return null;
+    }
+}
+

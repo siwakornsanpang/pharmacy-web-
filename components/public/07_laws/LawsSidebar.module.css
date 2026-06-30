@@ -2,8 +2,9 @@
 .sidebar {
     width: 300px;
     flex-shrink: 0;
+    position: -webkit-sticky;
     position: sticky;
-    top: 130px;
+    top: 165px;
     z-index: 10;
     align-self: flex-start;
     background-color: #F9F9F9;

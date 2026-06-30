@@ -161,7 +161,7 @@ export default function LoginPage() {
                   </button>
 
                   <div className={styles.formLinks}>
-                    <Link href="/register">ลงทะเบียน</Link>
+                    <Link href="/register">เข้าสู่ระบบครั้งแรก</Link>
                     <Link href="/forgot-password">ลืมรหัสผ่าน</Link>
                   </div>
 
