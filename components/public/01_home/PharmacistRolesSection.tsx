@@ -39,7 +39,7 @@ const PHARMACIST_ROLES: PharmacistRole[] = [
 export default function PharmacistRolesSection() {
     return (
         <section className={styles.serviceSection}>
-            <Container>
+            <Container size="2xl">
                 <div className={styles.roleGrid}>
                     <div className={styles.roleTitleCard}>
                         <div className={styles.roleTitleIcon}>

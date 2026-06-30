@@ -1,5 +1,5 @@
 .pageWrapper {
-    min-height: 100vh;
+  
     background-color: #ffffff;
     padding-bottom: 3rem;
 }
@@ -46,15 +46,15 @@
 
 /* === Search Section === */
 .searchSection {
-    padding: 2.5rem 1.5rem 0rem 1.5rem;
+    padding: 2.5rem 1.5rem;
     background: #fff;
 }
 
 .searchContainer {
-    max-width: 90%;
+max-width: var(--max-width-2xl);
+    width: 90%;
     margin: 0 auto;
-    border-radius: 24px;
-    padding: 0;
+    padding: 20px;
 }
 
 @media (max-width: 768px) {
@@ -64,9 +64,10 @@
 }
 
 .container {
-    max-width: 90%;
+    max-width: var(--max-width-2xl);
+    width: 90%;
     margin: 2rem auto 4rem;
-    padding: 0 1.5rem 4rem;
+    padding: 0 20px;
 }
 
 /* Layout */

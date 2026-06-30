@@ -27,7 +27,8 @@
 
 .container {
   position: relative;
-  max-width: 90%;
+  max-width: var(--max-width-2xl);
+  width: 90%;
   margin: 0 auto;
   padding: 0 20px;
   z-index: 1;

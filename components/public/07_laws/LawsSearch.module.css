@@ -5,11 +5,17 @@
 }
 
 .container {
-    max-width: 90%;
+max-width: var(--max-width-2xl);
+    width: 90%;
     margin: 0 auto;
-    background: #F9F9F9;
+    padding: 20px;
+}
+
+.wrapper{
+    background: #f9f9f9;
     border-radius: 24px;
-    padding: 2rem 2rem 1.5rem;
+    width: 100%;
+    padding: 20px;
 }
 
 .title {

@@ -91,7 +91,7 @@ export default function PharmacyCarousel() {
 
   return (
     <section className={styles.section}>
-      <Container className={styles.sectionInner}>
+      <Container size="2xl" className={styles.sectionInner}>
         {/* Header */}
         <div className={styles.headerGroup}>
           <h2 className={styles.sectionTitle}>6 สายงานวิชาชีพเภสัชกร</h2>

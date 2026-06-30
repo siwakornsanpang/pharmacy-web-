@@ -22,9 +22,13 @@
 .bannerContent {
     position: absolute;
     bottom: 4.5rem;
-    left: 10%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     color: white !important;
-    max-width: 1000px;
+    max-width: var(--max-width-xl);
+    width: 90%;
     z-index: 5;
     animation: slideUpFade 1s ease-out forwards;
 }
@@ -48,7 +52,8 @@
 }
 
 .contentBody {
-    max-width: 1200px;
+    max-width: var(--max-width-xl);
+    width: 90%;
     margin: 3rem auto 5rem;
     padding: 0 2rem;
 }

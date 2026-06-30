@@ -55,7 +55,7 @@ export default function PublicServiceSection() {
     return (
         <PublicOnlySection>
             <section className={styles.serviceSection}>
-                <Container>
+                <Container size="2xl">
                     <SectionHeader title="บริการประชาชน" viewAllHref="/service" />
                     <div className={styles.publicGrid}>
                         {PUBLIC_SERVICES.map((svc, i) => (

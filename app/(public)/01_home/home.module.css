@@ -9,10 +9,9 @@
 }
 
 .searchContainer {
-    max-width: 90%;
+    max-width: var(--max-width-2xl);
+    width: 90%;
     margin: 0 auto;
-    background: #F9F9F9;
-    border-radius: 24px;
     padding: 20px;
 }
 

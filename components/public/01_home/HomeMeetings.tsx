@@ -51,7 +51,7 @@ const MOCK_MEETINGS = [
 export default function HomeMeetings() {
   return (
     <section className={styles.section}>
-      <Container>
+      <Container size="2xl">
         <SectionHeader title="การประชุม" viewAllHref="/meeting" />
 
         <div className={styles.meetingList}>

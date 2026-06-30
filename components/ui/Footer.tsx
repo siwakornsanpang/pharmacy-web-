@@ -10,7 +10,7 @@ export default function Footer() {
 
     return (
         <footer className={styles.footer}>
-            <Container>
+            <Container size="2xl">
                 <div className={styles.footerInner}>
                     {/* Left Column: Contact info */}
                     <div className={styles.contactSection}>

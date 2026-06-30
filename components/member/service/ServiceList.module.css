@@ -6,8 +6,10 @@
 }
 
 .sectionCon {
-    max-width: 90%;
+    max-width: var(--max-width-2xl);
+    width: 90%;
     margin: auto;
+    padding:20px;
 }
 
 .title {

@@ -6,7 +6,8 @@
 }
 
 .sectionInner {
-  max-width: 90%;
+  max-width: var(--max-width-2xl);
+  width: 90%;
   margin: 0 auto;
   text-align: center;
   overflow: hidden;

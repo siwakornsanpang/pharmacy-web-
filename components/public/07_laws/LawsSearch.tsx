@@ -40,6 +40,7 @@ export default function LawsSearch({
   return (
     <section className={styles.section}>
       <div className={styles.container}>
+        <div className={styles.wrapper}>
         <h2 className={`${styles.title} ThaiFont`}>ค้นหากฎหมาย</h2>
         <div className={styles.row}>
           {/* Category dropdown */}
@@ -137,6 +138,7 @@ export default function LawsSearch({
           <button className={`${styles.searchBtn} ThaiFont`} onClick={onSearch}>
             ค้นหา
           </button>
+        </div>
         </div>
       </div>
     </section>

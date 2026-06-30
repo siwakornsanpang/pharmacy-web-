@@ -44,7 +44,8 @@
 }
 
 .container {
-    max-width: 90%;
+    max-width: var(--max-width-2xl);
+    width: 90%;
     margin: 3rem auto 4rem;
     padding: 0 1.5rem 2rem;
     position: relative;

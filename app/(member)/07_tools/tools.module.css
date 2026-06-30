@@ -30,9 +30,13 @@
 .bannerContent {
     position: absolute;
     bottom: 4.5rem;
-    left: 10%;
+    left: 0;
+    right: 0;
+    margin-left: auto;
+    margin-right: auto;
     color: white !important;
-    max-width: 1000px;
+    max-width: var(--max-width-xl);
+    width: 90%;
     z-index: 5;
     animation: slideUpFade 0.8s ease-out forwards;
 }
@@ -62,8 +66,8 @@
 
 /* ─── Container ─── */
 .container {
+    max-width: var(--max-width-xl);
     width: 90%;
-    max-width: 1400px;
     margin: 0 auto;
     padding: 2.5rem 1.5rem 0;
     display: flex;

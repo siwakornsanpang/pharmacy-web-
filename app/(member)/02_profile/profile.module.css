@@ -20,9 +20,9 @@
 .bannerContent {
     position: relative;
     z-index: 1;
-    max-width: 1200px;
+    max-width: var(--max-width-xl);
     margin: 0 auto;
-    width: 100%;
+    width: 90%;
     padding: 0 2rem;
     color: white;
 }
@@ -41,7 +41,8 @@
 }
 
 .contentBody {
-    max-width: 90%;
+    max-width: var(--max-width-xl);
+    width: 90%;
     margin: 3rem auto 5rem;
     padding: 0 2rem;
 }

@@ -1,6 +1,6 @@
 /* === Laws Page (layout only) === */
 .pageWrapper {
-    min-height: 100vh;
+    
     background-color: #ffffff;
     padding-bottom: 3rem;
 }
@@ -46,17 +46,19 @@
 }
 
 .layoutContainer {
-    max-width: 90%;
-    margin: 0 auto 4rem;
+    max-width: var(--max-width-2xl);
+    width: 90%;
+    margin: 3rem auto 4rem;
     display: flex;
     gap: 3rem;
     align-items: flex-start;
-    padding: 0 1.5rem;
+    padding: 0 20px;
 }
 
 @media (max-width: 768px) {
     .layoutContainer {
-        max-width: 90%;
+        max-width: 100%;
+        width: 100%;
         flex-direction: column;
     }
 }
