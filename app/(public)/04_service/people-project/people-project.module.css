@@ -1,4 +1,3 @@
-/* === About Layout === */
 .pageWrapper {
     min-height: 100vh;
     background-color: #ffffff;
@@ -9,15 +8,14 @@
     position: relative;
     width: 100%;
     height: 350px;
+    background: #2e3a1f url('/images/public/service/service-banner.png') center/cover no-repeat;
     overflow: hidden;
-    background: url('/images/public/about/imgbg2.png') center/cover no-repeat;
 }
 
 .bannerOverlay {
     position: absolute;
     inset: 0;
     z-index: 2;
-    /* Soft dark olive gradient at the bottom */
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(30, 40, 20, 0.4) 30%, transparent 70%);
     display: flex;
     align-items: flex-end;
@@ -25,9 +23,9 @@
 }
 
 .bannerContent {
+    animation: slideUpFade 1s ease-out forwards;
     color: white;
     max-width: 1000px;
-    animation: slideUpFade 1s ease-out forwards;
 }
 
 .bannerTitle {
@@ -46,32 +44,13 @@
     text-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
 }
 
-
-
-
-
-/* === Layout: Sidebar + Content === */
-.layoutContainer {
+.container {
     max-width: var(--max-width-2xl);
     width: 90%;
-    margin: 3rem auto 4rem;
-    display: flex;
-    gap: 3rem;
-    align-items: flex-start;  /* สำคัญมาก: ต้องเป็น flex-start ให้ sticky ทำงาน */
-}
-
-.contentArea {
-    flex: 1;
-    min-width: 0;
-    min-height: 100%;  /* ให้เนื้อหาดึงความสูง container */
-}
-
-/* === Responsive === */
-@media (max-width: 768px) {
-    .layoutContainer {
-        flex-direction: column;
-        max-width: 90%;
-    }
+    margin: 4rem auto 4rem;
+    padding: 20px;
+    position: relative;
+    z-index: 2;
 }
 
 @media (max-width: 640px) {
@@ -81,6 +60,10 @@
 
     .bannerContent h1 {
         font-size: 2.5rem;
+    }
+
+    .container {
+        margin-top: 2rem;
     }
 }
 

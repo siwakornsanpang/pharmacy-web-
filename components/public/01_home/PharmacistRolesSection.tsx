@@ -12,27 +12,27 @@ const PHARMACIST_ROLES: PharmacistRole[] = [
   {
     title: "วิจัยพัฒนา และผลิตยา",
     desc: "วิจัยและพัฒนายาใหม่\nควบคุมการผลิตตาม\nมาตรฐานสากล เพื่อ\nให้ได้ยาที่มีคุณภาพ\nแก่ประชาชน",
-    image: "/images/public/home/image1.png",
+    image: "/images/public/home/role/role1.png",
   },
   {
     title: "ให้ข้อมูลยาและผลิตภัณฑ์เสริมอาหาร",
     desc: "เป็นผู้เชี่ยวชาญด้านยา\nให้ข้อมูล ที่ถูกต้องแก่\nบุคลากรทาง\nการแพทย์",
-    image: "/images/public/home/image2.png",
+    image: "/images/public/home/role/role2.png",
   },
   {
     title: "คัดกรองและให้คำปรึกษา",
     desc: "คัดกรองความเสี่ยง ให้คำปรึกษาด้านยา\nและสุขภาพแก่ประชาชน",
-    image: "/images/public/home/image3.png",
+    image: "/images/public/home/role/role3.png",
   },
   {
     title: "บริหารจัดการด้านยา",
     desc: "ตรวจสอบใบสั่งยา ประเมินความเหมาะสม\nป้องกัน แก้ไขปัญหาด้านยา\nและจ่ายยาอย่างปลอดภัย",
-    image: "/images/public/home/image4.png",
+    image: "/images/public/home/role/role4.png",
   },
   {
     title: "คุ้มครองความปลอดภัย",
     desc: "เฝ้าระวังคุณภาพ ความปลอดภัย\nของยา และผลิตภัณฑ์สุขภาพเพื่อ\nคุ้มครองผู้บริโภค",
-    image: "/images/public/home/image5.png",
+    image: "/images/public/home/role/role5.png",
   },
 ];
 

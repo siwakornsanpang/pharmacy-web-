@@ -85,8 +85,9 @@ max-width: var(--max-width-2xl);
     border-radius: 12px;
     padding: 1.5rem;
     flex-shrink: 0;
+    position: -webkit-sticky;
     position: sticky;
-    top: 130px;
+    top: 165px;
     z-index: 10;
     align-self: flex-start;
 }

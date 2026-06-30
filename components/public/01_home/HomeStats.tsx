@@ -118,7 +118,7 @@ export default function HomeStats() {
               </h3>
             </div>
             <p className={styles.statLabel}>เภสัชกร</p>
-            <div className={styles.statDecoration}>01</div>
+            
           </div>
 
           {/* Stat Item 2 */}
@@ -131,7 +131,7 @@ export default function HomeStats() {
               </h3>
             </div>
             <p className={styles.statLabel}>ร้านยาคุณภาพ</p>
-            <div className={styles.statDecoration}>02</div>
+            
           </div>
 
           {/* Stat Item 3 */}
@@ -144,7 +144,7 @@ export default function HomeStats() {
               </h3>
             </div>
             <p className={styles.statLabel}>คณะเภสัชศาสตร์ประเทศไทย</p>
-            <div className={styles.statDecoration}>03</div>
+            
           </div>
         </div>
         <div className={styles.updateTimeContainer}>
