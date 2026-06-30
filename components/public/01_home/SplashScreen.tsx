@@ -106,8 +106,22 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
 
         setClosing(true);
         if (intervalRef.current) clearInterval(intervalRef.current);
-        setTimeout(() => setVisible(false), 600);
+        setTimeout(() => {
+            setVisible(false);
+            try {
+                document.documentElement.classList.remove('splash-active');
+            } catch(e) {}
+        }, 600);
     }, [dontShowAgain]);
+
+    // Safety cleanup in case visible state changes elsewhere
+    useEffect(() => {
+        if (!visible) {
+            try {
+                document.documentElement.classList.remove('splash-active');
+            } catch(e) {}
+        }
+    }, [visible]);
 
     if (!visible || popups.length === 0) return null;
 
@@ -117,7 +131,7 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
     const parallaxY = mousePos.y * 9;
 
     return (
-        <div className={`${styles.overlay} ${closing ? styles.closing : ''}`}>
+        <div className={`${styles.overlay} ${closing ? styles.closing : ''} splash-gate-keeper`}>
             {/* Shimmer particles */}
             <div className={styles.shimmerLayer} aria-hidden="true">
                 {Array.from({ length: 20 }).map((_, i) => (
