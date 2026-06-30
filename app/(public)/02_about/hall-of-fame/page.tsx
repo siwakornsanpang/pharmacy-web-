@@ -5,7 +5,7 @@ export default async function HallOfFamePage() {
     return (
         <main className={styles.mainContainer}>
             <h2 className={`${styles.contentTitle} ThaiFont`}>
-                หอเกียรติประวัติ
+                เกียรติประวัติ
             </h2>
 
             <div className={styles.contentWrapper}>
