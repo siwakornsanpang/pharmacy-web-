@@ -246,12 +246,45 @@
 .modalOverlay {
   position: fixed;
   inset: 0;
-  z-index: 40;
-  background: rgba(15, 23, 42, 0.55);
+  z-index: 9999;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 24px;
+  animation: fadeInOverlay 0.2s ease;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.modalImagePlaceholder {
+  width: 100%;
+  height: 100%;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f1f5f9;
+  color: #94a3b8;
+}
+
+.modalVideoWrapper {
+  margin-top: 8px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.modalVideo {
+  width: 100%;
+  display: block;
+  max-height: 240px;
+  object-fit: contain;
+  border-radius: 16px;
 }
 
 .modalCard {
@@ -379,3 +412,80 @@
     font-size: 1.6rem;
   }
 }
+
+/* ─── Video badge on card thumbnail ─── */
+.videoBadge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(6px);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  pointer-events: none;
+}
+
+/* ─── Video section in modal (full-width below top grid) ─── */
+.modalVideoSection {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+}
+
+.modalVideoHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 16px;
+}
+
+.modalVideoHeader svg {
+  color: #737300;
+  flex-shrink: 0;
+}
+
+/* 16:9 responsive iframe container */
+.videoIframeWrapper {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 */
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+}
+
+.videoIframe {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* Direct video file */
+.modalVideo {
+  width: 100%;
+  display: block;
+  border-radius: 16px;
+  background: #0f172a;
+  max-height: 480px;
+  object-fit: contain;
+}
+
+/* update wrapper (no longer needs its own bg) */
+.modalVideoWrapper {
+  border-radius: 16px;
+  overflow: hidden;
+}
+

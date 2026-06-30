@@ -1,7 +1,10 @@
 import styles from "../subpage.module.css";
 import HalloffameContent from "@/components/public/02_about/hall-of-fame/HalloffameContent";
+import { getHonorRecipients } from "@/lib/api";
 
 export default async function HallOfFamePage() {
+    const honorData = await getHonorRecipients();
+
     return (
         <main className={styles.mainContainer}>
             <h2 className={`${styles.contentTitle} ThaiFont`}>
@@ -9,8 +12,8 @@ export default async function HallOfFamePage() {
             </h2>
 
             <div className={styles.contentWrapper}>
-                <HalloffameContent />
+                <HalloffameContent initialData={honorData} />
             </div>
         </main>
     );
-}
+}
