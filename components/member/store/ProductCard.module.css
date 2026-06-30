@@ -1,20 +1,19 @@
 .card {
     background: #fff;
-    border-radius: 1.25rem;
+    border-radius: 1rem;
     overflow: hidden;
-    border: 1px solid #f3f4f6;
-    transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
     display: flex;
     flex-direction: column;
     height: 100%;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
     position: relative;
 }
 
 .card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.1);
-    border-color: #e5e7eb;
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+    border-color: #e2e8f0;
 }
 
 /* ─── Image ─── */
@@ -23,7 +22,7 @@
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background: #f8fafc;
+    background: #fff;
 }
 
 .image {
