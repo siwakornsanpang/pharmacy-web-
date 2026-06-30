@@ -16,9 +16,9 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ popups }: SplashScreenProps) {
-    // Start true by default, but we will quickly check in useEffect to see if it should be dismissed.
-    // To prevent flicker, we can check localStorage directly in useState or useEffect.
-    const [visible, setVisible] = useState(false);
+    // Start visible = true on the server-side / hydration to instantly block the viewport!
+    // We will immediately hide it in useEffect if they have already seen it.
+    const [visible, setVisible] = useState(true);
     const [closing, setClosing] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [nextIndex, setNextIndex] = useState<number | null>(null);
@@ -28,13 +28,17 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
     const [dontShowAgain, setDontShowAgain] = useState(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    // Initial check to prevent flash of content
+    // Immediate check on mount
     useEffect(() => {
-        if (popups.length === 0) return;
+        if (popups.length === 0) {
+            setVisible(false);
+            return;
+        }
         const hideForever = localStorage.getItem('splash_hide_forever');
         const seenSession = sessionStorage.getItem('splash_shown');
-        if (!hideForever && !seenSession) {
-            setVisible(true);
+        if (hideForever || seenSession) {
+            setVisible(false);
+        } else {
             sessionStorage.setItem('splash_shown', '1');
         }
     }, [popups]);
