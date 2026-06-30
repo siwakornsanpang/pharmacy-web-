@@ -16,6 +16,8 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ popups }: SplashScreenProps) {
+    // Start true by default, but we will quickly check in useEffect to see if it should be dismissed.
+    // To prevent flicker, we can check localStorage directly in useState or useEffect.
     const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -23,12 +25,15 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
     const [transitioning, setTransitioning] = useState(false);
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
+    const [dontShowAgain, setDontShowAgain] = useState(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
+    // Initial check to prevent flash of content
     useEffect(() => {
         if (popups.length === 0) return;
-        const seen = sessionStorage.getItem('splash_shown');
-        if (!seen) {
+        const hideForever = localStorage.getItem('splash_hide_forever');
+        const seenSession = sessionStorage.getItem('splash_shown');
+        if (!hideForever && !seenSession) {
             setVisible(true);
             sessionStorage.setItem('splash_shown', '1');
         }
@@ -89,10 +94,16 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
             setRipples(prev => [...prev, ripple]);
             setTimeout(() => setRipples(prev => prev.filter(r => r.id !== ripple.id)), 800);
         }
+
+        // Save preference if checkbox is checked
+        if (dontShowAgain) {
+            localStorage.setItem('splash_hide_forever', '1');
+        }
+
         setClosing(true);
         if (intervalRef.current) clearInterval(intervalRef.current);
         setTimeout(() => setVisible(false), 600);
-    }, []);
+    }, [dontShowAgain]);
 
     if (!visible || popups.length === 0) return null;
 
@@ -172,6 +183,17 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
                     </span>
                     <span className={styles.enterBtnShine} aria-hidden="true" />
                 </button>
+
+                {/* Don't show again checkbox option */}
+                <label className={styles.dontShowLabel}>
+                    <input
+                        type="checkbox"
+                        checked={dontShowAgain}
+                        onChange={(e) => setDontShowAgain(e.target.checked)}
+                        className={styles.dontShowCheckbox}
+                    />
+                    <span>ไม่ต้องแสดงหน้านี้อีก (Don't show this again)</span>
+                </label>
             </div>
         </div>
     );
