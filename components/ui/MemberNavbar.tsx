@@ -13,8 +13,8 @@ const memberLinks = [
     { name: "งานบริการ", href: "/service" },
     { name: "งานประชุม", href: "/meeting" },
     { name: "การศึกษา", href: "/learning" },
-    { name: "การสมัครงาน", href: "/careers" },
-    { name: "เครื่องมือเภสัชกร", href: "/tools" },
+    // { name: "การสมัครงาน", href: "/careers" },
+    // { name: "เครื่องมือเภสัชกร", href: "/tools" },
     { name: "สินค้าสภา", href: "/store" },
 ];
 
