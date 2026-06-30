@@ -103,6 +103,29 @@ export async function getNews(): Promise<News[]> {
     }
 }
 
+export async function getProducts(): Promise<any[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        // Fetch products, cached or with revalidate
+        const res = await fetchWithTimeout(`${API_BASE_URL}/products`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch products: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching products:', error);
+        return [];
+    }
+}
+
 export async function getNewsById(id: string): Promise<News | null> {
     if (!API_BASE_URL) {
         console.error('NEXT_PUBLIC_API_URL is not defined');
