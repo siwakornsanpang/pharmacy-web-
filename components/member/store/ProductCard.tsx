@@ -1,21 +1,15 @@
 "use client";
 
 import React, { useState } from 'react';
-import { ShoppingCart, Heart, Star, Eye } from 'lucide-react';
 import styles from './ProductCard.module.css';
 
 export interface Product {
     id: number;
     name: string;
+    imageUrl: string;
     category: string;
-    price: number;
-    originalPrice?: number;
-    rating: number;
-    reviewCount: number;
-    image: string;
-    badge?: string;
-    inStock: boolean;
-    soldCount: number;
+    description: string;
+    price: string | number;
 }
 
 interface ProductCardProps {
@@ -23,78 +17,53 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product }: ProductCardProps) {
-    const [isWishlisted, setIsWishlisted] = useState(false);
-    const [isHovered, setIsHovered] = useState(false);
-    const discount = product.originalPrice 
-        ? Math.round((1 - product.price / product.originalPrice) * 100) 
-        : 0;
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     return (
-        <div
-            className={styles.card}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-        >
-            <div className={styles.imageWrapper}>
-                <img
-                    src={product.image}
-                    alt={product.name}
-                    className={styles.image}
-                />
-                {product.badge && (
-                    <span className={`${styles.badge} ThaiFont`}>{product.badge}</span>
-                )}
-                {discount > 0 && (
-                    <span className={styles.discountBadge}>-{discount}%</span>
-                )}
-                <button
-                    className={`${styles.wishlistBtn} ${isWishlisted ? styles.wishlisted : ''}`}
-                    onClick={() => setIsWishlisted(!isWishlisted)}
-                    aria-label="เพิ่มในรายการโปรด"
+        <>
+            <div className={styles.card}>
+                <div 
+                    className={styles.imageWrapper} 
+                    onClick={() => setIsModalOpen(true)}
+                    style={{ cursor: 'pointer' }}
+                    title="คลิกเพื่อดูรูปเต็ม"
                 >
-                    <Heart size={18} fill={isWishlisted ? '#ef4444' : 'none'} />
-                </button>
-                <div className={`${styles.quickActions} ${isHovered ? styles.visible : ''}`}>
-                    <button className={styles.quickBtn} aria-label="ดูรายละเอียด">
-                        <Eye size={18} />
-                    </button>
-                    <button className={styles.quickCartBtn} aria-label="เพิ่มลงตะกร้า">
-                        <ShoppingCart size={18} />
-                        <span className="ThaiFont">เพิ่มลงตะกร้า</span>
-                    </button>
+                    <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className={styles.image}
+                    />
                 </div>
-            </div>
 
-            <div className={styles.info}>
-                <p className={`${styles.category} ThaiFont`}>{product.category}</p>
-                <h3 className={`${styles.name} ThaiFont`}>{product.name}</h3>
-
-                <div className={styles.ratingRow}>
-                    <div className={styles.stars}>
-                        {[1, 2, 3, 4, 5].map((s) => (
-                            <Star
-                                key={s}
-                                size={14}
-                                fill={s <= Math.round(product.rating) ? '#f59e0b' : 'none'}
-                                stroke={s <= Math.round(product.rating) ? '#f59e0b' : '#d1d5db'}
-                            />
-                        ))}
+                <div className={styles.info}>
+                    <div className={styles.categoryWrapper}>
+                        <p className={`${styles.category} ThaiFont`}>{product.category}</p>
                     </div>
-                    <span className={styles.reviewCount}>({product.reviewCount})</span>
-                    <span className={styles.soldCount}>ขายแล้ว {product.soldCount} ชิ้น</span>
-                </div>
-
-                <div className={styles.priceRow}>
-                    <span className={`${styles.price} ThaiFont`}>฿{product.price.toLocaleString()}</span>
-                    {product.originalPrice && (
-                        <span className={styles.originalPrice}>฿{product.originalPrice.toLocaleString()}</span>
+                    
+                    <div className={styles.namePriceRow}>
+                        <h3 className={`${styles.name} ThaiFont`}>{product.name}</h3>
+                        <span className={styles.price}>
+                            <span className={styles.currency}>฿</span>
+                            {Number(product.price).toLocaleString()}
+                        </span>
+                    </div>
+                    
+                    {product.description && (
+                        <p className={`${styles.description} ThaiFont`} style={{ fontSize: '0.875rem', color: '#6b7280', margin: '4px 0 0', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                            {product.description}
+                        </p>
                     )}
                 </div>
-
-                {!product.inStock && (
-                    <span className={`${styles.outOfStock} ThaiFont`}>สินค้าหมด</span>
-                )}
             </div>
-        </div>
+
+            {isModalOpen && (
+                <div className={styles.modalOverlay} onClick={() => setIsModalOpen(false)}>
+                    <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+                        <button className={styles.closeBtn} onClick={() => setIsModalOpen(false)}>✕</button>
+                        <img src={product.imageUrl} alt={product.name} className={styles.fullImage} />
+                    </div>
+                </div>
+            )}
+        </>
     );
 }

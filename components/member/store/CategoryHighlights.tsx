@@ -1,16 +1,15 @@
 "use client";
 
 import React from 'react';
-import { BookOpen, Stethoscope, Pill, FlaskConical, Shirt, GraduationCap } from 'lucide-react';
+import { LayoutGrid, BookOpen, Shirt, Shield, Gift } from 'lucide-react';
 import styles from './CategoryHighlights.module.css';
 
 const CATEGORIES = [
-    { icon: <BookOpen size={28} />, name: 'ตำราวิชาการ', count: 48 },
-    { icon: <Stethoscope size={28} />, name: 'อุปกรณ์การแพทย์', count: 35 },
-    { icon: <Pill size={28} />, name: 'ผลิตภัณฑ์สุขภาพ', count: 62 },
-    { icon: <FlaskConical size={28} />, name: 'อุปกรณ์ห้องปฏิบัติการ', count: 21 },
-    { icon: <Shirt size={28} />, name: 'เครื่องแบบ', count: 18 },
-    { icon: <GraduationCap size={28} />, name: 'สื่อการเรียนรู้', count: 29 },
+    { icon: <LayoutGrid size={28} />, name: 'ทั้งหมด', count: 120 },
+    { icon: <BookOpen size={28} />, name: 'หนังสือเรียน', count: 48 },
+    { icon: <Shirt size={28} />, name: 'เสื้อกาวน์', count: 35 },
+    { icon: <Shield size={28} />, name: 'อาร์ม', count: 62 },
+    { icon: <Gift size={28} />, name: 'ของที่ระลึก', count: 21 },
 ];
 
 interface CategoryHighlightsProps {

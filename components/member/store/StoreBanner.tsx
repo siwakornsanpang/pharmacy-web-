@@ -8,7 +8,7 @@ export default function StoreBanner() {
         <div className={styles.banner}>
             <div className={styles.bannerOverlay}>
                 <div className={styles.bannerContent}>
-                    <h1 className={`${styles.bannerTitle} ThaiFont`}>ร้านค้าเภสัชกร</h1>
+                    <h1 className={`${styles.bannerTitle} ThaiFont`}>สินค้าสภาเภสัชกรรม</h1>
                     <p className={`${styles.bannerSubtitle} ThaiFont`}>
                         อุปกรณ์ ตำรา และสินค้าคุณภาพสำหรับเภสัชกรมืออาชีพ จัดส่งทั่วประเทศ
                     </p>
