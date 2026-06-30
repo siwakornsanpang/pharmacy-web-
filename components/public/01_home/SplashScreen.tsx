@@ -16,9 +16,8 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ popups }: SplashScreenProps) {
-    // Start visible = true on the server-side / hydration to instantly block the viewport!
-    // We will immediately hide it in useEffect if they have already seen it.
-    const [visible, setVisible] = useState(true);
+    // Start false to prevent server-client hydration mismatch or white screen on refresh
+    const [visible, setVisible] = useState(false);
     const [closing, setClosing] = useState(false);
     const [currentIndex, setCurrentIndex] = useState(0);
     const [nextIndex, setNextIndex] = useState<number | null>(null);
@@ -28,17 +27,12 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
     const [dontShowAgain, setDontShowAgain] = useState(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-    // Immediate check on mount
     useEffect(() => {
-        if (popups.length === 0) {
-            setVisible(false);
-            return;
-        }
+        if (popups.length === 0) return;
         const hideForever = localStorage.getItem('splash_hide_forever');
         const seenSession = sessionStorage.getItem('splash_shown');
-        if (hideForever || seenSession) {
-            setVisible(false);
-        } else {
+        if (!hideForever && !seenSession) {
+            setVisible(true);
             sessionStorage.setItem('splash_shown', '1');
         }
     }, [popups]);
@@ -108,20 +102,8 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
         if (intervalRef.current) clearInterval(intervalRef.current);
         setTimeout(() => {
             setVisible(false);
-            try {
-                document.documentElement.classList.remove('splash-active');
-            } catch(e) {}
         }, 600);
     }, [dontShowAgain]);
-
-    // Safety cleanup in case visible state changes elsewhere
-    useEffect(() => {
-        if (!visible) {
-            try {
-                document.documentElement.classList.remove('splash-active');
-            } catch(e) {}
-        }
-    }, [visible]);
 
     if (!visible || popups.length === 0) return null;
 
@@ -131,7 +113,7 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
     const parallaxY = mousePos.y * 9;
 
     return (
-        <div className={`${styles.overlay} ${closing ? styles.closing : ''} splash-gate-keeper`}>
+        <div className={`${styles.overlay} ${closing ? styles.closing : ''}`}>
             {/* Shimmer particles */}
             <div className={styles.shimmerLayer} aria-hidden="true">
                 {Array.from({ length: 20 }).map((_, i) => (

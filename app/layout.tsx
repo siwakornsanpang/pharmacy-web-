@@ -33,28 +33,6 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="th">
-      <head>
-        {/* Inline CSS + Script to block content immediately if Splash Screen is active */}
-        <style dangerouslySetInnerHTML={{ __html: `
-          html.splash-active body > * {
-            display: none !important;
-          }
-          html.splash-active body > .splash-gate-keeper {
-            display: block !important;
-          }
-        `}} />
-        <script dangerouslySetInnerHTML={{ __html: `
-          (function() {
-            try {
-              var hideForever = localStorage.getItem('splash_hide_forever');
-              var seenSession = sessionStorage.getItem('splash_shown');
-              if (!hideForever && !seenSession) {
-                document.documentElement.classList.add('splash-active');
-              }
-            } catch(e) {}
-          })();
-        `}} />
-      </head>
       <body suppressHydrationWarning className={`${geistSans.variable} ${geistMono.variable} ${kanit.variable} antialiased bg-gray-50 text-gray-900 flex flex-col min-h-screen`}>
         <Providers>
           <AppHeader />
