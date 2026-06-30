@@ -1,272 +1,354 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { HonorRecipient } from "@/lib/api";
 import styles from "./HalloffameContent.module.css";
-import { motion } from "framer-motion";
-import { HonorAward, HonorRecipient } from "@/lib/api";
 
-const API_URL = "/api/proxy";
+// ─── helpers ────────────────────────────────────────────────
+function getYouTubeId(url: string): string | null {
+    try {
+        const u = new URL(url);
+        if (u.hostname.includes("youtube.com")) {
+            return u.searchParams.get("v");
+        }
+        if (u.hostname === "youtu.be") {
+            return u.pathname.slice(1).split("?")[0] || null;
+        }
+    } catch {
+        // not a valid URL
+    }
+    return null;
+}
 
-export default function HalloffameContent() {
-    const [awards, setAwards] = useState<HonorAward[]>([]);
-    const [recipients, setRecipients] = useState<HonorRecipient[]>([]);
-    const [loading, setLoading] = useState(true);
+function VideoEmbed({ url }: { url: string }) {
+    const ytId = getYouTubeId(url);
+
+    if (ytId) {
+        return (
+            <div className={styles.videoIframeWrapper}>
+                <iframe
+                    src={`https://www.youtube.com/embed/${ytId}`}
+                    title="วิดีโอเกียรติประวัติ"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className={styles.videoIframe}
+                />
+            </div>
+        );
+    }
+
+    // Direct video file (mp4, etc.)
+    return (
+        <video
+            src={url}
+            controls
+            className={styles.modalVideo}
+            preload="metadata"
+        />
+    );
+}
+// ────────────────────────────────────────────────────────────
+
+interface Props {
+    initialData?: HonorRecipient[];
+}
+
+export default function HalloffameContent({ initialData = [] }: Props) {
+    const [honorMembers, setHonorMembers] = useState<HonorRecipient[]>(initialData);
+    const [selectedAward, setSelectedAward] = useState("all");
+    const [searchTerm, setSearchTerm] = useState("");
+    // Show loading only when SSR gave us nothing
+    const [loading, setLoading] = useState(initialData.length === 0);
     const [error, setError] = useState<string | null>(null);
-    const [selectedAward, setSelectedAward] = useState<HonorAward | null>(null);
-    const [selectedRecipient, setSelectedRecipient] = useState<HonorRecipient | null>(null);
 
+    // Modal state
+    const [modalMember, setModalMember] = useState<HonorRecipient | null>(null);
+    const modalRef = useRef<HTMLDivElement>(null);
+
+    // Client-side fallback: fetch only when SSR didn't provide data
     useEffect(() => {
-        async function fetchData() {
+        if (initialData.length > 0) {
+            setLoading(false);
+            return;
+        }
+
+        async function loadHonorRecipients() {
             try {
                 setLoading(true);
                 setError(null);
 
-                const cleanApiUrl = API_URL.replace(/\/$/, "");
+                const res = await fetch("/api/proxy/honor", {
+                    cache: "no-store",
+                });
 
-                const [awardsRes, recipientsRes] = await Promise.all([
-                    fetch(`${cleanApiUrl}/honor-awards`, { cache: "no-store" }),
-                    fetch(`${cleanApiUrl}/honor`, { cache: "no-store" }),
-                ]);
+                if (!res.ok) throw new Error(`API error: ${res.status}`);
 
-                if (!awardsRes.ok || !recipientsRes.ok) {
-                    throw new Error(`เกิดข้อผิดพลาดในการโหลดข้อมูล (Status: ${awardsRes.status}/${recipientsRes.status})`);
-                }
-
-                const [awardsJson, recipientsJson] = await Promise.all([
-                    awardsRes.json(),
-                    recipientsRes.json(),
-                ]);
-
-                // Robust data extraction (handling both direct arrays and nested .data arrays)
-                const awardsData = Array.isArray(awardsJson)
-                    ? awardsJson
-                    : Array.isArray(awardsJson.data)
-                        ? awardsJson.data
+                const json = await res.json();
+                const data: HonorRecipient[] = Array.isArray(json)
+                    ? json
+                    : Array.isArray(json.data)
+                        ? json.data
                         : [];
 
-                const recipientsData = Array.isArray(recipientsJson)
-                    ? recipientsJson
-                    : Array.isArray(recipientsJson.data)
-                        ? recipientsJson.data
-                        : [];
+                const cleaned = data
+                    .filter((item) => item?.id)
+                    .sort((a, b) => (a.order || 0) - (b.order || 0));
 
-                setAwards(awardsData);
-                setRecipients(recipientsData);
-            } catch (err: any) {
-                console.error("Failed to fetch Hall of Fame data:", err);
-                setError(err.message || "เกิดข้อผิดพลาดในการโหลดข้อมูล");
+                setHonorMembers(cleaned);
+            } catch (err) {
+                console.error("Failed to load honor recipients:", err);
+                setError("ไม่สามารถโหลดข้อมูลเกียรติประวัติได้ในขณะนี้");
             } finally {
                 setLoading(false);
             }
         }
-        fetchData();
+
+        loadHonorRecipients();
+    }, [initialData]);
+
+    // Lock / unlock body scroll when modal is open
+    useEffect(() => {
+        if (modalMember) {
+            document.body.style.overflow = "hidden";
+            setTimeout(() => modalRef.current?.focus(), 50);
+        } else {
+            document.body.style.overflow = "";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [modalMember]);
+
+    // Close modal on Escape key
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setModalMember(null);
+        };
+        if (modalMember) {
+            window.addEventListener("keydown", handleKeyDown);
+        }
+        return () => window.removeEventListener("keydown", handleKeyDown);
+    }, [modalMember]);
+
+    // ── Derived state ──
+    const excludedTargets = useMemo(() => {
+        const list = [
+            "ภกสมรัก รักดี",
+            "ดรสมหมาย หายดี",
+        ];
+        return new Set(list.map((s) => s.replace(/\s+/g, "").replace(/\./g, "").toLowerCase()));
     }, []);
 
-    // Helper to match recipients to awards more robustly (fuzzy matching)
-    const getFilteredRecipients = (awardId: number, awardName: string) => {
-        return recipients.filter(r => {
-            const rName = r.awardName || "";
-            const aName = awardName || "";
-            
-            // Exact match by ID
-            if (r.awardId === awardId) return true;
-            
-            // Exact match by Name
-            if (rName === aName) return true;
+    const sortedMembers = useMemo(() => {
+        return [...honorMembers]
+            .filter((item) => item?.id)
+            .sort((a, b) => (a.order || 0) - (b.order || 0));
+    }, [honorMembers]);
 
-            // Fuzzy match for common award types if data is inconsistent
-            if (aName.includes("ยอดเยี่ยม") && (rName.includes("ยอดเยี่ยม") || rName.includes("ยอด") || rName.includes("เยี่ยม"))) {
-                return true;
-            }
-            if (aName.includes("ดีเด่น") && rName.includes("ดีเด่น")) {
-                return true;
-            }
+    const awardOptions = useMemo(() => {
+        const awards = Array.from(new Set(sortedMembers.map((m) => m.awardName).filter(Boolean)));
+        return ["all", ...awards];
+    }, [sortedMembers]);
 
-            return false;
+    const displayedMembers = useMemo(() => {
+        const lowerQuery = searchTerm.trim().toLowerCase();
+        return sortedMembers.filter((m) => {
+            // Excluded list
+            const full = `${m.prefix || ""} ${m.name || ""}`;
+            const norm = full.replace(/\s+/g, "").replace(/\./g, "").toLowerCase();
+            if (excludedTargets.has(norm)) return false;
+
+            // Award filter
+            if (selectedAward !== "all" && m.awardName !== selectedAward) return false;
+
+            // Search
+            if (lowerQuery) {
+                return (
+                    (m.name || "").toLowerCase().includes(lowerQuery) ||
+                    (m.prefix || "").toLowerCase().includes(lowerQuery) ||
+                    (m.workName || "").toLowerCase().includes(lowerQuery) ||
+                    (m.awardName || "").toLowerCase().includes(lowerQuery) ||
+                    (m.awardDetail || "").toLowerCase().includes(lowerQuery)
+                );
+            }
+            return true;
         });
-    };
+    }, [sortedMembers, selectedAward, searchTerm, excludedTargets]);
 
-    if (loading) {
-        return (
-            <div className={styles.loadingWrapper}>
-                <div className={styles.loader}>กำลังโหลดข้อมูล...</div>
-            </div>
-        );
-    }
-
-    if (error) {
-        return (
-            <div className={styles.loadingWrapper}>
-                <div className={styles.error} style={{ color: '#ff4444', textAlign: 'center', padding: '40px' }}>
-                    <p>{error}</p>
-                    <button 
-                        onClick={() => window.location.reload()} 
-                        style={{ marginTop: '20px', padding: '8px 16px', background: '#737300', color: 'white', borderRadius: '5px' }}
-                    >
-                        ลองใหม่อีกครั้ง
-                    </button>
-                </div>
-            </div>
-        );
-    }
+    const hasVideo = (m: HonorRecipient) => !!m.videoUrl?.trim();
 
     return (
-        <div className={styles.page}>
-            {/* HERO */}
-            <section className={styles.heroSection}>
-                <div className={styles.heroGlow}></div>
-
-                <motion.div
-                    initial={{ opacity: 0, y: 40 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    viewport={{ once: true }}
-                    className={styles.heroContent}
-                >
-                    <p className={styles.heroSubtitle}>
-                        เชิดชูเกียรติบุคคลและองค์กรผู้สร้างคุณูปการ
-                        ต่อวิชาชีพเภสัชกรรมไทย
+        <section className={styles.wrapper}>
+            <div className={styles.headerSection}>
+                <div className={styles.descriptionBox}>
+                    <p className={styles.descriptionText}>
+                        สภาเภสัชกรรมขอเชิดชูเกียรติบุคคลผู้ทรงคุณวุฒิ และนิคุณปการต่อวิชาชีพเภสัชกรรม
                     </p>
+                    <p className={styles.descriptionText}>
+                        การคุ้มครองผู้บริโภคด้านยาและสุขภาพของประเทศ
+                    </p>
+                </div>
 
-                    <div className={styles.statsGrid}>
-                        <div className={styles.statCard}>
-                            <h3>{awards.length}</h3>
-                            <p>รางวัลเกียรติประวัติ</p>
-                        </div>
-
-                        <div className={styles.statCard}>
-                            <h3>{recipients.length}</h3>
-                            <p>ผู้ได้รับรางวัล</p>
-                        </div>
-                    </div>
-                </motion.div>
-            </section>
-
-            {/* AWARD GRID */}
-            <section className={styles.awardGrid}>
-                {awards.map((award, index) => {
-                    const awardRecipients = getFilteredRecipients(award.id, award.name);
-                    // Try to find an image from a recipient of this award
-                    const awardImage = awardRecipients.length > 0 
-                        ? awardRecipients[0].imageUrl 
-                        : "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?q=80&w=1200&auto=format&fit=crop";
-
-                    return (
-                        <motion.div
-                            key={award.id}
-                            className={styles.awardCard}
-                            initial={{ opacity: 0, y: 50 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            transition={{ duration: 0.6, delay: index * 0.1 }}
-                            viewport={{ once: true }}
+                <div className={styles.toolbar}>
+                    <div className={styles.filterBox}>
+                        <select
+                            id="awardFilter"
+                            className={styles.filterSelect}
+                            value={selectedAward}
+                            onChange={(e) => setSelectedAward(e.target.value)}
                         >
-                            <div className={styles.cardImage}>
-                                <img src={awardImage} alt={award.name} />
+                            <option value="all">ทั้งหมด</option>
+                            {awardOptions.slice(1).map((awardName) => (
+                                <option key={awardName} value={awardName}>
+                                    {awardName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div className={styles.searchBox}>
+                        <input
+                            type="text"
+                            className={styles.searchInput}
+                            placeholder="ค้นหาชื่อบุคคล"
+                            value={searchTerm}
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                        />
+                        <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                    </div>
+                </div>
+            </div>
+
+            {loading && <div className={styles.statusMessage}>กำลังโหลดข้อมูลเกียรติประวัติ...</div>}
+            {error && <div className={styles.statusMessage}>{error}</div>}
+
+            {!loading && !error && displayedMembers.length === 0 && (
+                <div className={styles.statusMessage}>ไม่พบข้อมูลตามเงื่อนไขการค้นหา</div>
+            )}
+
+            {!loading && !error && displayedMembers.length > 0 && (
+                <div className={styles.grid}>
+                    {displayedMembers.map((member) => (
+                        <article key={member.id} className={styles.card}>
+                            <div className={styles.cardMedia}>
+                                {member.imageUrl && (
+                                    <img src={member.imageUrl} alt={`${member.prefix}${member.name}`} className={styles.cardImage} />
+                                )}
                             </div>
 
-                            <div className={styles.cardGlow}></div>
-
-                            <div className={styles.cardContent}>
-                                <h3>{award.name}</h3>
-
-                                <p>{award.description}</p>
-
+                            <div className={styles.cardBody}>
+                                <h3 className={styles.cardTitle}>
+                                    {member.prefix}{member.name}
+                                </h3>
+                                <p className={styles.cardSubtitle}>{member.workName}</p>
+                                <p className={styles.cardMeta}>{member.awardDetail || "-"}</p>
+                                <div className={styles.cardRole}></div>
                                 <div className={styles.cardFooter}>
-                                    <span>{awardRecipients.length} ผู้ได้รับรางวัล</span>
-
-                                    <button onClick={() => setSelectedAward(award)}>ดูรายละเอียด</button>
+                                    <button
+                                        type="button"
+                                        className={styles.detailButton}
+                                        onClick={() => setModalMember(member)}
+                                        aria-label={`ดูรายละเอียด ${member.prefix}${member.name}`}
+                                    >
+                                        <span>ดูรายละเอียด</span>
+                                        <span className={styles.arrow}>›</span>
+                                    </button>
                                 </div>
                             </div>
-                        </motion.div>
-                    );
-                })}
-            </section>
+                        </article>
+                    ))}
+                </div>
+            )}
 
-            {/* AWARD DETAILS MODAL */}
-            {selectedAward && (
-                <div className={styles.modalOverlay} onClick={() => setSelectedAward(null)}>
-                    <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                        <button className={styles.closeButton} onClick={() => setSelectedAward(null)}>×</button>
+            {/* ─── DETAIL MODAL ─── */}
+            {modalMember && (
+                <div
+                    className={styles.modalOverlay}
+                    onClick={(e) => {
+                        if (e.target === e.currentTarget) setModalMember(null);
+                    }}
+                    role="dialog"
+                    aria-modal="true"
+                    aria-label={`รายละเอียด ${modalMember.prefix}${modalMember.name}`}
+                >
+                    <div
+                        className={styles.modalCard}
+                        ref={modalRef}
+                        tabIndex={-1}
+                    >
+                        {/* Close button */}
+                        <button
+                            type="button"
+                            className={styles.modalClose}
+                            onClick={() => setModalMember(null)}
+                            aria-label="ปิด"
+                        >
+                            ✕
+                        </button>
 
-                        <h2 className={styles.modalTitle}>{selectedAward.name}</h2>
-                        <p className={styles.modalDescription}>{selectedAward.description}</p>
-
-                        <div className={styles.recipientList}>
-                            {getFilteredRecipients(selectedAward.id, selectedAward.name)
-                                .map(recipient => (
-                                    <div
-                                        key={recipient.id}
-                                        className={styles.recipientCard}
-                                        onClick={() => setSelectedRecipient(recipient)}
-                                        style={{ cursor: 'pointer' }}
-                                    >
-                                        <img
-                                            src={recipient.imageUrl}
-                                            alt={recipient.name}
-                                            className={styles.recipientImage}
-                                        />
-                                        <h4>{recipient.prefix} {recipient.name} {recipient.workName}</h4>
+                        {/* ── Top section: photo + info ── */}
+                        <div className={styles.modalGrid}>
+                            {/* Left: Image */}
+                            <div className={styles.modalImageBox}>
+                                {modalMember.imageUrl ? (
+                                    <img
+                                        src={modalMember.imageUrl}
+                                        alt={`${modalMember.prefix}${modalMember.name}`}
+                                        className={styles.modalImage}
+                                    />
+                                ) : (
+                                    <div className={styles.modalImagePlaceholder}>
+                                        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.3">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                                            <circle cx="12" cy="7" r="4" />
+                                        </svg>
                                     </div>
-                                ))}
+                                )}
+                            </div>
+
+                            {/* Right: Info */}
+                            <div className={styles.modalContent}>
+                                {modalMember.awardName && (
+                                    <div className={styles.modalAward}>{modalMember.awardName}</div>
+                                )}
+
+                                <h2 className={styles.modalTitle}>
+                                    {modalMember.prefix}{modalMember.name}
+                                </h2>
+
+                                {modalMember.workName && (
+                                    <p className={styles.modalSubtitle}>{modalMember.workName}</p>
+                                )}
+
+                                {modalMember.awardDetail && (
+                                    <>
+                                        <div className={styles.modalInfoRow}>
+                                            <span>ผลงาน / เหตุผลที่ได้รับรางวัล</span>
+                                        </div>
+                                        <p className={styles.modalDetail}>{modalMember.awardDetail}</p>
+                                    </>
+                                )}
+                            </div>
                         </div>
 
-                        {getFilteredRecipients(selectedAward.id, selectedAward.name).length === 0 && (
-                            <p style={{ textAlign: 'center', padding: '40px', color: '#999' }}>ยังไม่มีรายชื่อผู้ได้รับรางวัลในหมวดนี้</p>
+                        {/* ── Bottom section: Video (full-width) ── */}
+                        {hasVideo(modalMember) && (
+                            <div className={styles.modalVideoSection}>
+                                <div className={styles.modalVideoHeader}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <polygon points="23 7 16 12 23 17 23 7" />
+                                        <rect x="1" y="5" width="15" height="14" rx="2" ry="2" />
+                                    </svg>
+                                    <span>วิดีโอเกียรติประวัติ</span>
+                                </div>
+                                <div className={styles.modalVideoWrapper}>
+                                    <VideoEmbed url={modalMember.videoUrl} />
+                                </div>
+                            </div>
                         )}
                     </div>
                 </div>
             )}
-
-
-
-            {/* RECIPIENT DETAIL MODAL */}
-            {selectedRecipient && (
-                <div className={styles.modalOverlay} onClick={() => setSelectedRecipient(null)}>
-                    <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-                        <button className={styles.closeButton} onClick={() => setSelectedRecipient(null)}>×</button>
-
-                        <div className={styles.modalBody}>
-                            <div className={styles.modalImageBox}>
-                                <img src={selectedRecipient.imageUrl} alt={selectedRecipient.name} />
-                            </div>
-
-                            <div className={styles.modalContent}>
-                                <span style={{ color: '#737300', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '1px' }}>
-                                    {selectedRecipient.awardName}
-                                </span>
-                                <h2 className={styles.modalTitle} style={{ marginTop: '10px' }}>
-                                    {selectedRecipient.prefix} {selectedRecipient.name}
-                                </h2>
-
-                                <div className={styles.modalField}>
-                                    <h4>ชื่อผลงาน</h4>
-                                    <p>{selectedRecipient.workName}</p>
-                                </div>
-
-                                <div className={styles.modalBio}>
-                                    <h4>รายละเอียดเกียรติคุณ</h4>
-                                    <p>{selectedRecipient.awardDetail}</p>
-                                </div>
-
-                                {selectedRecipient.videoUrl && (
-                                    <div className={styles.videoSection}>
-                                        <h4>วิดีโอประกอบ</h4>
-                                        <div className={styles.videoWrapper}>
-                                            <video
-                                                src={selectedRecipient.videoUrl}
-                                                controls
-                                                className={styles.modalVideo}
-                                            />
-                                        </div>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+        </section>
     );
 }
-
-

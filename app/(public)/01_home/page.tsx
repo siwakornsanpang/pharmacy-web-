@@ -9,6 +9,7 @@ import HomeNewsSection from "@/components/public/01_home/HomeNewsSection";
 import PopularServices from "@/components/member/service/PopularServices";
 import { getHomeContent, getWebSettings, getNews, getPopularServices } from "@/lib/api";
 import styles from "./home.module.css";
+import SplashScreen from "@/components/public/01_home/SplashScreen";
 
 export const dynamic = 'force-dynamic';
 
@@ -27,8 +28,15 @@ export default async function Home() {
     .filter(b => b.active)
     .sort((a, b) => a.order - b.order);
 
+  const activePopups = (homeContent.popups || [])
+    .filter(p => p.active)
+    .sort((a, b) => a.order - b.order);
+
   return (
     <div className={styles.page}>
+      {/* Immersive Splash Screen */}
+      <SplashScreen popups={activePopups} />
+
       {/* === Banner Carousel 16:9 === (Everyone) */}
       <BannerCarousel
         banners={activeBanners}

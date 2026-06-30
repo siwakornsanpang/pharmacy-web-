@@ -438,20 +438,20 @@ export async function getHistory(): Promise<HistoryTerm[]> {
         return [];
     }
 
-    if (!API_BASE_URL) {
-        console.error('NEXT_PUBLIC_API_URL is not defined');
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/history`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch history: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching history:', error);
         return [];
     }
-
-    const res = await fetchWithTimeout(`${API_BASE_URL}/history`, {
-        next: { revalidate: 60 },
-    });
-
-    if (!res.ok) {
-        throw new Error(`Failed to fetch history: ${res.statusText}`);
-    }
-
-    return res.json();
 }
 // ===== Honor / Hall of Fame =====
 
@@ -485,15 +485,20 @@ export async function getHonorAwards(): Promise<HonorAward[]> {
         return [];
     }
 
-    const res = await fetchWithTimeout(`${API_BASE_URL}/honor-awards`, {
-        next: { revalidate: 60 },
-    });
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/honor-awards`, {
+            next: { revalidate: 60 },
+        });
 
-    if (!res.ok) {
-        throw new Error(`Failed to fetch honor awards: ${res.statusText}`);
+        if (!res.ok) {
+            throw new Error(`Failed to fetch honor awards: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching honor awards:', error);
+        return [];
     }
-
-    return res.json();
 }
 
 export async function getHonorRecipients(): Promise<HonorRecipient[]> {
@@ -502,15 +507,20 @@ export async function getHonorRecipients(): Promise<HonorRecipient[]> {
         return [];
     }
 
-    const res = await fetchWithTimeout(`${API_BASE_URL}/honor`, {
-        next: { revalidate: 60 },
-    });
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/honor`, {
+            next: { revalidate: 60 },
+        });
 
-    if (!res.ok) {
-        throw new Error(`Failed to fetch honor recipients: ${res.statusText}`);
+        if (!res.ok) {
+            throw new Error(`Failed to fetch honor recipients: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching honor recipients:', error);
+        return [];
     }
-
-    return res.json();
 }
 
 // ===== Public Projects =====
