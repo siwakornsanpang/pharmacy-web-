@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import styles from "./CouncildirectoryContent.module.css";
 
 export interface CouncilTerm {
     id: number;
     term: string;
     startYear: string;
-    endYear: string;
+    endYear: string; 
     presidentName: string;
     presidentImage: string;
     secretaryName: string;
@@ -25,9 +26,15 @@ export default function CouncildirectoryContent({
     const [loading, setLoading] = useState(initialData.length === 0);
     const [selectedTerm, setSelectedTerm] = useState<CouncilTerm | null>(null);
 
-    const sortedData = [...data].sort(
-        (a, b) => Number(a.id) - Number(b.id)
-    );
+    const timelineRef = useRef<HTMLDivElement>(null);
+
+    // Sort descending by ID/Term to show latest on the left
+    const sortedData = [...data].sort((a, b) => {
+        const termA = parseInt(a.term) || 0;
+        const termB = parseInt(b.term) || 0;
+        if (termA !== termB) return termB - termA;
+        return b.id - a.id;
+    });
 
     // Fetch on client if SSR data is missing
     useEffect(() => {
@@ -62,6 +69,37 @@ export default function CouncildirectoryContent({
         }
     }, [sortedData, selectedTerm]);
 
+    const scrollTimeline = (direction: "left" | "right") => {
+        if (timelineRef.current) {
+            const scrollAmount = 240;
+            timelineRef.current.scrollBy({
+                left: direction === "left" ? -scrollAmount : scrollAmount,
+                behavior: "smooth",
+            });
+        }
+    };
+
+    useEffect(() => {
+        if (!selectedTerm || !timelineRef.current) return;
+        const target = timelineRef.current.querySelector<HTMLElement>(`[data-term-id="${selectedTerm.id}"]`);
+        target?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }, [selectedTerm]);
+
+    // Helper: wrap last word (family name) in a span to prevent mid-word breaks
+    const renderPersonName = (fullName?: string | null) => {
+        if (!fullName) return null;
+        const parts = fullName.trim().split(/\s+/);
+        if (parts.length === 1) return fullName;
+        const last = parts.pop();
+        const first = parts.join(" ");
+        return (
+            <>
+                <span>{first} </span>
+                <span className={styles.familyName}>{last}</span>
+            </>
+        );
+    };
+
     if (loading) {
         return (
             <section className={styles.wrapper}>
@@ -79,31 +117,53 @@ export default function CouncildirectoryContent({
                 </div>
             )}
 
-            {/* DROPDOWN SELECTOR */}
+            {/* TIMELINE SELECTOR */}
             {sortedData.length > 0 && (
-                <div className={styles.dropdownSection}>
-                    <h3 className={styles.scrollTitle}>วาระ:</h3>
-                    <div className={styles.selectWrapper}>
-                        <select
-                            className={styles.termSelect}
-                            value={selectedTerm?.id || ""}
-                            onChange={(e) => {
-                                const termId = Number(e.target.value);
-                                const term = sortedData.find((t) => t.id === termId);
-                                if (term) setSelectedTerm(term);
-                            }}
+                <div className={styles.timelineContainer}>
+                    <div className={styles.timelineLabel}>เลือกวาระ</div>
+                    <div className={styles.timelineWrapper}>
+                        <button 
+                            className={styles.scrollBtn} 
+                            onClick={() => scrollTimeline("left")}
+                            aria-label="เลื่อนซ้าย"
                         >
-                            {sortedData.map((item) => (
-                                <option key={item.id} value={item.id}>
-                                    วาระที่ {item.term} (พ.ศ. {item.startYear} - {item.endYear})
-                                </option>
-                            ))}
-                        </select>
-                        <div className={styles.selectArrow}>
-                            <svg width="12" height="8" viewBox="0 0 12 8" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M1 1.5L6 6.5L11 1.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
+                            <ChevronLeft size={20} />
+                        </button>
+                        
+                        <div className={styles.timelineScroll} ref={timelineRef}>
+                            <div className={styles.termsList}>
+                                <div className={styles.timelineLine}></div>
+                                {sortedData.map((item) => {
+                                    const isActive = selectedTerm?.id === item.id;
+                                    return (
+                                        <button
+                                            key={item.id}
+                                            type="button"
+                                            className={styles.termNode}
+                                            data-term-id={item.id}
+                                            aria-pressed={isActive}
+                                            aria-label={`วาระที่ ${item.term} (${item.startYear} - ${item.endYear})`}
+                                            onClick={() => setSelectedTerm(item)}
+                                        >
+                                            <div className={`${styles.termCard} ${isActive ? styles.activeCard : ""}`}>
+                                                <span className={styles.termNodeLabel}>วาระที่</span>
+                                                <span className={styles.termNodeNum}>{item.term}</span>
+                                                <span className={styles.termNodeYears}>{item.startYear} - {item.endYear}</span>
+                                            </div>
+                                            <div className={`${styles.timelineDot} ${isActive ? styles.activeDot : ""}`}></div>
+                                        </button>
+                                    );
+                                })}
+                            </div>
                         </div>
+
+                        <button 
+                            className={styles.scrollBtn} 
+                            onClick={() => scrollTimeline("right")}
+                            aria-label="เลื่อนขวา"
+                        >
+                            <ChevronRight size={20} />
+                        </button>
                     </div>
                 </div>
             )}
@@ -113,8 +173,12 @@ export default function CouncildirectoryContent({
                 <div key={selectedTerm.id} className={styles.detailCard}>
                     <div className={styles.cardHeader}>
                         <h2 className={styles.termTitle}>วาระที่ {selectedTerm.term}</h2>
-                        <div className={styles.yearBadge}>
-                            พ.ศ. {selectedTerm.startYear} - {selectedTerm.endYear}
+                        <div className={styles.headerDivider}></div>
+                        <div className={styles.headerRight}>
+                            <div className={styles.committeeLabel}>คณะกรรมการสภาเภสัชกรรม</div>
+                            <div className={styles.yearBadge}>
+                                พ.ศ. {selectedTerm.startYear} - {selectedTerm.endYear}
+                            </div>
                         </div>
                     </div>
 
@@ -122,29 +186,37 @@ export default function CouncildirectoryContent({
                         {/* PRESIDENT */}
                         <div className={styles.personCard}>
                             <div className={styles.imageBox}>
+                                <div className={styles.imageBoxDecoration}></div>
                                 <img
                                     src={selectedTerm.presidentImage || "/images/placeholder-person.png"}
                                     alt={selectedTerm.presidentName}
                                 />
                             </div>
-                            <div className={styles.roleLabel}>นายกสภาเภสัชกรรม</div>
-                            <h3 className={styles.personName}>{selectedTerm.presidentName}</h3>
+                            <div className={styles.cardInfo}>
+                                <div className={styles.roleBadge}>นายกสภาเภสัชกรรม</div>
+                                <h3 className={styles.personName}>{renderPersonName(selectedTerm.presidentName)}</h3>
+                                <div className={styles.nameUnderline}></div>
+                            </div>
                         </div>
 
                         {/* SECRETARY */}
                         <div className={styles.personCard}>
                             <div className={styles.imageBox}>
+                                <div className={styles.imageBoxDecoration}></div>
                                 <img
                                     src={selectedTerm.secretaryImage || "/images/placeholder-person.png"}
                                     alt={selectedTerm.secretaryName}
                                 />
                             </div>
-                            <div className={styles.roleLabel}>เลขาธิการสภาเภสัชกรรม</div>
-                            <h3 className={styles.personName}>{selectedTerm.secretaryName}</h3>
+                            <div className={styles.cardInfo}>
+                                <div className={styles.roleBadge}>เลขาธิการสภาเภสัชกรรม</div>
+                                <h3 className={styles.personName}>{renderPersonName(selectedTerm.secretaryName)}</h3>
+                                <div className={styles.nameUnderline}></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             )}
         </section>
     );
-}
+}
