@@ -15,7 +15,7 @@ const memberLinks = [
     { name: "การศึกษา", href: "/learning" },
     // { name: "การสมัครงาน", href: "/careers" },
     // { name: "เครื่องมือเภสัชกร", href: "/tools" },
-    { name: "สินค้าสภา", href: "/store" },
+    { name: "สินค้าสภาเภสัชกรรม", href: "/store" },
 ];
 
 export default function MemberNavbar() {
