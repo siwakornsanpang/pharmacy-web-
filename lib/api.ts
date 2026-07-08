@@ -608,7 +608,7 @@ export async function getOtherServiceCategories(): Promise<OtherServiceCategory[
 
     try {
         const res = await fetchWithTimeout(`${API_BASE_URL}/other-service-categories`, {
-            next: { revalidate: 60 },
+            cache: 'no-store',
         });
 
         if (!res.ok) {
@@ -630,7 +630,7 @@ export async function getOtherServiceItems(categoryId: number): Promise<OtherSer
 
     try {
         const res = await fetchWithTimeout(`${API_BASE_URL}/other-service-items/${categoryId}`, {
-            next: { revalidate: 60 },
+            cache: 'no-store',
         });
 
         if (!res.ok) {
