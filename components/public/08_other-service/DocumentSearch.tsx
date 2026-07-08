@@ -6,21 +6,21 @@ import styles from './DocumentSearch.module.css';
 
 const searchCategories = [
   { value: 'all', label: 'ทั้งหมด' },
-  { value: 'forms', label: 'ฟอร์ม' },
-  { value: 'manuals', label: 'คู่มือ' },
+  { value: 'forms', label: 'แบบฟอร์ม' },
+  { value: 'manuals', label: 'คู่มือ/แนวทาง' },
 ];
 
-export default function DocumentSearch() {
-  const [category, setCategory] = useState('all');
-  const [query, setQuery] = useState('');
+interface DocumentSearchProps {
+  query: string;
+  setQuery: (q: string) => void;
+  filterType: string;
+  setFilterType: (type: string) => void;
+}
+
+export default function DocumentSearch({ query, setQuery, filterType, setFilterType }: DocumentSearchProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const selectedCategory = searchCategories.find(c => c.value === category)!;
-
-  const handleSearch = () => {
-    if (!query.trim() && category === 'all') return;
-    console.log('Search Document:', category, query);
-  };
+  const selectedCategory = searchCategories.find(c => c.value === filterType) || searchCategories[0];
 
   return (
     <div className={styles.wrapper}>
@@ -45,9 +45,9 @@ export default function DocumentSearch() {
                 <li key={cat.value}>
                   <button
                     type="button"
-                    className={`${styles.dropdownItem} ThaiFont ${cat.value === category ? styles.dropdownItemActive : ''}`}
+                    className={`${styles.dropdownItem} ThaiFont ${cat.value === filterType ? styles.dropdownItemActive : ''}`}
                     onClick={() => {
-                      setCategory(cat.value);
+                      setFilterType(cat.value);
                       setDropdownOpen(false);
                     }}
                   >
@@ -65,21 +65,11 @@ export default function DocumentSearch() {
           <input
             type="text"
             className={`${styles.input} ThaiFont`}
-            placeholder="ค้นหาจาก keyword"
+            placeholder="ค้นหาจากชื่อไฟล์ หรือประเภท..."
             value={query}
             onChange={e => setQuery(e.target.value)}
-            onKeyDown={e => e.key === 'Enter' && handleSearch()}
           />
         </div>
-
-        {/* Search button */}
-        <button
-          type="button"
-          className={`${styles.searchButton} ThaiFont`}
-          onClick={handleSearch}
-        >
-          ค้นหา
-        </button>
       </div>
     </div>
   );

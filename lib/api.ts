@@ -583,3 +583,65 @@ export async function getPublicProjectById(id: string): Promise<PublicProject | 
     }
 }
 
+// ===== Other Services (ดาวน์โหลดเอกสาร) =====
+
+export interface OtherServiceCategory {
+    id: number;
+    name: string;
+    order: number;
+}
+
+export interface OtherServiceItem {
+    id: number;
+    categoryId: number;
+    name: string;
+    status: string;
+    pdfUrl: string | null;
+    order: number;
+}
+
+export async function getOtherServiceCategories(): Promise<OtherServiceCategory[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/other-service-categories`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch other service categories: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching other service categories:', error);
+        return [];
+    }
+}
+
+export async function getOtherServiceItems(categoryId: number): Promise<OtherServiceItem[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/other-service-items/${categoryId}`, {
+            next: { revalidate: 60 },
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch other service items: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error(`Error fetching other service items for category ${categoryId}:`, error);
+        return [];
+    }
+}
+
+
