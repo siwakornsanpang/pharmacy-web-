@@ -32,8 +32,11 @@ export interface News {
 }
 
 const isBrowser = typeof window !== 'undefined';
-export const API_BASE_URL = (process.env.NEXT_PUBLIC_API_URL || 
-    (isBrowser ? '/api/proxy' : "https://pharmacy-api-6w5d.onrender.com")).replace(/\/$/, "");
+// Browser: same-origin proxy avoids CORS. Server: hit production API (or NEXT_PUBLIC_API_URL).
+export const API_BASE_URL = (
+    process.env.NEXT_PUBLIC_API_URL ||
+    (isBrowser ? '/api/proxy' : 'https://pharmacy-api-6w5d.onrender.com')
+).replace(/\/$/, '');
 
 // Helper function for fetch with timeout
 async function fetchWithTimeout(url: string, options: any = {}, timeout = 15000) {
@@ -640,6 +643,28 @@ export async function getOtherServiceItems(categoryId: number): Promise<OtherSer
         return res.json();
     } catch (error) {
         console.error(`Error fetching other service items for category ${categoryId}:`, error);
+        return [];
+    }
+}
+
+export async function getAllOtherServiceItems(): Promise<OtherServiceItem[]> {
+    if (!API_BASE_URL) {
+        console.error('NEXT_PUBLIC_API_URL is not defined');
+        return [];
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/other-service-items`, {
+            cache: 'no-store',
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to fetch other service items: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error fetching all other service items:', error);
         return [];
     }
 }
