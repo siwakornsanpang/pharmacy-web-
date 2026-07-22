@@ -669,4 +669,39 @@ export async function getAllOtherServiceItems(): Promise<OtherServiceItem[]> {
     }
 }
 
+// ===== Pharmacists =====
+
+export interface PharmacistApiItem {
+    id: number;
+    name: string;
+    registrationId: string;
+    province?: string | null;
+    status?: string | null;
+    address?: string | null;
+    expiryDate?: string | null;
+    imageUrl?: string | null;
+}
+
+export async function searchPharmacists(query: string): Promise<PharmacistApiItem[] | null> {
+    if (!API_BASE_URL || !query.trim()) {
+        return null;
+    }
+
+    try {
+        const res = await fetchWithTimeout(`${API_BASE_URL}/pharmacists?q=${encodeURIComponent(query.trim())}`, {
+            cache: 'no-store',
+        });
+
+        if (!res.ok) {
+            throw new Error(`Failed to search pharmacists: ${res.statusText}`);
+        }
+
+        return res.json();
+    } catch (error) {
+        console.error('Error searching pharmacists via API:', error);
+        return null;
+    }
+}
+
+
 

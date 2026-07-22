@@ -1,33 +1,40 @@
 .wrapper {
   width: 100%;
-    background: #F9F9F9;
-    border-radius: 24px;
-    padding: 20px;
+  margin: 0 auto;
+}
+
+/* === Search Box Card === */
+.searchBoxCard {
+  width: 100%;
+  background: #F9F9F9;
+  border-radius: 24px;
+  padding: 20px;
 }
 
 .header {
   display: flex;
   align-items: baseline;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
+  gap: 0.6rem;
+  margin-bottom: 1.25rem;
 }
 
 .title {
   font-size: 1.35rem;
   font-weight: 700;
-  color: #1f2937;
+  color: #1E293B;
   margin: 0;
 }
 
 .subtitle {
-  font-size: 0.9rem;
-  color: #6b7280;
+  font-size: 0.95rem;
+  color: #475569;
+  font-weight: 400;
 }
 
 /* === Search Row === */
 .searchRow {
   display: flex;
-  align-items: stretch;
+  align-items: center;
   gap: 0.75rem;
 }
 
@@ -41,28 +48,29 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  height: 100%;
-  padding: 0.65rem 1rem;
-  background: #fff;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
+  height: 44px;
+  padding: 0 1rem;
+  background: #FFFFFF;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 0.9rem;
   color: #374151;
   cursor: pointer;
   white-space: nowrap;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .dropdownButton:hover {
-  border-color: #737300;
+  border-color: #3A4B0F;
 }
 
 .dropdownIcon {
-  color: #6b7280;
+  color: #6B7280;
 }
 
 .chevron {
-  color: #9ca3af;
+  color: #9CA3AF;
+  margin-left: 0.25rem;
 }
 
 .dropdownMenu {
@@ -70,37 +78,37 @@
   top: calc(100% + 4px);
   left: 0;
   min-width: 100%;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   list-style: none;
   margin: 0;
   padding: 0.25rem 0;
-  z-index: 10;
+  z-index: 20;
 }
 
 .dropdownItem {
   display: block;
   width: 100%;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   background: none;
   border: none;
   text-align: left;
-  font-size: 0.85rem;
+  font-size: 0.875rem;
   color: #374151;
   cursor: pointer;
   transition: background 0.15s;
 }
 
 .dropdownItem:hover {
-  background: #f9fafb;
+  background: #F8FAFC;
 }
 
 .dropdownItemActive {
-  color: #737300;
+  color: #3A4B0F;
   font-weight: 600;
-  background: #f5f5e0;
+  background: #F4F7EE;
 }
 
 /* === Input === */
@@ -114,55 +122,361 @@
 .inputIcon {
   position: absolute;
   left: 0.85rem;
-  color: #9ca3af;
+  color: #9CA3AF;
   pointer-events: none;
 }
 
 .input {
   width: 100%;
-  padding: 0.65rem 1rem 0.65rem 2.75rem;
-  border: 1px solid #d1d5db;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  color: #1f2937;
+  height: 44px;
+  padding: 0 1rem 0 2.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #1E293B;
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
-  background-color: #fff;
+  background-color: #FFFFFF;
 }
 
 .input::placeholder {
-  color: #9ca3af;
+  color: #9CA3AF;
 }
 
 .input:focus {
-  border-color: #737300;
-  box-shadow: 0 0 0 3px rgba(115, 115, 0, 0.1);
+  border-color: #3A4B0F;
+  box-shadow: 0 0 0 3px rgba(58, 75, 15, 0.12);
 }
 
 /* === Search Button === */
 .searchButton {
-  padding: 0.65rem 2.50rem;
-  background: linear-gradient(90deg, rgba(197, 193, 120, 1) 0%, rgba(115, 115, 0, 1) 100%),
-    linear-gradient(0deg, rgba(115, 115, 0, 1) 0%, rgba(115, 115, 0, 1) 100%);
-  color: #fff;
+  height: 44px;
+  padding: 0 2.5rem;
+  background: #3A4B0F;
+  color: #FFFFFF;
   border: none;
-  border-radius: 0.5rem;
-  font-size: 0.9rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.2s;
+  transition: background-color 0.2s, transform 0.1s;
 }
 
 .searchButton:hover {
-  background: linear-gradient(90deg, rgb(198, 193, 106) 0%, rgb(72, 72, 1) 100%),
-    linear-gradient(0deg, rgba(115, 115, 0, 1) 0%, rgb(67, 67, 1) 100%);
+  background: #2C390B;
 }
 
-/* === Responsive === */
+.searchButton:active {
+  transform: scale(0.98);
+}
+
+/* === Results Container === */
+.resultsContainer {
+  margin-top: 1.75rem;
+}
+
+.resultTitle {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #3A4B0F;
+  margin: 0 0 1rem 0;
+}
+
+/* === Main Pharmacist Profile Card === */
+.profileCard {
+  display: flex;
+  gap: 1.75rem;
+  padding: 24px;
+  align-items: flex-start;
+}
+
+.avatarWrapper {
+  flex-shrink: 0;
+  width: 140px;
+  height: 175px;
+  border-radius: 12px;
+  overflow: hidden;
+  background-color: #E2E8F0;
+  border: 1px solid #E2E8F0;
+}
+
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  background-color: #E2E8F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatarPlaceholderIcon {
+  color: #94A3B8;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.profileDetails {
+  flex: 1;
+  min-width: 0;
+}
+
+.pharmacistName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #737300;
+  margin: 0 0 1rem 0;
+}
+
+.detailRows {
+  display: flex;
+  flex-direction: column;
+}
+
+.resultItemBlock {
+  margin-bottom: 1.5rem;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
+}
+
+.resultItemBlock:last-child {
+  margin-bottom: 0;
+}
+
+.detailRow {
+  display: flex;
+  align-items: center;
+  padding: 0.65rem 0;
+  border-bottom: 1px solid #F1F5F9;
+}
+
+.detailRow:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.detailRow:first-child {
+  padding-top: 0;
+}
+
+.detailLabel {
+  width: 280px;
+  flex-shrink: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #475569;
+}
+
+.detailValue {
+  font-size: 0.9rem;
+  color: #1E293B;
+  font-weight: 600;
+  text-align: left;
+}
+
+.detailValueMuted {
+  font-size: 0.9rem;
+  color: #64748B;
+  text-align: left;
+}
+
+.statusNormal {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #2E7D32;
+  font-weight: 600;
+}
+
+.statusInactive {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #64748B;
+  font-weight: 600;
+}
+
+.statusIcon {
+  color: #2E7D32;
+  flex-shrink: 0;
+}
+
+.statusIconInactive {
+  color: #64748B;
+  flex-shrink: 0;
+}
+
+/* === Qualifications & Training Card === */
+.qualificationCard {
+  display: flex;
+  align-items: stretch;
+  background: #F8FAFC;
+  border-top: 1px solid #E2E8F0;
+  padding: 20px 24px;
+  gap: 1.5rem;
+}
+
+.qualColumnMain {
+  flex: 2;
+  min-width: 0;
+}
+
+.qualColumnSub {
+  flex: 1;
+  min-width: 0;
+}
+
+.qualDivider {
+  width: 1px;
+  background-color: #E2E8F0;
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.qualHeader {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: #3A4B0F;
+  margin-bottom: 0.65rem;
+}
+
+.qualIcon {
+  color: #3A4B0F;
+  flex-shrink: 0;
+}
+
+.qualContent {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.875rem;
+  color: #334155;
+  line-height: 1.45;
+}
+
+.certIcon {
+  color: #3A4B0F;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.certText {
+  color: #334155;
+}
+
+.qualSubValue {
+  font-size: 0.875rem;
+  color: #1E293B;
+  font-weight: 500;
+}
+
+/* === Empty Card === */
+.emptyCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 16px;
+  padding: 48px 24px;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+.emptyIllustration {
+  margin-bottom: 1rem;
+}
+
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #3A4B0F;
+  margin: 0 0 0.4rem 0;
+}
+
+.emptySubtitle {
+  font-size: 0.9rem;
+  color: #64748B;
+  margin: 0 0 1.5rem 0;
+}
+
+.resetButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  height: 40px;
+  padding: 0 1.25rem;
+  background: #FFFFFF;
+  border: 1px solid #3A4B0F;
+  color: #3A4B0F;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.resetButton:hover {
+  background-color: #F4F7EE;
+}
+
+/* === Timestamp Note === */
+.timestampNote {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.85rem;
+  font-size: 0.825rem;
+  color: #64748B;
+}
+
+.infoIcon {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+/* === Responsive Layout === */
+@media (max-width: 900px) {
+  .qualificationCard {
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .qualDivider {
+    width: 100%;
+    height: 1px;
+  }
+}
+
 @media (max-width: 768px) {
   .searchRow {
     flex-direction: column;
+    align-items: stretch;
     gap: 0.75rem;
   }
 
@@ -173,16 +487,49 @@
 
   .searchButton {
     width: 100%;
-    padding: 0.75rem;
+  }
+
+  .profileCard {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .avatarWrapper {
+    width: 140px;
+    height: 175px;
+  }
+
+  .pharmacistName {
+    text-align: center;
+  }
+
+  .detailRow {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.2rem;
+  }
+
+  .detailLabel {
+    width: 100%;
   }
 }
 
 @media (max-width: 480px) {
+  .searchBoxCard {
+    padding: 16px;
+  }
+
   .title {
     font-size: 1.15rem;
   }
 
   .subtitle {
-    font-size: 0.8rem;
+    font-size: 0.85rem;
+  }
+
+  .profileCard {
+    padding: 16px;
   }
 }
+
