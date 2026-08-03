@@ -22,7 +22,6 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [nextIndex, setNextIndex] = useState<number | null>(null);
     const [transitioning, setTransitioning] = useState(false);
-    const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
     const [ripples, setRipples] = useState<{ id: number; x: number; y: number }[]>([]);
     const [dontShowAgain, setDontShowAgain] = useState(false);
     const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -73,17 +72,6 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
         return () => { if (intervalRef.current) clearInterval(intervalRef.current); };
     }, [visible, popups.length]);
 
-    useEffect(() => {
-        if (!visible) return;
-        const handleMouse = (e: MouseEvent) => {
-            const x = (e.clientX / window.innerWidth - 0.5) * 2;
-            const y = (e.clientY / window.innerHeight - 0.5) * 2;
-            setMousePos({ x, y });
-        };
-        window.addEventListener('mousemove', handleMouse);
-        return () => window.removeEventListener('mousemove', handleMouse);
-    }, [visible]);
-
     const dismiss = useCallback((e?: React.MouseEvent<HTMLButtonElement>) => {
         if (e) {
             const btn = e.currentTarget;
@@ -109,8 +97,6 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
 
     const current = popups[currentIndex];
     const next = nextIndex !== null ? popups[nextIndex] : null;
-    const parallaxX = mousePos.x * 14;
-    const parallaxY = mousePos.y * 9;
 
     return (
         <div className={`${styles.overlay} ${closing ? styles.closing : ''}`}>
@@ -121,13 +107,12 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
                 ))}
             </div>
 
-            {/* Images with parallax */}
+            {/* Static splash images */}
             <div className={styles.imageLayer}>
                 <img
                     src={current.url}
                     alt={current.title}
                     className={`${styles.bgImage} ${styles.bgImageActive} ${transitioning ? styles.bgImageFadeOut : ''}`}
-                    style={{ transform: `scale(1.1) translate(${parallaxX}px, ${parallaxY}px)` }}
                     draggable={false}
                 />
                 {next && (
@@ -135,7 +120,6 @@ export default function SplashScreen({ popups }: SplashScreenProps) {
                         src={next.url}
                         alt={next.title}
                         className={`${styles.bgImage} ${styles.bgImageNext}`}
-                        style={{ transform: `scale(1.1) translate(${parallaxX}px, ${parallaxY}px)` }}
                         draggable={false}
                     />
                 )}

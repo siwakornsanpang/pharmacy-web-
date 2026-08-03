@@ -7,6 +7,9 @@ const publicServices = [
   { id: 4, img: "/images/public/service/service4.jpg", alt: "service4", href: "/service/people-project" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
   { id: 5, img: "/images/public/service/service5.jpg", alt: "service5", href: "https://law.pharmacycouncil.org/" }, // 🛠️ แก้จาก herf เป็น href
   { id: 6, img: "/images/public/service/service6.jpg", alt: "service6", href: "#" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
+  { id: 7, img: "/images/public/service/service7.jpg", alt: "service7", href: "/service/people-project" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
+  { id: 8, img: "/images/public/service/service8.jpg", alt: "service8", href: "https://law.pharmacycouncil.org/" }, // 🛠️ แก้จาก herf เป็น href
+  { id: 9, img: "/images/public/service/service9.jpg", alt: "service9", href: "#" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
 ];
 
 export default function PublicServices() {

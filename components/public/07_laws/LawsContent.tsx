@@ -51,15 +51,15 @@ export default function LawsContent({ allLaws }: LawsContentProps) {
     if (yearFilter !== "all") {
       result = result.filter((law) => law.year === parseInt(yearFilter));
     }
+    // เรียงตามปี (สลับได้) แล้วตามลำดับจากหลังบ้าน จากนั้น id เพื่อความเสถียร
     result.sort((a, b) => {
       const yearA = a.year ?? 0;
       const yearB = b.year ?? 0;
-      if (yearSort === "desc") {
-        if (yearB !== yearA) return yearB - yearA;
-      } else {
-        if (yearA !== yearB) return yearA - yearB;
+      if (yearA !== yearB) {
+        return yearSort === "desc" ? yearB - yearA : yearA - yearB;
       }
-      return b.order - a.order;
+      if (a.order !== b.order) return a.order - b.order;
+      return a.id - b.id;
     });
     return result;
   }, [currentLaws, searchQuery, yearFilter, yearSort]);
@@ -128,9 +128,10 @@ export default function LawsContent({ allLaws }: LawsContentProps) {
           yearSort={yearSort}
           currentPage={currentPage}
           totalPages={totalPages}
-          onYearSortToggle={() =>
-            setYearSort((s) => (s === "desc" ? "asc" : "desc"))
-          }
+          onYearSortToggle={() => {
+            setYearSort((s) => (s === "desc" ? "asc" : "desc"));
+            setCurrentPage(1);
+          }}
           onPageChange={setCurrentPage}
         />
       </div>

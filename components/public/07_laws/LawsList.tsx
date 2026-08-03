@@ -37,6 +37,18 @@ export default function LawsList({
     return pages;
   };
 
+  // จัดกลุ่มตามปี — ลำดับเริ่มใหม่ในแต่ละปี
+  const groupedByYear: { year: number | null; items: LawItem[] }[] = [];
+  laws.forEach((law) => {
+    const year = law.year ?? null;
+    const last = groupedByYear[groupedByYear.length - 1];
+    if (last && last.year === year) {
+      last.items.push(law);
+    } else {
+      groupedByYear.push({ year, items: [law] });
+    }
+  });
+
   return (
     <div className={styles.wrapper}>
       <div className={styles.header}>
@@ -58,23 +70,32 @@ export default function LawsList({
         </div>
       ) : (
         <div className={styles.list}>
-          {laws.map((law) => (
-            <div key={law.id} className={styles.item}>
-              <span className={styles.bullet} />
-              {law.pdfUrl ? (
-                <a
-                  href={law.pdfUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className={`${styles.itemLink} ThaiFont`}
-                >
-                  {law.title}
-                </a>
-              ) : (
-                <span className={`${styles.itemTitle} ThaiFont`}>
-                  {law.title}
-                </span>
-              )}
+          {groupedByYear.map((group) => (
+            <div key={group.year ?? "none"} className={styles.yearGroup}>
+              <div className={`${styles.yearHeading} ThaiFont`}>
+                {group.year ? `พ.ศ. ${group.year}` : "ไม่ระบุปี"}
+              </div>
+              {group.items.map((law) => (
+                <div key={law.id} className={styles.item}>
+                  <span className={`${styles.orderBadge} ThaiFont`}>
+                    {law.order}
+                  </span>
+                  {law.pdfUrl ? (
+                    <a
+                      href={law.pdfUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className={`${styles.itemLink} ThaiFont`}
+                    >
+                      {law.title}
+                    </a>
+                  ) : (
+                    <span className={`${styles.itemTitle} ThaiFont`}>
+                      {law.title}
+                    </span>
+                  )}
+                </div>
+              ))}
             </div>
           ))}
         </div>
