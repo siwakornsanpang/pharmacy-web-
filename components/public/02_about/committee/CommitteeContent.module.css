@@ -46,21 +46,12 @@
     width: 100%;
 }
 
-/* Olive + gold concentric rings — like official council portraits */
 .photoStage {
     position: relative;
     width: 100%;
     aspect-ratio: 1 / 1;
     overflow: hidden;
-    background-color: #2f3619;
-    background-image:
-        radial-gradient(circle at 50% 58%, transparent 0 42px, rgba(201, 168, 76, 0.28) 43px, transparent 44px),
-        radial-gradient(circle at 50% 58%, transparent 0 62px, rgba(201, 168, 76, 0.24) 63px, transparent 64px),
-        radial-gradient(circle at 50% 58%, transparent 0 82px, rgba(201, 168, 76, 0.2) 83px, transparent 84px),
-        radial-gradient(circle at 50% 58%, transparent 0 102px, rgba(201, 168, 76, 0.16) 103px, transparent 104px),
-        radial-gradient(circle at 50% 58%, transparent 0 122px, rgba(201, 168, 76, 0.12) 123px, transparent 124px),
-        radial-gradient(circle at 18% 18%, rgba(212, 185, 90, 0.12), transparent 36%),
-        linear-gradient(165deg, #454d28 0%, #32391c 48%, #262c16 100%);
+    background: linear-gradient(165deg, #454d28 0%, #32391c 48%, #262c16 100%);
 }
 
 .cardLg .photoStage {
@@ -198,19 +189,41 @@
 
 .modalImageBox {
     position: relative;
-    flex: 0 0 300px;
-    width: 300px;
+    flex: 0 0 320px;
+    width: 320px;
     height: 100%;
     overflow: hidden;
-    background: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.25rem 1.5rem;
+    background:
+        radial-gradient(ellipse 70% 55% at 50% 42%, rgba(163, 163, 77, 0.22), transparent 70%),
+        linear-gradient(165deg, #5a5a14 0%, #737300 38%, #4a4a00 72%, #2e2e00 100%);
+}
+
+.modalImageBox::before {
+    content: "";
+    position: absolute;
+    inset: 1.15rem;
+    border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    pointer-events: none;
 }
 
 .modalPhoto {
+    position: relative;
+    z-index: 1;
     display: block;
-    width: 100%;
-    height: 100%;
-    object-fit: contain;
-    object-position: center center;
+    width: min(100%, 230px);
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center 12%;
+    border-radius: 18px;
+    background: #1a1a1a;
+    box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
 .modalContent {
@@ -294,10 +307,19 @@
     }
 
     .modalImageBox {
-        flex: 0 0 240px;
+        flex: 0 0 250px;
         width: 100%;
         max-width: none;
-        height: 240px;
+        height: 250px;
+        padding: 1.25rem;
+    }
+
+    .modalImageBox::before {
+        inset: 0.75rem;
+    }
+
+    .modalPhoto {
+        width: min(100%, 150px);
     }
 
     .modalContent {
