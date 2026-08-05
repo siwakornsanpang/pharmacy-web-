@@ -703,4 +703,3 @@ export async function searchPharmacists(query: string): Promise<PharmacistApiIte
     }
 }
 
-
