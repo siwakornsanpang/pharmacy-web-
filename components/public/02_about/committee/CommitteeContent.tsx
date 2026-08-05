@@ -21,6 +21,18 @@ interface CommitteeContentProps {
 
 const API_URL = "/api/proxy";
 
+const INTRO_TEXT =
+    "คณะกรรมการสภาเภสัชกรรม (มาตรา 15 แห่งพระราชบัญญัติวิชาชีพเภสัชกรรม พ.ศ. 2537) มีวาระอยู่ในตำแหน่งคราวละสามปี ประกอบด้วย กรรมการโดยตำแหน่ง กรรมการซึ่งได้รับแต่งตั้ง และกรรมการซึ่งได้รับเลือกตั้ง โดยสมาชิก";
+
+function fullName(member: CouncilMember) {
+    return `${member.prefix || ""}${member.name}`.trim();
+}
+
+function isPresident(member: CouncilMember) {
+    const pos = (member.position || "").trim();
+    return pos === "นายกสภาเภสัชกรรม";
+}
+
 export default function CommitteeContent({ initialMembers = [] }: CommitteeContentProps) {
     const [members, setMembers] = useState<CouncilMember[]>(initialMembers);
     const [selected, setSelected] = useState<CouncilMember | null>(null);
@@ -35,30 +47,22 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
         async function getCouncil() {
             try {
                 setLoading(true);
-
                 const cleanApiUrl = API_URL.replace(/\/$/, "");
-
-                const res = await fetch(`${cleanApiUrl}/council`, {
-                    cache: "no-store",
-                });
-
-                if (!res.ok) {
-                    throw new Error(`API error: ${res.status}`);
-                }
+                const res = await fetch(`${cleanApiUrl}/council`, { cache: "no-store" });
+                if (!res.ok) throw new Error(`API error: ${res.status}`);
 
                 const json = await res.json();
-
                 const data: CouncilMember[] = Array.isArray(json)
                     ? json
                     : Array.isArray(json.data)
-                        ? json.data
-                        : [];
+                      ? json.data
+                      : [];
 
-                const sortedData = data
-                    .filter((item) => item?.id && item?.imageUrl)
-                    .sort((a, b) => (a.order || 0) - (b.order || 0));
-
-                setMembers(sortedData);
+                setMembers(
+                    data
+                        .filter((item) => item?.id && item?.imageUrl)
+                        .sort((a, b) => (a.order || 0) - (b.order || 0))
+                );
             } catch (error) {
                 console.error("Failed to fetch council:", error);
                 setMembers([]);
@@ -70,32 +74,32 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
         getCouncil();
     }, [initialMembers]);
 
-    const { appointed, elected } = useMemo(() => {
-        const raw = [...members];
-
-        const appointedByType = raw.filter((item) => {
-            const type = item.type?.trim().toLowerCase();
-            return type === "appointed" || type === "appoint";
+    const { president, others } = useMemo(() => {
+        const sorted = [...members].sort((a, b) => {
+            const typeRank = (t?: string) =>
+                t === "elected" ? 0 : t === "appointed" ? 1 : 2;
+            const tr = typeRank(a.type) - typeRank(b.type);
+            if (tr !== 0) return tr;
+            return (a.order || 0) - (b.order || 0);
         });
 
-        const electedByType = raw.filter((item) => {
-            const type = item.type?.trim().toLowerCase();
-            return type === "elected" || type === "election";
-        });
-
-        if (appointedByType.length > 0 || electedByType.length > 0) {
-            return {
-                appointed: appointedByType,
-                elected: electedByType,
-            };
-        }
-
-        // Fallback split if no types are provided
-        return {
-            appointed: raw.slice(0, Math.ceil(raw.length / 2)),
-            elected: raw.slice(Math.ceil(raw.length / 2)),
-        };
+        const presidentMember = sorted.find(isPresident) || null;
+        const rest = sorted.filter((m) => !presidentMember || m.id !== presidentMember.id);
+        return { president: presidentMember, others: rest };
     }, [members]);
+
+    useEffect(() => {
+        if (!selected) return;
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setSelected(null);
+        };
+        document.body.style.overflow = "hidden";
+        window.addEventListener("keydown", onKey);
+        return () => {
+            document.body.style.overflow = "";
+            window.removeEventListener("keydown", onKey);
+        };
+    }, [selected]);
 
     if (loading) {
         return (
@@ -111,19 +115,24 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
 
     return (
         <section className={styles.wrapper}>
-            <CommitteeCarousel
-                title="กรรมการเลือกตั้งสภา"
-                members={elected}
-                typeLabel="เลือกตั้ง"
-                onSelect={setSelected}
-            />
+            <p className={`${styles.intro} ThaiFont`}>{INTRO_TEXT}</p>
 
-            <CommitteeCarousel
-                title="กรรมการแต่งตั้งสภา"
-                members={appointed}
-                typeLabel="แต่งตั้ง"
-                onSelect={setSelected}
-            />
+            {president && (
+                <div className={styles.presidentRow}>
+                    <MemberCard member={president} size="lg" onSelect={setSelected} />
+                </div>
+            )}
+
+            <div className={styles.grid}>
+                {others.map((member) => (
+                    <MemberCard
+                        key={member.id}
+                        member={member}
+                        size="sm"
+                        onSelect={setSelected}
+                    />
+                ))}
+            </div>
 
             {selected && (
                 <div className={styles.modalOverlay} onClick={() => setSelected(null)}>
@@ -138,24 +147,23 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
 
                         <div className={styles.modalImageBox}>
                             <img
-                                src={selected.originalImageUrl || selected.imageUrl}
-                                alt={`${selected.prefix}${selected.name}`}
+                                src={selected.imageUrl}
+                                alt={fullName(selected)}
+                                className={styles.modalPhoto}
                             />
                         </div>
 
                         <div className={styles.modalContent}>
-
-
-                            <h3>
-                                {selected.prefix}
-                                {selected.name}
-                            </h3>
-
-                            <p className={styles.modalPosition}>{selected.position}</p>
+                            <header className={styles.modalHeader}>
+                                <h3 className="ThaiFont">{fullName(selected)}</h3>
+                                <p className={`${styles.modalPosition} ThaiFont`}>
+                                    {selected.position}
+                                </p>
+                            </header>
 
                             <div className={styles.modalBio}>
-                                <h4>ประวัติส่วนตัว</h4>
-                                <p>
+                                <h4 className="ThaiFont">ประวัติส่วนตัว</h4>
+                                <p className={`${styles.bioPlain} ThaiFont`}>
                                     {selected.background && selected.background !== "-"
                                         ? selected.background
                                         : "ยังไม่มีข้อมูลประวัติส่วนตัว"}
@@ -169,60 +177,36 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
     );
 }
 
-function CommitteeCarousel({
-    title,
-    members,
-    typeLabel,
+function MemberCard({
+    member,
+    size,
     onSelect,
 }: {
-    title: string;
-    members: CouncilMember[];
-    typeLabel: string;
+    member: CouncilMember;
+    size: "lg" | "sm";
     onSelect: (member: CouncilMember) => void;
 }) {
-    if (members.length === 0) return null;
-
     return (
-        <div className={styles.carouselSection}>
-            <div className={styles.sectionHead}>
-                <h3>{title}</h3>
-                <span>{members.length} ท่าน</span>
+        <article className={`${styles.card} ${size === "lg" ? styles.cardLg : styles.cardSm}`}>
+            <div className={styles.photoStage}>
+                <img
+                    src={member.imageUrl}
+                    alt={fullName(member)}
+                    className={styles.photo}
+                />
             </div>
 
-            <div className={styles.gridContainer}>
-                {members.map((member) => (
-                    <div
-                        key={`${typeLabel}-${member.id}`}
-                        className={styles.gridItem}
-                    >
-                        <article className={styles.card}>
-                            <div className={styles.imageBox}>
-                                <img
-                                    src={member.imageUrl}
-                                    alt={`${member.prefix}${member.name}`}
-                                />
-                            </div>
-
-                            <div className={styles.cardContent}>
-                                <h4>
-                                    {member.prefix}
-                                    {member.name}
-                                </h4>
-
-                                <p className={styles.position}>{member.position}</p>
-
-                                <button
-                                    type="button"
-                                    className={styles.moreButton}
-                                    onClick={() => onSelect(member)}
-                                >
-                                    ดูประวัติ
-                                </button>
-                            </div>
-                        </article>
-                    </div>
-                ))}
+            <div className={styles.cardBody}>
+                <h3 className={`${styles.name} ThaiFont`}>{fullName(member)}</h3>
+                <p className={`${styles.position} ThaiFont`}>{member.position}</p>
+                <button
+                    type="button"
+                    className={`${styles.bioBtn} ThaiFont`}
+                    onClick={() => onSelect(member)}
+                >
+                    ดูประวัติ
+                </button>
             </div>
-        </div>
+        </article>
     );
 }

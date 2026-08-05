@@ -20,12 +20,14 @@ const getCategoryLabel = (cat: NewsCategory) => {
   }
 };
 
-const stripHtml = (html: string) => {
-  if (!html) return "";
-  return html
+const getExcerpt = (news: News) => {
+  if (news.excerpt?.trim()) return news.excerpt;
+  if (!news.content) return "";
+  return news.content
     .replace(/<[^>]*>?/gm, '')
-    .replace(/&nbsp;/g, ' ') 
-    .substring(0, 180) + "..."; 
+    .replace(/&nbsp;/g, ' ')
+    .trim()
+    .substring(0, 180) + (news.content.length > 180 ? "..." : "");
 };
 
 export default function MemberHighlightSection({ highlights }: MemberHighlightSectionProps) {
@@ -101,7 +103,7 @@ export default function MemberHighlightSection({ highlights }: MemberHighlightSe
                     {getCategoryLabel(activeHighlight.category)}
                   </span>
                   <h3 className={styles.highlightTitle}>{activeHighlight.title}</h3>
-                  <p className={styles.highlightDesc}>{stripHtml(activeHighlight.content)}</p>
+                  <p className={styles.highlightDesc}>{getExcerpt(activeHighlight)}</p>
                   <Link href={`/news/${activeHighlight.id}`} className={styles.readMoreBtn}>
                     อ่านเพิ่มเติม
                   </Link>

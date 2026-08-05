@@ -1,181 +1,161 @@
 .wrapper {
     width: 100%;
-    padding: 40px 0 80px;
+    padding: 0 0 3.5rem;
     background: #ffffff;
-    overflow: hidden;
-    font-family: "Prompt", sans-serif;
 }
 
-.carouselSection {
-    margin-bottom: 88px;
+.intro {
+    margin: 0 0 2.25rem;
+    max-width: 48rem;
+    font-size: 0.98rem;
+    line-height: 1.85;
+    color: #4b5563;
 }
 
-.sectionHead {
-    width: min(1180px, calc(100% - 48px));
-    margin: 0 auto 34px;
+.presidentRow {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    border-bottom: 1px solid rgba(123, 132, 41, 0.18);
-    padding-bottom: 16px;
-}
-
-.sectionHead h3 {
-    margin: 0;
-    font-size: 26px;
-    color: #111111;
-    font-weight: 700;
-}
-
-.sectionHead span {
-    font-size: 14px;
-    color: #7b8429;
-    background: rgba(123, 132, 41, 0.1);
-    padding: 8px 16px;
-    border-radius: 999px;
-}
-
-.swiper {
-    width: 100%;
-    padding: 70px 0 82px;
-}
-
-.slide {
-    height: auto;
-}
-
-.gridContainer {
-    width: min(1180px, calc(100% - 48px));
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: repeat(6, 1fr);
-    gap: 20px;
-    padding: 20px 0 60px;
-}
-
-.gridItem {
-    width: 100%;
-}
-
-/* Adjust card for grid */
-.card {
-    position: relative;
-    width: 100%;
-    height: 340px; /* Reduced height to fit 6 in a row */
-    background: #ffffff;
-    border: 1px solid rgba(115, 115, 0, 0.1);
-    border-radius: 20px;
-    padding: 0 12px 12px;
-    box-shadow: 
-        0 4px 12px rgba(0, 0, 0, 0.04),
-        0 10px 25px rgba(115, 115, 0, 0.04);
-    overflow: hidden;
-    transition: all 0.4s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-.card:hover {
-    box-shadow: 0 15px 35px rgba(115, 115, 0, 0.1);
-    border-color: rgba(115, 115, 0, 0.3);
-    transform: translateY(-5px);
-}
-
-.imageBox {
-    position: relative;
-    z-index: 1;
-    height: 120px; /* Reduced height */
-    display: flex;
-    align-items: flex-end;
     justify-content: center;
-    margin-bottom: 0px;
-    flex-shrink: 0;
+    margin-bottom: 1.75rem;
 }
 
-.imageBox img {
-    max-width: 100%;
-    max-height: 120px;
-    object-fit: contain;
-    filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.1));
-    transition: transform 0.4s ease;
+.grid {
+    display: grid;
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+    gap: 1.15rem 0.85rem;
+    align-items: stretch;
 }
 
-.cardContent {
-    position: relative;
-    z-index: 2;
-    height: 190px; /* Adjusted height */
+/* ─── Card shell (matches mockup) ─── */
+.card {
     background: #ffffff;
-    border-radius: 18px;
-    padding: 15px 12px;
-    text-align: center;
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.04);
-    border: 1px solid rgba(115, 115, 0, 0.08);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow:
+        0 8px 24px rgba(15, 23, 42, 0.08),
+        0 2px 6px rgba(15, 23, 42, 0.04);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    height: 100%;
 }
 
-.cardContent h4 {
+.cardLg {
+    width: 250px;
+}
+
+.cardSm {
+    width: 100%;
+}
+
+/* Olive + gold concentric rings — like official council portraits */
+.photoStage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    background-color: #2f3619;
+    background-image:
+        radial-gradient(circle at 50% 58%, transparent 0 42px, rgba(201, 168, 76, 0.28) 43px, transparent 44px),
+        radial-gradient(circle at 50% 58%, transparent 0 62px, rgba(201, 168, 76, 0.24) 63px, transparent 64px),
+        radial-gradient(circle at 50% 58%, transparent 0 82px, rgba(201, 168, 76, 0.2) 83px, transparent 84px),
+        radial-gradient(circle at 50% 58%, transparent 0 102px, rgba(201, 168, 76, 0.16) 103px, transparent 104px),
+        radial-gradient(circle at 50% 58%, transparent 0 122px, rgba(201, 168, 76, 0.12) 123px, transparent 124px),
+        radial-gradient(circle at 18% 18%, rgba(212, 185, 90, 0.12), transparent 36%),
+        linear-gradient(165deg, #454d28 0%, #32391c 48%, #262c16 100%);
+}
+
+.cardLg .photoStage {
+    aspect-ratio: 1 / 1.02;
+}
+
+.photo {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    /* Make solid black studio backgrounds disappear over olive pattern */
+    mix-blend-mode: lighten;
+}
+
+.cardBody {
+    padding: 0.85rem 0.7rem 1rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3rem;
+    background: #ffffff;
+    flex: 1;
+}
+
+.cardLg .cardBody {
+    padding: 1rem 0.9rem 1.15rem;
+    gap: 0.4rem;
+}
+
+.name {
     margin: 0;
-    font-size: 14px; /* Smaller font size for 6 cols */
-    color: #202020;
+    font-size: 0.88rem;
     font-weight: 700;
-    line-height: 1.4;
-    height: 40px;
+    color: #111827;
+    line-height: 1.35;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     overflow: hidden;
+    min-height: 2.4rem;
+}
+
+.cardLg .name {
+    font-size: 1.05rem;
+    min-height: 2.8rem;
 }
 
 .position {
-    margin: 4px 0 0;
-    font-size: 12px; /* Smaller font size */
-    color: #6b7280;
+    margin: 0;
+    font-size: 0.74rem;
+    color: #374151;
     line-height: 1.4;
-    height: 34px;
     display: -webkit-box;
-    -webkit-line-clamp: 2;
+    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
-}
-
-.moreButton {
-    margin-top: 10px;
+    flex: 1;
     width: 100%;
-    height: 36px;
-    border: 1.5px solid rgba(115, 115, 0, 0.4);
+}
+
+.cardLg .position {
+    font-size: 0.86rem;
+}
+
+.bioBtn {
+    margin-top: 0.55rem;
+    appearance: none;
+    border: 1px solid #d1d5db;
     background: #ffffff;
-    color: #737300;
-    border-radius: 12px;
-    font-size: 13px;
-    font-weight: 700;
+    color: #111827;
+    border-radius: 999px;
+    padding: 0.38rem 1.1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
+    white-space: nowrap;
 }
 
-@media (max-width: 1200px) {
-    .gridContainer {
-        grid-template-columns: repeat(4, 1fr);
-    }
+.cardLg .bioBtn {
+    margin-top: 0.65rem;
+    padding: 0.45rem 1.35rem;
+    font-size: 0.88rem;
 }
 
-@media (max-width: 900px) {
-    .gridContainer {
-        grid-template-columns: repeat(3, 1fr);
-    }
+.bioBtn:hover {
+    border-color: #9ca3af;
+    background: #f9fafb;
 }
 
-@media (max-width: 600px) {
-    .gridContainer {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-        padding: 10px 0 40px;
-    }
-}
-
-
-/* Modal and Remaining Styles */
+/* ─── Modal ─── */
 .modalOverlay {
     position: fixed;
     inset: 0;
@@ -190,159 +170,170 @@
 
 .modal {
     position: relative;
-    width: min(920px, 100%);
+    display: flex;
+    width: min(960px, 100%);
+    height: min(88vh, 780px);
     max-height: 88vh;
     background: #ffffff;
-    border-radius: 32px;
+    border-radius: 24px;
     overflow: hidden;
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    box-shadow: 0 30px 90px rgba(0, 0, 0, 0.25);
+    box-shadow: 0 28px 80px rgba(0, 0, 0, 0.28);
 }
 
 .closeButton {
     position: absolute;
-    top: 18px;
-    right: 18px;
+    top: 16px;
+    right: 16px;
     z-index: 5;
-    width: 42px;
-    height: 42px;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: 999px;
-    background: rgba(0, 0, 0, 0.82);
+    background: rgba(0, 0, 0, 0.78);
     color: #ffffff;
-    font-size: 28px;
+    font-size: 26px;
     line-height: 1;
     cursor: pointer;
 }
 
 .modalImageBox {
-    background:
-        radial-gradient(circle at center, rgba(123, 132, 41, 0.14), transparent 55%),
-        #f7f8f3;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 520px;
-    padding: 32px 28px;
+    position: relative;
+    flex: 0 0 300px;
+    width: 300px;
+    height: 100%;
+    overflow: hidden;
+    background: #111827;
 }
 
-.modalImageBox img {
-    max-width: 100%;
-    max-height: 500px;
+.modalPhoto {
+    display: block;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
-    filter: drop-shadow(0 18px 20px rgba(0, 0, 0, 0.16));
+    object-position: center center;
 }
 
 .modalContent {
-    padding: 54px 42px;
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 100%;
+    padding: 36px 40px 32px;
+    overflow-x: hidden;
     overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    background: #ffffff;
 }
 
-.modalBadge {
-    display: inline-flex;
-    margin-bottom: 18px;
-    padding: 7px 14px;
-    border-radius: 999px;
-    background: rgba(123, 132, 41, 0.1);
-    color: #7b8429;
-    font-size: 13px;
-    font-weight: 600;
+.modalHeader {
+    margin-bottom: 22px;
+    padding-right: 40px;
 }
 
 .modalContent h3 {
     margin: 0;
-    font-size: 30px;
+    font-size: 1.65rem;
     line-height: 1.35;
-    color: #202020;
+    color: #1a1a1a;
 }
 
 .modalPosition {
-    margin: 14px 0 28px;
-    font-size: 17px;
-    line-height: 1.7;
-    color: #666666;
+    margin: 8px 0 0;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #6b7280;
 }
 
 .modalBio {
-    padding-top: 24px;
-    border-top: 1px solid #eeeeee;
+    margin-top: 4px;
 }
 
 .modalBio h4 {
     margin: 0 0 12px;
-    font-size: 20px;
-    color: #202020;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1f2937;
 }
 
-.modalBio p {
+.bioPlain {
     margin: 0;
-    font-size: 15px;
+    font-size: 0.95rem;
     line-height: 1.9;
-    color: #555555;
+    color: #4b5563;
     white-space: pre-line;
 }
 
 .loading {
-    min-height: 360px;
+    min-height: 280px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #7b8429;
-    font-size: 18px;
+    font-size: 1.05rem;
+}
+
+/* ─── Responsive ─── */
+@media (max-width: 1280px) {
+    .grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
 }
 
 @media (max-width: 900px) {
-    .sectionHead {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 12px;
+    .grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .cardLg {
+        width: 220px;
     }
 
     .modal {
-        grid-template-columns: 1fr;
-        overflow-y: auto;
+        flex-direction: column;
+        height: min(92vh, 900px);
+        max-height: 92vh;
     }
 
     .modalImageBox {
-        min-height: 360px;
-    }
-
-    .modalImageBox img {
-        max-height: 340px;
+        flex: 0 0 240px;
+        width: 100%;
+        max-width: none;
+        height: 240px;
     }
 
     .modalContent {
-        padding: 34px 24px;
+        flex: 1 1 auto;
+        height: auto;
+        min-height: 0;
+        padding: 24px 20px;
+    }
+
+    .modalHeader {
+        margin-bottom: 16px;
+        padding-right: 36px;
     }
 }
 
-@media (max-width: 560px) {
-    .wrapper {
-        padding: 32px 0 54px;
+@media (max-width: 640px) {
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.75rem;
     }
 
-    .carouselSection {
-        margin-bottom: 54px;
+    .cardLg {
+        width: 190px;
     }
 
-    .sectionHead {
-        width: min(100% - 32px, 1180px);
+    .name {
+        font-size: 0.8rem;
+        min-height: 2.2rem;
     }
 
-    .sectionHead h3 {
-        font-size: 22px;
+    .position {
+        font-size: 0.7rem;
     }
 
-    .swiper {
-        padding: 38px 0 54px;
-    }
-
-    .card {
-        min-height: 440px;
-    }
-
-    .imageBox {
-        height: 210px;
+    .bioBtn {
+        font-size: 0.75rem;
+        padding: 0.32rem 0.9rem;
     }
 }
