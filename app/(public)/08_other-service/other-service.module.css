@@ -46,7 +46,7 @@
 
 /* === Search Section === */
 .searchSection {
-    padding: 2.5rem 1.5rem;
+    padding: 1.5rem 1.5rem 0.75rem;
     background: #fff;
 }
 
@@ -59,14 +59,14 @@ max-width: var(--max-width-2xl);
 
 @media (max-width: 768px) {
     .searchSection {
-        padding: 1.5rem 1rem 0;
+        padding: 1.25rem 1rem 0.5rem;
     }
 }
 
 .container {
     max-width: var(--max-width-2xl);
     width: 90%;
-    margin: 2rem auto 4rem;
+    margin: 1.25rem auto 3rem;
     padding: 0 20px;
 }
 

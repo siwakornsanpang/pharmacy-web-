@@ -1,0 +1,494 @@
+"use client";
+
+import { useEffect, useMemo, useState, Suspense } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import {
+  Search,
+  ChevronDown,
+  ChevronLeft,
+  ListFilter,
+  CheckCircle2,
+  Ban,
+  CalendarX2,
+  GraduationCap,
+  Award,
+  Calendar,
+  Building2,
+  Info,
+  RotateCcw,
+  User,
+  Loader2,
+} from "lucide-react";
+import { searchPharmacists, PharmacistApiItem } from "@/lib/api";
+import MeetingPagination from "@/components/public/05_meeting/MeetingPagination";
+import styles from "./LicenseSearch.module.css";
+import pageStyles from "./LicenseSearchResults.module.css";
+import {
+  PharmacistData,
+  SearchType,
+  searchOptions,
+  mockPharmacistsList,
+  getFormattedThaiDateTime,
+  buildLicenseSearchPath,
+} from "./licenseSearchShared";
+
+const ITEMS_PER_PAGE = 5;
+
+function normalizeLicenseDigits(value: string) {
+  return value.replace(/[^0-9]/g, "");
+}
+
+function isExactLicenseMatch(licenseValue: string, searchTerm: string) {
+  const licenseDigits = normalizeLicenseDigits(licenseValue);
+  const searchDigits = normalizeLicenseDigits(searchTerm);
+  if (!searchDigits) return false;
+  return licenseDigits === searchDigits;
+}
+
+async function fetchPharmacistResults(
+  searchType: SearchType,
+  searchTerm: string
+): Promise<PharmacistData[]> {
+  try {
+    const apiResults: PharmacistApiItem[] | null = await searchPharmacists(searchTerm);
+
+    if (apiResults !== null) {
+      const filteredApiResults = apiResults.filter((item) => {
+        if (searchType === "license") {
+          return isExactLicenseMatch(item.registrationId, searchTerm);
+        }
+        const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+        const itemName = item.name.toLowerCase();
+        return searchWords.every((word) => itemName.includes(word));
+      });
+
+      return filteredApiResults.map((item, idx) => {
+        const regId = item.registrationId.startsWith("ภ.")
+          ? item.registrationId
+          : `ภ. ${item.registrationId}`;
+
+        let statusText = item.status || "ปกติ";
+        const rawStatus = statusText.replace(/^สถานะใบอนุญาต:\s*/i, "").trim();
+
+        const isSuspended =
+          rawStatus.includes("พักใช้") ||
+          rawStatus.includes("ไม่ใช้งาน") ||
+          rawStatus.includes("เพิกถอน");
+        const isExpired = rawStatus.includes("หมดอายุ");
+
+        let statusType: PharmacistData["statusType"] = "normal";
+        if (isSuspended) statusType = "suspended";
+        else if (isExpired) statusType = "expired";
+
+        return {
+          id: item.id || idx,
+          title: "",
+          name: item.name,
+          licenseNo: regId,
+          status: rawStatus || "ปกติ",
+          statusType,
+          expiryDate: item.expiryDate || undefined,
+          replacementInfo: "(ไม่เคยขอใบแทน)",
+          image: item.imageUrl || null,
+        };
+      });
+    }
+
+    if (searchType === "license") {
+      return mockPharmacistsList.filter((item) =>
+        isExactLicenseMatch(item.licenseNo, searchTerm)
+      );
+    }
+
+    const words = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
+    return mockPharmacistsList.filter((item) => {
+      const cleanName = item.name.toLowerCase();
+      return words.every((word) => cleanName.includes(word));
+    });
+  } catch (err) {
+    console.error("Search error:", err);
+    return [];
+  }
+}
+
+function LicenseSearchResultsInner() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const initialType = (searchParams.get("type") === "name" ? "name" : "license") as SearchType;
+  const initialQuery = searchParams.get("q") || "";
+  const initialFirst = searchParams.get("first") || "";
+  const initialLast = searchParams.get("last") || "";
+
+  const [searchType, setSearchType] = useState<SearchType>(initialType);
+  const [query, setQuery] = useState(initialQuery);
+  const [firstName, setFirstName] = useState(initialFirst);
+  const [lastName, setLastName] = useState(initialLast);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchResults, setSearchResults] = useState<PharmacistData[]>([]);
+  const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
+  const [searchTime, setSearchTime] = useState(getFormattedThaiDateTime());
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const selectedOption = searchOptions.find((o) => o.value === searchType)!;
+
+  const activeTerm = useMemo(() => {
+    if (initialType === "license") return initialQuery.trim();
+    return `${initialFirst.trim()} ${initialLast.trim()}`.trim();
+  }, [initialType, initialQuery, initialFirst, initialLast]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function run() {
+      if (!activeTerm) {
+        setSearchResults([]);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      setImageErrors({});
+      setCurrentPage(1);
+      setSearchTime(getFormattedThaiDateTime());
+
+      const results = await fetchPharmacistResults(initialType, activeTerm);
+      if (!cancelled) {
+        setSearchResults(results);
+        setIsLoading(false);
+      }
+    }
+
+    run();
+    return () => {
+      cancelled = true;
+    };
+  }, [activeTerm, initialType]);
+
+  const handleSearch = () => {
+    const path = buildLicenseSearchPath({
+      type: searchType,
+      query,
+      firstName,
+      lastName,
+    });
+    if (!path) return;
+    router.push(path);
+  };
+
+  const handleResetSearch = () => {
+    setQuery("");
+    setFirstName("");
+    setLastName("");
+    router.push("/");
+  };
+
+  const getStatusDisplay = (item: PharmacistData) => {
+    const raw = (item.status || "").replace(/^สถานะใบอนุญาต:\s*/i, "").trim();
+    const lower = raw.toLowerCase();
+
+    if (
+      item.statusType === "suspended" ||
+      raw.includes("พักใช้") ||
+      raw.includes("ไม่ใช้งาน") ||
+      raw.includes("เพิกถอน")
+    ) {
+      return {
+        label: "พักใช้ใบอนุญาต",
+        className: styles.statusSuspended,
+        iconClassName: styles.statusIconSuspended,
+        Icon: Ban,
+      };
+    }
+
+    if (
+      item.statusType === "expired" ||
+      raw.includes("หมดอายุ") ||
+      lower.includes("expired")
+    ) {
+      return {
+        label: "ใบอนุญาตหมดอายุ",
+        className: styles.statusExpired,
+        iconClassName: styles.statusIconExpired,
+        Icon: CalendarX2,
+      };
+    }
+
+    // "ใช้งาน" / "ปกติ" / อื่นๆ ที่ไม่ใช่สถานะผิดปกติ
+    return {
+      label: "ปกติ",
+      className: styles.statusNormal,
+      iconClassName: styles.statusIcon,
+      Icon: CheckCircle2,
+    };
+  };
+
+  return (
+    <div className={pageStyles.pageInner}>
+      <Link href="/" className={pageStyles.backBtn}>
+        <ChevronLeft size={18} />
+        <span>ย้อนกลับหน้าแรก</span>
+      </Link>
+
+      <div className={`${styles.searchBoxCard} ${pageStyles.searchCard}`}>
+        <div className={styles.header}>
+          <h2 className={styles.title}>ค้นหารายชื่อ</h2>
+          <span className={styles.subtitle}>ผู้ประกอบวิชาชีพเภสัชกรรม</span>
+        </div>
+
+        <div className={styles.searchRow}>
+          <div className={styles.dropdown}>
+            <button
+              type="button"
+              className={styles.dropdownButton}
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+            >
+              <ListFilter size={18} className={styles.dropdownIcon} />
+              <span>{selectedOption.label}</span>
+              <ChevronDown size={16} className={styles.chevron} />
+            </button>
+            {dropdownOpen && (
+              <ul className={styles.dropdownMenu}>
+                {searchOptions.map((opt) => (
+                  <li key={opt.value}>
+                    <button
+                      type="button"
+                      className={`${styles.dropdownItem} ${
+                        opt.value === searchType ? styles.dropdownItemActive : ""
+                      }`}
+                      onClick={() => {
+                        setSearchType(opt.value);
+                        setDropdownOpen(false);
+                        setQuery("");
+                        setFirstName("");
+                        setLastName("");
+                      }}
+                    >
+                      {opt.label}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+
+          {searchType === "name" ? (
+            <>
+              <div className={styles.inputWrap}>
+                <Search size={18} className={styles.inputIcon} />
+                <input
+                  type="text"
+                  className={styles.input}
+                  placeholder="ชื่อ"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+              <div className={styles.inputWrap}>
+                <Search size={18} className={styles.inputIcon} />
+                <input
+                  type="text"
+                  className={styles.input}
+                  placeholder="นามสกุล"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+                />
+              </div>
+            </>
+          ) : (
+            <div className={styles.inputWrap}>
+              <Search size={18} className={styles.inputIcon} />
+              <input
+                type="text"
+                className={styles.input}
+                placeholder={selectedOption.label}
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSearch()}
+              />
+            </div>
+          )}
+
+          <button
+            type="button"
+            className={styles.searchButton}
+            onClick={handleSearch}
+            disabled={isLoading}
+          >
+            {isLoading ? <Loader2 size={18} className={styles.spinner} /> : "ค้นหา"}
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.resultsContainer}>
+        <h3 className={styles.resultTitle}>
+          ผลการค้นหา{" "}
+          {!isLoading && searchResults.length > 0 ? `${searchResults.length} รายการ` : ""}
+        </h3>
+
+        {isLoading ? (
+          <div className={pageStyles.loadingBox}>
+            <Loader2 size={28} className={styles.spinner} />
+            <span>กำลังค้นหาข้อมูล...</span>
+          </div>
+        ) : searchResults.length > 0 ? (
+          <div className={styles.resultsList}>
+            {searchResults
+              .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
+              .map((item, index) => (
+                <div key={item.id || index} className={styles.resultItemBlock}>
+                  <div className={styles.profileCard}>
+                    <div className={styles.avatarWrapper}>
+                      {item.image && !imageErrors[index] ? (
+                        <Image
+                          src={item.image}
+                          alt={item.name}
+                          fill
+                          sizes="140px"
+                          className={styles.avatarImage}
+                          unoptimized
+                          onError={() =>
+                            setImageErrors((prev) => ({ ...prev, [index]: true }))
+                          }
+                        />
+                      ) : (
+                        <div className={styles.avatarPlaceholder}>
+                          <User size={56} className={styles.avatarPlaceholderIcon} />
+                        </div>
+                      )}
+                    </div>
+
+                    <div className={styles.profileDetails}>
+                      <h4 className={styles.pharmacistName}>
+                        {item.title ? `${item.title} ` : ""}
+                        {item.name}
+                      </h4>
+
+                      <div className={styles.detailRows}>
+                        <div className={styles.detailRow}>
+                          <span className={styles.detailLabel}>เลขที่ใบอนุญาต</span>
+                          <span className={styles.detailValue}>{item.licenseNo}</span>
+                        </div>
+
+                        <div className={styles.detailRow}>
+                          <span className={styles.detailLabel}>สถานะ</span>
+                          {(() => {
+                            const status = getStatusDisplay(item);
+                            const StatusIcon = status.Icon;
+                            return (
+                              <span className={`${styles.detailValue} ${status.className}`}>
+                                <StatusIcon size={16} className={status.iconClassName} />
+                                {status.label}
+                              </span>
+                            );
+                          })()}
+                        </div>
+
+                        {item.expiryDate && (
+                          <div className={styles.detailRow}>
+                            <span className={styles.detailLabel}>ใบอนุญาตหมดอายุ</span>
+                            <span className={styles.detailValue}>{item.expiryDate}</span>
+                          </div>
+                        )}
+
+                        <div className={styles.detailRowStacked}>
+                          <div className={styles.detailRow}>
+                            <span className={styles.detailLabel}>
+                              ใบอนุญาตเป็นผู้ประกอบวิชาชีพเภสัชกรรม
+                            </span>
+                            <span className={styles.detailValueMuted}>
+                              {item.replacementInfo || "(ไม่เคยขอใบแทน)"}
+                            </span>
+                          </div>
+                          <div className={styles.timestampUnderField}>
+                            <Info size={14} className={styles.infoIcon} />
+                            <span>ข้อมูล ณ วันที่ค้นหา {searchTime}</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className={styles.qualificationCard}>
+                    <div className={styles.qualColumnMain}>
+                      <div className={styles.qualHeader}>
+                        <GraduationCap size={20} className={styles.qualIcon} />
+                        <span>คุณวุฒิและการอบรม</span>
+                      </div>
+                      <div className={styles.qualContent}>
+                        <Award size={18} className={styles.certIcon} />
+                        <span className={styles.certText}>
+                          <strong>ประกาศนียบัตร:</strong> -
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className={styles.qualDivider} />
+
+                    <div className={styles.qualColumnSub}>
+                      <div className={styles.qualHeader}>
+                        <Calendar size={18} className={styles.qualIcon} />
+                        <span>วันที่ได้รับ</span>
+                      </div>
+                      <div className={styles.qualSubValue}>-</div>
+                    </div>
+
+                    <div className={styles.qualDivider} />
+
+                    <div className={styles.qualColumnSub}>
+                      <div className={styles.qualHeader}>
+                        <Building2 size={18} className={styles.qualIcon} />
+                        <span>หน่วยงานที่จัด</span>
+                      </div>
+                      <div className={styles.qualSubValue}>-</div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+
+            {Math.ceil(searchResults.length / ITEMS_PER_PAGE) > 1 && (
+              <div className={pageStyles.paginationWrap}>
+                <MeetingPagination
+                  currentPage={currentPage}
+                  totalPages={Math.ceil(searchResults.length / ITEMS_PER_PAGE)}
+                  onPageChange={setCurrentPage}
+                />
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className={styles.emptyCard}>
+            <h4 className={styles.emptyTitle}>ไม่พบข้อมูลที่ค้นหา</h4>
+            <p className={styles.emptySubtitle}>
+              ไม่พบข้อมูลผู้ประกอบวิชาชีพเภสัชกรรมที่ตรงกับคำค้นหา
+            </p>
+            <button type="button" className={styles.resetButton} onClick={handleResetSearch}>
+              <RotateCcw size={16} />
+              <span>กลับหน้าแรกเพื่อค้นหาใหม่</span>
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default function LicenseSearchResults() {
+  return (
+    <Suspense
+      fallback={
+        <div className={pageStyles.loadingBox}>
+          <Loader2 size={28} className={styles.spinner} />
+          <span>กำลังโหลด...</span>
+        </div>
+      }
+    >
+      <LicenseSearchResultsInner />
+    </Suspense>
+  );
+}

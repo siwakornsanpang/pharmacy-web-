@@ -81,6 +81,12 @@
   margin-bottom: 1.5rem;
 }
 
+.highlightHeaderRight {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+}
+
 .highlightNav {
   display: flex;
   gap: 12px;

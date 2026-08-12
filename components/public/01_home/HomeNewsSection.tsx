@@ -76,13 +76,19 @@ export default function HomeNewsSection({ highlights, newsList }: HomeNewsSectio
         <div className={styles.highlightWrapper}>
           <div className={styles.highlightHeader}>
             <h2 className={styles.sectionTitle}>เรื่องเด่น</h2>
-            <div className={styles.highlightNav}>
-              <button onClick={handlePrev} className={styles.navButton} aria-label="Previous">
-                <ChevronLeft size={20} strokeWidth={2} />
-              </button>
-              <button onClick={handleNext} className={styles.navButton} aria-label="Next">
-                <ChevronRight size={20} strokeWidth={2} />
-              </button>
+            <div className={styles.highlightHeaderRight}>
+              <Link href="/news" className={styles.viewAll}>
+                ดูทั้งหมด
+                <ArrowRight size={18} strokeWidth={2} />
+              </Link>
+              <div className={styles.highlightNav}>
+                <button onClick={handlePrev} className={styles.navButton} aria-label="Previous">
+                  <ChevronLeft size={20} strokeWidth={2} />
+                </button>
+                <button onClick={handleNext} className={styles.navButton} aria-label="Next">
+                  <ChevronRight size={20} strokeWidth={2} />
+                </button>
+              </div>
             </div>
           </div>
 
@@ -146,7 +152,7 @@ export default function HomeNewsSection({ highlights, newsList }: HomeNewsSectio
 
           {newsList.length > 0 ? (
             <div className={styles.newsGrid}>
-              {newsList.slice(0, 3).map((news, i) => (
+              {newsList.slice(0, 6).map((news, i) => (
                 <Link href={`/news/${news.id}`} key={news.id} className={styles.newsCard} style={{ textDecoration: 'none' }}>
                   <div className={styles.newsImageWrapper}>
                     {news.thumbnailUrl ? (

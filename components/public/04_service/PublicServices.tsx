@@ -4,12 +4,48 @@ import { useAuth } from "@/context/AuthContext";
 import styles from "./PublicServices.module.css";
 
 const publicServices = [
-  { id: 4, img: "/images/public/service/service4.jpg", alt: "service4", href: "/service/people-project" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
-  { id: 5, img: "/images/public/service/service5.jpg", alt: "service5", href: "https://law.pharmacycouncil.org/" }, // 🛠️ แก้จาก herf เป็น href
-  { id: 6, img: "/images/public/service/service6.jpg", alt: "service6", href: "#" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
-  { id: 7, img: "/images/public/service/service7.jpg", alt: "service7", href: "/service/people-project" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
-  { id: 8, img: "/images/public/service/service8.jpg", alt: "service8", href: "https://law.pharmacycouncil.org/" }, // 🛠️ แก้จาก herf เป็น href
-  { id: 9, img: "/images/public/service/service9.jpg", alt: "service9", href: "#" }, // ใส่ลิงก์ปลายทางที่ต้องการ (ตอนนี้ใส่ # แทนไว้ก่อน)
+  {
+    id: 1,
+    img: "/images/public/service/service1.jpg",
+    title: "โครงการสำหรับประชาชน",
+    description: "กิจกรรมและบริการเพื่อสุขภาพ\nสำหรับทุกคน",
+    href: "/service/people-project",
+  },
+  {
+    id: 2,
+    img: "/images/public/service/service2.jpg",
+    title: "ร้องเรียนเภสัชกร",
+    description: "แจ้งปัญหาการให้บริการไม่เหมาะสม",
+    href: "https://law.pharmacycouncil.org/",
+  },
+  {
+    id: 3,
+    img: "/images/public/service/service3.jpg",
+    title: "แจ้งเบาะแสร้านยา",
+    description: "รายงานร้านยาที่ไม่อาจปฏิบัติตามมาตรฐาน",
+    href: "#",
+  },
+  {
+    id: 4,
+    img: "/images/public/service/service4.jpg",
+    title: "ตรวจสอบคำร้อง",
+    description: "ตรวจสอบคำร้องเรียน",
+    href: "/service/people-project",
+  },
+  {
+    id: 5,
+    img: "/images/public/service/service5.jpg",
+    title: "ร้านยาใกล้ฉัน",
+    description: "ค้นหาร้านยาใกล้คุณ",
+    href: "https://law.pharmacycouncil.org/",
+  },
+  {
+    id: 6,
+    img: "/images/public/service/service6.jpg",
+    title: "เภสัชกรออนไลน์",
+    description: "ปรึกษาเภสัชกรออนไลน์",
+    href: "#",
+  },
 ];
 
 export default function PublicServices() {
@@ -20,21 +56,30 @@ export default function PublicServices() {
   return (
     <section className={styles.section}>
       <div className={styles.sectionCon}>
-      <h2 className={`${styles.title} ThaiFont`}>บริการประชาชน</h2>
-      <div className={styles.cardGrid}>
-        {publicServices.map((service) => (
-          <a
-            href={service.href}
-            key={service.id}
-            className={styles.card}
-            // 💡 บรรทัดด้านล่างนี้: ถ้าลิงก์ไหนขึ้นต้นด้วย http จะให้เปิดแท็บใหม่ทันที ( target="_blank" )
-            target={service.href?.startsWith("http") ? "_blank" : "_self"}
-            rel="noopener noreferrer"
-          >
-            <img src={service.img} alt={service.alt} className={styles.serviceImage} />
-          </a>
-        ))}
-      </div>
+        <h2 className={`${styles.title} ThaiFont`}>บริการประชาชน</h2>
+        <div className={styles.cardGrid}>
+          {publicServices.map((service) => (
+            <a
+              href={service.href}
+              key={service.id}
+              className={styles.card}
+              target={service.href?.startsWith("http") ? "_blank" : "_self"}
+              rel="noopener noreferrer"
+            >
+              <img
+                src={service.img}
+                alt={service.title}
+                className={styles.serviceImage}
+              />
+              <div className={styles.cardOverlay}>
+                <h3 className={`${styles.cardTitle} ThaiFont`}>{service.title}</h3>
+                <p className={`${styles.cardDescription} ThaiFont`}>
+                  {service.description}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );

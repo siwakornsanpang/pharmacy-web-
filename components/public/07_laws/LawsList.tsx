@@ -77,9 +77,6 @@ export default function LawsList({
               </div>
               {group.items.map((law) => (
                 <div key={law.id} className={styles.item}>
-                  <span className={`${styles.orderBadge} ThaiFont`}>
-                    {law.order}
-                  </span>
                   {law.pdfUrl ? (
                     <a
                       href={law.pdfUrl}

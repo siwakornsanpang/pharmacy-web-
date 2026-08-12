@@ -48,7 +48,7 @@
 .layoutContainer {
     max-width: var(--max-width-2xl);
     width: 90%;
-    margin: 3rem auto 4rem;
+    margin: 1.25rem auto 3rem;
     display: flex;
     gap: 3rem;
     align-items: flex-start;

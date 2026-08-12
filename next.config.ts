@@ -53,6 +53,8 @@ const nextConfig: NextConfig = {
         { source: "/other-service/:path*", destination: "/08_other-service/:path*" },
         { source: "/contact", destination: "/09_contact" },
         { source: "/contact/:path*", destination: "/09_contact/:path*" },
+        { source: "/license-search", destination: "/10_license-search" },
+        { source: "/license-search/:path*", destination: "/10_license-search/:path*" },
 
         // Member Routes
         { source: "/member-home", destination: "/01_member-home" },

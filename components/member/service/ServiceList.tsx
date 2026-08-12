@@ -2,6 +2,7 @@ import styles from "./ServiceList.module.css";
 
 import Link from "next/link";
 import { ServiceItem } from "@/lib/api";
+import { resolveEServiceHref } from "@/components/public/04_service/e-service/eServiceConfig";
 
 interface ServiceListProps {
   services: ServiceItem[];
@@ -20,6 +21,8 @@ export default function ServiceList({ services }: ServiceListProps) {
       <h2 className={`${styles.title} ThaiFont`}>บริการเภสัชกร</h2>
       <div className={styles.serviceListGrid}>
         {regularServices.map((item) => {
+          const localHref = resolveEServiceHref(item.name, item.shortName);
+          const href = localHref || item.linkUrl || null;
           const content = (
             <>
               <div className={`${styles.serviceLabel} ThaiFont`}>
@@ -31,14 +34,14 @@ export default function ServiceList({ services }: ServiceListProps) {
             </>
           );
 
-          if (item.linkUrl) {
+          if (href) {
             return (
               <Link 
                 key={item.id} 
-                href={item.linkUrl}
+                href={href}
                 className={styles.serviceListItem}
-                target={item.linkUrl.startsWith('http') ? "_blank" : "_self"}
-                rel={item.linkUrl.startsWith('http') ? "noopener noreferrer" : undefined}
+                target={!localHref && href.startsWith('http') ? "_blank" : "_self"}
+                rel={!localHref && href.startsWith('http') ? "noopener noreferrer" : undefined}
                 style={{ textDecoration: 'none', color: 'inherit' }}
               >
                 {content}
