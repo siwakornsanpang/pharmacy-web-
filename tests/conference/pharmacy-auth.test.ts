@@ -10,6 +10,17 @@ describe("server-side Pharmacy authentication", () => {
     expect(identity && await mockPharmacyAdapter.verifyOtp(identity, "111222")).toBe(true);
   });
 
+  it("authenticates each five-digit mock pharmacist with unique identity data", async () => {
+    const licenses = ["ph123", "11111", "22222", "33333", "44444", "55555", "66666", "77777", "88888", "99999", "00000"];
+    const identities = await Promise.all(
+      licenses.map((license) => mockPharmacyAdapter.authenticate(license, "12345")),
+    );
+    expect(identities.every(Boolean)).toBe(true);
+    expect(new Set(identities.map((identity) => identity?.subject)).size).toBe(11);
+    expect(new Set(identities.map((identity) => identity?.email)).size).toBe(11);
+    expect(await mockPharmacyAdapter.authenticate("11111", "wrong")).toBeNull();
+  });
+
   it("uses an opaque revocable session id", async () => {
     const identity = await mockPharmacyAdapter.authenticate("ph123", "12345");
     expect(identity).not.toBeNull();
