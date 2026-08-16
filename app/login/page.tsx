@@ -3,8 +3,9 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { User, Lock, EyeOff, Globe, ChevronLeft } from "lucide-react";
+import { User, Lock, EyeOff, ChevronLeft } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { safeReturnTo } from "@/lib/navigation/safe-return-to";
 import styles from "./login.module.css";
 
 export default function LoginPage() {
@@ -15,20 +16,27 @@ export default function LoginPage() {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [loginError, setLoginError] = useState("");
   const [otpError, setOtpError] = useState("");
+  const [challengeId, setChallengeId] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const MOCK_ID = "ph123";
   const MOCK_PASSWORD = "12345";
   const MOCK_OTP = "111222";
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoginError("");
-
-    if (id === MOCK_ID && password === MOCK_PASSWORD) {
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/auth/pharmacy/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ license: id, password }) });
+      const payload = await response.json() as { challengeId?: string; title?: string };
+      if (!response.ok || !payload.challengeId) throw new Error(payload.title || "ไม่สามารถเข้าสู่ระบบได้");
+      setChallengeId(payload.challengeId);
+      setPassword("");
       setStep("otp");
-    } else {
-      setLoginError("เลขที่ใบอนุญาตหรือรหัสผ่านไม่ถูกต้อง กรุณาลองใหม่");
-    }
+    } catch (error) {
+      setLoginError(error instanceof Error ? error.message : "ไม่สามารถเข้าสู่ระบบได้");
+    } finally { setSubmitting(false); }
   };
 
   useEffect(() => {
@@ -41,15 +49,19 @@ export default function LoginPage() {
     }
   }, [step]);
 
-  const handleVerifyOtp = () => {
+  const handleVerifyOtp = async () => {
     const enteredOtp = otp.join("");
     setOtpError("");
-
-    if (enteredOtp === MOCK_OTP) {
-      auth.login();
-    } else {
-      setOtpError("รหัส OTP ไม่ถูกต้อง กรุณาตรวจสอบและระบุอีกครั้ง");
-    }
+    setSubmitting(true);
+    try {
+      const response = await fetch("/api/auth/pharmacy/login", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ challengeId, otp: enteredOtp }) });
+      const payload = await response.json() as { title?: string };
+      if (!response.ok) throw new Error(payload.title || "รหัส OTP ไม่ถูกต้อง");
+      if (!(await auth.refresh())) throw new Error("ไม่สามารถยืนยัน session ได้");
+      window.location.href = safeReturnTo(new URLSearchParams(window.location.search).get("returnTo"));
+    } catch (error) {
+      setOtpError(error instanceof Error ? error.message : "รหัส OTP ไม่ถูกต้อง กรุณาตรวจสอบและระบุอีกครั้ง");
+    } finally { setSubmitting(false); }
   };
 
   const handleOtpChange = (index: number, value: string) => {
@@ -156,7 +168,7 @@ export default function LoginPage() {
 
                   {loginError && <p className={styles.errorMessage}>{loginError}</p>}
 
-                  <button type="submit" className={styles.submitBtn}>
+                  <button type="submit" className={styles.submitBtn} disabled={submitting}>
                     เข้าสู่ระบบ
                   </button>
 
@@ -227,7 +239,7 @@ export default function LoginPage() {
 
                   {otpError && <p className={styles.otpErrorMessage}>{otpError}</p>}
 
-                  <button type="submit" className={styles.submitBtn}>
+                  <button type="submit" className={styles.submitBtn} disabled={submitting}>
                     ยืนยัน OTP
                   </button>
                 </form>
@@ -241,6 +253,7 @@ export default function LoginPage() {
                   onClick={() => {
                     setStep("login");
                     setOtpError("");
+                    setChallengeId("");
                     setOtp(["", "", "", "", "", ""]);
                   }}
                 >

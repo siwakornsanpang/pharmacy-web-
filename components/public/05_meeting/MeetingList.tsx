@@ -8,7 +8,7 @@ import { FaGraduationCap } from "react-icons/fa";
 import { HiOutlineLocationMarker, HiOutlineCalendar, HiOutlineUsers } from "react-icons/hi";
 
 export interface StaticMeeting {
-  id: number;
+  id: number | string;
   day: string;
   month: string;
   title: string;
