@@ -9,7 +9,8 @@ export function pharmacyAuthConfig() {
   const mode = process.env.PHARMACY_AUTH_MODE ?? "mock";
   const store = process.env.PHARMACY_SESSION_STORE ?? "memory";
   const ttl = Number(process.env.PHARMACY_SESSION_TTL_SECONDS ?? 7 * 24 * 60 * 60);
-  if (process.env.NODE_ENV === "production" && (mode === "mock" || store === "memory")) {
+  const pocMode = process.env.PHARMACY_POC_MODE === "true";
+  if (process.env.NODE_ENV === "production" && !pocMode && (mode === "mock" || store === "memory")) {
     throw new Error("Production requires a real Pharmacy auth adapter and durable session store");
   }
   if (mode !== "mock" || store !== "memory" || !Number.isInteger(ttl) || ttl < 300 || ttl > 30 * 24 * 60 * 60) {

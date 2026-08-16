@@ -185,7 +185,7 @@
     100% { left: 100%; }
 }
 
-tr:hover td {
+.policyContainer :global(tr:hover td) {
     background-color: #fcfdfd;
 }
 

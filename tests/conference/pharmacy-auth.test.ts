@@ -1,6 +1,9 @@
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { mockPharmacyAdapter } from "@/lib/server/pharmacy-auth/mock-adapter";
+import { pharmacyAuthConfig } from "@/lib/server/pharmacy-auth/session";
 import { createSession, getSession, revokeSession } from "@/lib/server/pharmacy-auth/session-store";
+
+afterEach(() => vi.unstubAllEnvs());
 
 describe("server-side Pharmacy authentication", () => {
   it("keeps demo credential and OTP verification out of the browser auth state", async () => {
@@ -29,5 +32,14 @@ describe("server-side Pharmacy authentication", () => {
     expect(getSession(id)?.pharmacistLicense).toBe("ภ12345");
     revokeSession(id);
     expect(getSession(id)).toBeNull();
+  });
+
+  it("allows mock authentication only when POC mode is explicit", () => {
+    vi.stubEnv("NODE_ENV", "production");
+    vi.stubEnv("PHARMACY_AUTH_MODE", "mock");
+    vi.stubEnv("PHARMACY_SESSION_STORE", "memory");
+    vi.stubEnv("PHARMACY_POC_MODE", "true");
+
+    expect(pharmacyAuthConfig().ttlSeconds).toBe(7 * 24 * 60 * 60);
   });
 });
