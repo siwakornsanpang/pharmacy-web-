@@ -7,8 +7,8 @@ import styles from "./RecommendedMeeting.module.css";
 import { FaGraduationCap } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface RecommendedMeetingItem {
-  id: number;
+export interface RecommendedMeetingItem {
+  id: number | string;
   title: string;
   location: string;
   date: string;
@@ -17,49 +17,20 @@ interface RecommendedMeetingItem {
   cpe?: string;
 }
 
-const recommendedMeetings: RecommendedMeetingItem[] = [
-  {
-    id: 1,
-    title: "สภาเภสัชกรรมเปิดอบรมหลักสูตรอบรมระยะสั้นการบริบาลทางเภสัชกรรม (สาขาปฐมภูมิ) รุ่นที่ 5",
-    location: "ห้อง Sapphire 204-206 ศูนย์การประชุม อิมแพ็ค ฟอรั่ม เมืองทองธานี จังหวัดนนทบุรี",
-    date: "02 พ.ค. 2569 - 13 ก.ย. 2569",
-    count: "62/100 คน",
-    image: "/images/public/meeting/meeting1.jpg",
-    cpe: "10.0"
-  },
-  {
-    id: 2,
-    title: "Pharmacy Research and Innovation Summit 2025: (PRIS2025) Synergizing for the better future",
-    location: "ห้อง Sapphire 204-206 ศูนย์การประชุม อิมแพ็ค ฟอรั่ม เมืองทองธานี จังหวัดนนทบุรี",
-    date: "02 พ.ค. 2569 - 13 ก.ย. 2569",
-    count: "45/100 คน",
-    image: "/images/public/meeting/meeting2.jpg",
-    cpe: "5.5"
-  },
-  {
-    id: 3,
-    title: "การฝึกอบรม ประกาศนียบัตรวิชาชีพเภสัชกรรม (สาขาบริหารจัดการผลิตภัณฑ์สมุนไพร) รุ่นที่ 3",
-    location: "ห้อง Sapphire 204-206 ศูนย์การประชุม อิมแพ็ค ฟอรั่ม เมืองทองธานี จังหวัดนนทบุรี",
-    date: "02 พ.ค. 2569 - 13 ก.ย. 2569",
-    count: "100/100 (เต็ม)",
-    image: "/images/public/meeting/meeting3.jpg",
-    cpe: "3.0"
-  }
-];
-
-export default function RecommendedMeeting() {
+export default function RecommendedMeeting({ meetings }: { meetings?: RecommendedMeetingItem[] }) {
+  const recommendedMeetings = meetings ?? [];
   const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
   useEffect(() => {
-    if (isHovered) return;
+    if (isHovered || recommendedMeetings.length <= 1) return;
     const timer = setInterval(() => {
       setActiveIndex((prev) => (prev === recommendedMeetings.length - 1 ? 0 : prev + 1));
     }, 5000); // auto slide every 5 seconds
 
     return () => clearInterval(timer);
-  }, [isHovered]);
+  }, [isHovered, recommendedMeetings.length]);
 
   const handlePrev = () => {
     setActiveIndex((prev) => (prev === 0 ? recommendedMeetings.length - 1 : prev - 1));
@@ -70,6 +41,7 @@ export default function RecommendedMeeting() {
   };
 
   const current = recommendedMeetings[activeIndex];
+  if (!current) return null;
   const isFull = current.count.includes("เต็ม");
 
   return (
