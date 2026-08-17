@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { mockPharmacyAdapter } from "@/lib/server/pharmacy-auth/mock-adapter";
 import { pharmacyAuthConfig } from "@/lib/server/pharmacy-auth/session";
-import { createSession, getSession, revokeSession } from "@/lib/server/pharmacy-auth/session-store";
+import { consumeChallenge, createChallenge, createSession, getSession } from "@/lib/server/pharmacy-auth/session-store";
 
 afterEach(() => vi.unstubAllEnvs());
 
@@ -24,14 +24,14 @@ describe("server-side Pharmacy authentication", () => {
     expect(await mockPharmacyAdapter.authenticate("11111", "wrong")).toBeNull();
   });
 
-  it("uses an opaque revocable session id", async () => {
+  it("uses an encrypted stateless session token", async () => {
     const identity = await mockPharmacyAdapter.authenticate("ph123", "12345");
     expect(identity).not.toBeNull();
     const id = createSession(identity!, 300);
     expect(id).not.toContain("ph123");
     expect(getSession(id)?.pharmacistLicense).toBe("ภ12345");
-    revokeSession(id);
-    expect(getSession(id)).toBeNull();
+    expect(getSession(`${id}tampered`)).toBeNull();
+    expect(consumeChallenge(createChallenge(identity!))?.subject).toBe(identity!.subject);
   });
 
   it("allows mock authentication only when POC mode is explicit", () => {
