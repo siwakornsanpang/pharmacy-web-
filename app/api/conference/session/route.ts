@@ -26,7 +26,12 @@ export async function POST(request: NextRequest) {
   try {
     const base = conferenceUrl();
     const existing = await fetch(`${base}/api/v1/me`, { headers: { cookie: conferenceCookie(request.headers.get("cookie")), accept: "application/json" }, cache: "no-store" });
-    if (existing.ok) return NextResponse.json({ established: true, exchanged: false });
+    if (existing.ok) {
+      try {
+        const profile = await existing.json() as { pharmacistLicense?: string | null };
+        if (profile.pharmacistLicense === identity.pharmacistLicense) return NextResponse.json({ established: true, exchanged: false });
+      } catch { /* exchange when the existing profile cannot be read */ }
+    }
 
     const exchange = await fetch(`${base}/api/v1/auth/pharmacy/exchange`, {
       method: "POST",

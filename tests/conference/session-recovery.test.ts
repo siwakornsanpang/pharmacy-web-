@@ -1,14 +1,17 @@
 // @vitest-environment node
 import { NextRequest } from "next/server";
-import { describe, expect, it } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { GET as getPharmacyMe } from "@/app/api/auth/pharmacy/me/route";
 import { POST as establishConferenceSession } from "@/app/api/conference/session/route";
 import { shouldReloadForStaleSession } from "@/lib/conference/session-recovery";
 import { createSession } from "@/lib/server/pharmacy-auth/session-store";
 
-const request = (path: string, sessionId?: string) => new NextRequest(`http://localhost${path}`, {
-  headers: sessionId ? { cookie: `pharmacy_session=${sessionId}` } : undefined,
-});
+const request = (path: string, sessionId?: string, conferenceCookies?: string) => {
+  const cookie = [`pharmacy_session=${sessionId ?? ""}`, conferenceCookies ?? ""].filter(Boolean).join("; ");
+  return new NextRequest(`http://localhost${path}`, { headers: cookie ? { cookie } : undefined });
+};
+
+afterEach(() => vi.unstubAllGlobals());
 
 describe("stale Pharmacy session recovery", () => {
   it("does not clear or reload when no Pharmacy cookie was sent", async () => {
@@ -36,6 +39,21 @@ describe("stale Pharmacy session recovery", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toMatchObject({ user: { pharmacistLicense: "ภ999" } });
     expect(response.headers.get("set-cookie")).toBeNull();
+  });
+
+  it("re-exchanges when the existing Conference session belongs to another account", async () => {
+    const sessionId = createSession({ provider: "pharmacy-council", subject: "new-user", pharmacistLicense: "ภ111", firstName: "บัญชีใหม่", lastName: "ทดสอบ", email: null, phone: null }, 300);
+    const fetchMock = vi.fn()
+      .mockResolvedValueOnce(new Response(JSON.stringify({ pharmacistLicense: "99999" }), { status: 200 }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ established: true, exchanged: true }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await establishConferenceSession(request("/api/conference/session", sessionId, "conference_attendee_session=old; conference_csrf=csrf"));
+
+    expect(response.status).toBe(200);
+    expect(await response.json()).toMatchObject({ exchanged: true });
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(fetchMock.mock.calls[1]?.[0]).toContain("/api/v1/auth/pharmacy/exchange");
   });
 
   it("also clears stale Pharmacy state before Conference exchange", async () => {
