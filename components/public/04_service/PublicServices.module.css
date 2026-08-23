@@ -21,17 +21,17 @@
 .cardGrid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
+    gap: 18px;
     align-items: start;
 }
 
 .card {
     position: relative;
     display: block;
-    border-radius: 20px;
+    border-radius: 18px;
     overflow: hidden;
     transition: 0.3s;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 16 / 10;
     background: #f4f4ea;
 }
 
@@ -49,7 +49,7 @@
 .cardOverlay {
     position: absolute;
     inset: 0;
-    padding: 1.35rem 1.4rem;
+    padding: 1.1rem 1.2rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -66,7 +66,7 @@
 .cardTitle {
     margin: 0;
     color: #ffffff;
-    font-size: clamp(1.35rem, 2.2vw, 1.85rem);
+    font-size: clamp(1.15rem, 1.8vw, 1.55rem);
     font-weight: 800;
     line-height: 1.25;
     letter-spacing: 0.01em;
@@ -74,11 +74,11 @@
 }
 
 .cardDescription {
-    margin: 0.45rem 0 0;
+    margin: 0.35rem 0 0;
     color: #ffffff;
-    font-size: clamp(0.95rem, 1.35vw, 1.15rem);
+    font-size: clamp(0.85rem, 1.15vw, 1rem);
     font-weight: 500;
-    line-height: 1.45;
+    line-height: 1.4;
     white-space: pre-line;
     text-shadow: 0 1px 8px rgba(0, 0, 0, 0.25);
     max-width: 92%;
