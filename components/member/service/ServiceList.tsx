@@ -22,15 +22,11 @@ export default function ServiceList({ services }: ServiceListProps) {
         {regularServices.map((item) => {
           const localHref = resolveEServiceHref(item.name, item.shortName);
           const href = localHref || item.linkUrl || null;
+          const label = (item.shortName || item.name || "").trim();
           const content = (
-            <>
-              <div className={`${styles.serviceLabel} ThaiFont`}>
-                {item.shortName}
-              </div>
-              <div className={`${styles.serviceDesc} ThaiFont`}>
-                {item.description}
-              </div>
-            </>
+            <div className={`${styles.serviceLabel} ThaiFont`} title={label}>
+              {label}
+            </div>
           );
 
           if (href) {
