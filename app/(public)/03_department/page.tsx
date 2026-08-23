@@ -21,6 +21,10 @@ export default async function DepartmentPage() {
         .filter(a => a.category === "college")
         .sort((a, b) => a.order - b.order);
 
+    const sampleDataAgencies = agencies
+        .filter(a => a.category === "sample_data")
+        .sort((a, b) => a.order - b.order);
+
     const networkAgencies = agencies
         .filter(a => a.category === "professional_network")
         .sort((a, b) => a.order - b.order);
@@ -60,6 +64,12 @@ export default async function DepartmentPage() {
             <DepartmentColleges
                 title="วิทยาลัยสภาเภสัชกรรมแห่งประเทศไทย"
                 agencies={collegeAgencies}
+            />
+
+            {/* ข้อมูลตัวอย่าง — layout แบบหน่วยงานในกำกับ */}
+            <DepartmentAgencies
+                title="ข้อมูลตัวอย่าง"
+                agencies={sampleDataAgencies}
             />
 
             {/* เครือข่ายวิชาชีพ */}

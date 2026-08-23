@@ -8,6 +8,7 @@ interface DepartmentStatsProps {
 const CATEGORY_LABELS: Record<string, string> = {
   supervised: "หน่วยงานในกำกับ",
   college: "วิทยาลัย",
+  sample_data: "ข้อมูลตัวอย่าง",
   professional_network: "เครือข่ายวิชาชีพ",
   institution: "สถาบันการศึกษา",
   other: "หน่วยงานอื่น ๆ",
@@ -20,10 +21,11 @@ export default function DepartmentStats({ agencies }: DepartmentStatsProps) {
     counts[agency.category] = (counts[agency.category] || 0) + 1;
   }
 
-  // Order: supervised, college, professional_network, institution, other
+  // Order: supervised, college, sample_data, then the rest
   const orderedCategories = [
     "supervised",
     "college",
+    "sample_data",
     "professional_network",
     "institution",
     "other",
