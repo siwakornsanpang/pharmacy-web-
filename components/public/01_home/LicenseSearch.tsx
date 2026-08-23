@@ -8,6 +8,7 @@ import {
   SearchType,
   searchOptions,
   buildLicenseSearchPath,
+  normalizeLicenseDigits,
 } from "./licenseSearchShared";
 
 export default function LicenseSearch() {
@@ -105,10 +106,13 @@ export default function LicenseSearch() {
               <Search size={18} className={styles.inputIcon} />
               <input
                 type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="off"
                 className={styles.input}
                 placeholder={selectedOption.label}
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => setQuery(normalizeLicenseDigits(e.target.value))}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>

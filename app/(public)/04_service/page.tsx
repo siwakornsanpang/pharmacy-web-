@@ -17,7 +17,11 @@ export default async function ServicesPage() {
         <div className={styles.pageWrapper}>
             <ServiceBanner />
             <PublicServices />
-            <PopularServices services={popularServices} />
+            <PopularServices
+                services={popularServices}
+                viewAllHref="/service/e-service/sap-33/history"
+                viewAllText="ประวัติการยื่นคำขอ"
+            />
             <ServiceList services={services} />
         </div>
     );

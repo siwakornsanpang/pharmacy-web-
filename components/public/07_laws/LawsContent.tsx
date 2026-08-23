@@ -10,8 +10,8 @@ import styles from "@/app/(public)/07_laws/laws.module.css";
 const CATEGORIES = [
   { key: "law1", label: "พระราชบัญญัติวิชาชีพเภสัชกรรม" },
   { key: "law2", label: "ข้อบังคับสภาเภสัชกรรม" },
-  { key: "law3", label: "ประกาศสภาเภสัชกรรม" },
   { key: "law4", label: "กฎกระทรวง" },
+  { key: "law3", label: "ประกาศสภาเภสัชกรรม" },
   { key: "law5", label: "กฎหมายอื่นที่เกี่ยวข้อง" },
   { key: "law6", label: "คำสั่งสภาเภสัชกรรม" },
   { key: "law7", label: "ระเบียบสภาเภสัชกรรม" },

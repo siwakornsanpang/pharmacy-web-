@@ -1,6 +1,10 @@
 .pageWrapper {
-  min-height: 100vh;
+  flex: 1 0 auto;
+  width: 100%;
+  min-height: 100%;
   background: #ffffff;
+  display: flex;
+  flex-direction: column;
 }
 
 .banner {
@@ -51,7 +55,9 @@
 .container {
   width: 90%;
   max-width: var(--max-width-xl, 1200px);
-  margin: 2rem auto 4rem;
+  margin: 2rem auto 0;
+  padding-bottom: 3rem;
+  flex: 1 0 auto;
 }
 
 .pageInner {

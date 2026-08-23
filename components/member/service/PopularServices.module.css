@@ -1,7 +1,7 @@
 .section {
 
     margin: auto;
-    padding: 40px 20px;
+    padding: 40px 20px 8px;
     background: #ffffff;
 }
 
@@ -23,7 +23,7 @@
     grid-template-columns: repeat(4, 1fr);
     gap: 24px;
     align-items: stretch;
-    margin-top: 40px;
+    margin-top: 0;
 }
 
 .popularCard {

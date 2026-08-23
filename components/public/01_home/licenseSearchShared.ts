@@ -4,14 +4,15 @@ export interface PharmacistData {
   name: string;
   licenseNo: string;
   status: string;
-  statusType: "normal" | "suspended" | "expired";
+  statusType: "normal" | "suspended" | "cpe_incomplete";
+  /** Months of suspension — used when statusType is suspended */
+  suspensionMonths?: number;
   expiryDate?: string;
   replacementInfo?: string;
   image?: string | null;
   qualification?: {
     type: string;
     courseName: string;
-    receivedDate: string;
     organization: string;
   };
 }
@@ -23,45 +24,69 @@ export const searchOptions = [
 
 export type SearchType = "license" | "name";
 
+/** Keep only digits for license-number search (e.g. "ภ. 13476" → "13476"). */
+export function normalizeLicenseDigits(value: string): string {
+  return value.replace(/[^0-9]/g, "");
+}
+
+/** Strip common pharmacist/person titles so users can search by name only. */
+export function stripNameTitles(value: string): string {
+  return value
+    .replace(/(ภญ\.|ภก\.|ภ\.|ดร\.|นาย|นางสาว|นาง)\s*/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+/** Mock examples covering all 3 license statuses. */
 export const mockPharmacistsList: PharmacistData[] = [
   {
-    id: "13476",
-    title: "ภญ.",
-    name: "วิราภรณ์ วงศ์ประเสริฐ",
-    licenseNo: "ภ. 13476",
+    id: "11111",
+    title: "ภก.",
+    name: "สมชาย ใจดีภักดี",
+    licenseNo: "ภ. 11111",
     status: "ปกติ",
     statusType: "normal",
-    expiryDate: "25 พฤษภาคม 2567",
+    expiryDate: "15 สิงหาคม 2569",
     replacementInfo: "(ไม่เคยขอใบแทน)",
     image: "/images/public/pharmacist-sample.png",
     qualification: {
       type: "ประกาศนียบัตร",
       courseName: 'การอบรมเชิงปฏิบัติการ "การสร้างเสริมภูมิคุ้มกันโรคโดยเภสัชกร"',
-      receivedDate: "12 มกราคม 2565",
       organization: "สภาเภสัชกรรม",
     },
   },
   {
-    id: "30123",
-    title: "ภก.",
-    name: "สมชาย ใจดีภักดี",
-    licenseNo: "ภ. 30123",
-    status: "ปกติ",
-    statusType: "normal",
-    expiryDate: "15 สิงหาคม 2568",
-    replacementInfo: "(ไม่เคยขอใบแทน)",
-    image: null,
-  },
-  {
-    id: "30456",
+    id: "22222",
     title: "ภญ.",
-    name: "สุนิสา วงศ์สว่าง",
-    licenseNo: "ภ. 30456",
+    name: "วิราภรณ์ วงศ์ประเสริฐ",
+    licenseNo: "ภ. 22222",
     status: "พักใช้ใบอนุญาต",
     statusType: "suspended",
+    suspensionMonths: 3,
     expiryDate: "10 มีนาคม 2569",
     replacementInfo: "(ไม่เคยขอใบแทน)",
     image: null,
+    qualification: {
+      type: "ประกาศนียบัตร",
+      courseName: "-",
+      organization: "สภาเภสัชกรรม",
+    },
+  },
+  {
+    id: "33333",
+    title: "ภญ.",
+    name: "สุนิสา วงศ์สว่าง",
+    licenseNo: "ภ. 33333",
+    status: "CPE ไม่ครบ",
+    statusType: "cpe_incomplete",
+    expiryDate: "25 พฤษภาคม 2568",
+    replacementInfo: "(ไม่เคยขอใบแทน)",
+    image: null,
+    qualification: {
+      type: "ประกาศนียบัตร",
+      courseName: "-",
+      organization: "-",
+    },
   },
 ];
 
@@ -98,12 +123,12 @@ export function buildLicenseSearchPath(params: {
   searchParams.set("type", params.type);
 
   if (params.type === "license") {
-    const q = (params.query || "").trim();
+    const q = normalizeLicenseDigits(params.query || "");
     if (!q) return null;
     searchParams.set("q", q);
   } else {
-    const first = (params.firstName || "").trim();
-    const last = (params.lastName || "").trim();
+    const first = stripNameTitles(params.firstName || "");
+    const last = stripNameTitles(params.lastName || "");
     if (!first && !last) return null;
     if (first) searchParams.set("first", first);
     if (last) searchParams.set("last", last);

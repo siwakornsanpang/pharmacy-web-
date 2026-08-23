@@ -1,20 +1,32 @@
 import Link from "next/link";
 import styles from "./PopularServices.module.css";
+import SectionHeader from "@/components/ui/SectionHeader";
 
 import { ServiceItem } from "@/lib/api";
 import { resolveEServiceHref } from "@/components/public/04_service/e-service/eServiceConfig";
 
 interface PopularServicesProps {
   services: ServiceItem[];
+  /** Defaults to homepage "ดูทั้งหมด" → /service */
+  viewAllHref?: string;
+  viewAllText?: string;
 }
 
-export default function PopularServices({ services }: PopularServicesProps) {
+export default function PopularServices({
+  services,
+  viewAllHref = "/service",
+  viewAllText = "ดูทั้งหมด",
+}: PopularServicesProps) {
   if (!services || services.length === 0) return null;
 
   return (
     <section className={styles.section}>
       <div className={styles.sectionCon}>
-        <h2 className={`${styles.title} ThaiFont`}>บริการเภสัชกร</h2>
+        <SectionHeader
+          title="บริการเภสัชกร"
+          viewAllHref={viewAllHref}
+          viewAllText={viewAllText}
+        />
         <div className={styles.popularGrid}>
           {services.map((service) => {
             const localHref = resolveEServiceHref(service.name, service.shortName);

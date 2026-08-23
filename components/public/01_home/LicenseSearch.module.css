@@ -326,6 +326,14 @@
   font-weight: 600;
 }
 
+.statusCpe {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  color: #B91C1C;
+  font-weight: 600;
+}
+
 .statusInactive {
   display: flex;
   align-items: center;
@@ -345,6 +353,11 @@
 }
 
 .statusIconExpired {
+  color: #B91C1C;
+  flex-shrink: 0;
+}
+
+.statusIconCpe {
   color: #B91C1C;
   flex-shrink: 0;
 }

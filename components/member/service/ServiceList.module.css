@@ -1,7 +1,7 @@
 .section {
     background: #ffffff;
     margin: auto;
-    padding: 40px 20px;
+    padding: 0 20px 40px;
     overflow: hidden;
 }
 
@@ -9,7 +9,7 @@
     max-width: var(--max-width-2xl);
     width: 90%;
     margin: auto;
-    padding:20px;
+    padding: 0 20px 20px;
 }
 
 .title {
@@ -22,7 +22,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
-    margin-top: 30px;
+    margin-top: 24px;
 }
 
 .serviceListItem {

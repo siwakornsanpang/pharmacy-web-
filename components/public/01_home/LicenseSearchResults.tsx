@@ -11,17 +11,15 @@ import {
   ListFilter,
   CheckCircle2,
   Ban,
-  CalendarX2,
+  AlertTriangle,
   GraduationCap,
   Award,
-  Calendar,
   Building2,
   Info,
   RotateCcw,
   User,
   Loader2,
 } from "lucide-react";
-import { searchPharmacists, PharmacistApiItem } from "@/lib/api";
 import MeetingPagination from "@/components/public/05_meeting/MeetingPagination";
 import styles from "./LicenseSearch.module.css";
 import pageStyles from "./LicenseSearchResults.module.css";
@@ -32,13 +30,11 @@ import {
   mockPharmacistsList,
   getFormattedThaiDateTime,
   buildLicenseSearchPath,
+  normalizeLicenseDigits,
+  stripNameTitles,
 } from "./licenseSearchShared";
 
 const ITEMS_PER_PAGE = 5;
-
-function normalizeLicenseDigits(value: string) {
-  return value.replace(/[^0-9]/g, "");
-}
 
 function isExactLicenseMatch(licenseValue: string, searchTerm: string) {
   const licenseDigits = normalizeLicenseDigits(licenseValue);
@@ -47,70 +43,28 @@ function isExactLicenseMatch(licenseValue: string, searchTerm: string) {
   return licenseDigits === searchDigits;
 }
 
+function matchesName(itemName: string, searchTerm: string) {
+  const searchWords = stripNameTitles(searchTerm)
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
+  if (!searchWords.length) return false;
+  const cleanName = stripNameTitles(itemName).toLowerCase();
+  return searchWords.every((word) => cleanName.includes(word));
+}
+
 async function fetchPharmacistResults(
   searchType: SearchType,
   searchTerm: string
 ): Promise<PharmacistData[]> {
-  try {
-    const apiResults: PharmacistApiItem[] | null = await searchPharmacists(searchTerm);
-
-    if (apiResults !== null) {
-      const filteredApiResults = apiResults.filter((item) => {
-        if (searchType === "license") {
-          return isExactLicenseMatch(item.registrationId, searchTerm);
-        }
-        const searchWords = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
-        const itemName = item.name.toLowerCase();
-        return searchWords.every((word) => itemName.includes(word));
-      });
-
-      return filteredApiResults.map((item, idx) => {
-        const regId = item.registrationId.startsWith("ภ.")
-          ? item.registrationId
-          : `ภ. ${item.registrationId}`;
-
-        let statusText = item.status || "ปกติ";
-        const rawStatus = statusText.replace(/^สถานะใบอนุญาต:\s*/i, "").trim();
-
-        const isSuspended =
-          rawStatus.includes("พักใช้") ||
-          rawStatus.includes("ไม่ใช้งาน") ||
-          rawStatus.includes("เพิกถอน");
-        const isExpired = rawStatus.includes("หมดอายุ");
-
-        let statusType: PharmacistData["statusType"] = "normal";
-        if (isSuspended) statusType = "suspended";
-        else if (isExpired) statusType = "expired";
-
-        return {
-          id: item.id || idx,
-          title: "",
-          name: item.name,
-          licenseNo: regId,
-          status: rawStatus || "ปกติ",
-          statusType,
-          expiryDate: item.expiryDate || undefined,
-          replacementInfo: "(ไม่เคยขอใบแทน)",
-          image: item.imageUrl || null,
-        };
-      });
-    }
-
-    if (searchType === "license") {
-      return mockPharmacistsList.filter((item) =>
-        isExactLicenseMatch(item.licenseNo, searchTerm)
-      );
-    }
-
-    const words = searchTerm.toLowerCase().split(/\s+/).filter(Boolean);
-    return mockPharmacistsList.filter((item) => {
-      const cleanName = item.name.toLowerCase();
-      return words.every((word) => cleanName.includes(word));
-    });
-  } catch (err) {
-    console.error("Search error:", err);
-    return [];
+  // Mock-first while status UX is still demo data
+  if (searchType === "license") {
+    return mockPharmacistsList.filter((item) =>
+      isExactLicenseMatch(item.licenseNo, searchTerm)
+    );
   }
+
+  return mockPharmacistsList.filter((item) => matchesName(item.name, searchTerm));
 }
 
 function LicenseSearchResultsInner() {
@@ -118,9 +72,12 @@ function LicenseSearchResultsInner() {
   const searchParams = useSearchParams();
 
   const initialType = (searchParams.get("type") === "name" ? "name" : "license") as SearchType;
-  const initialQuery = searchParams.get("q") || "";
-  const initialFirst = searchParams.get("first") || "";
-  const initialLast = searchParams.get("last") || "";
+  const initialQuery =
+    initialType === "license"
+      ? normalizeLicenseDigits(searchParams.get("q") || "")
+      : searchParams.get("q") || "";
+  const initialFirst = stripNameTitles(searchParams.get("first") || "");
+  const initialLast = stripNameTitles(searchParams.get("last") || "");
 
   const [searchType, setSearchType] = useState<SearchType>(initialType);
   const [query, setQuery] = useState(initialQuery);
@@ -188,16 +145,21 @@ function LicenseSearchResultsInner() {
 
   const getStatusDisplay = (item: PharmacistData) => {
     const raw = (item.status || "").replace(/^สถานะใบอนุญาต:\s*/i, "").trim();
-    const lower = raw.toLowerCase();
 
     if (
       item.statusType === "suspended" ||
-      raw.includes("พักใช้") ||
-      raw.includes("ไม่ใช้งาน") ||
-      raw.includes("เพิกถอน")
+      raw.includes("พักใช้")
     ) {
+      const months =
+        item.suspensionMonths ??
+        (() => {
+          const match = raw.match(/(\d+)\s*เดือน/);
+          return match ? Number(match[1]) : undefined;
+        })();
       return {
-        label: "พักใช้ใบอนุญาต",
+        label: months
+          ? `พักใช้ใบอนุญาต ${months} เดือน`
+          : "พักใช้ใบอนุญาต",
         className: styles.statusSuspended,
         iconClassName: styles.statusIconSuspended,
         Icon: Ban,
@@ -205,19 +167,17 @@ function LicenseSearchResultsInner() {
     }
 
     if (
-      item.statusType === "expired" ||
-      raw.includes("หมดอายุ") ||
-      lower.includes("expired")
+      item.statusType === "cpe_incomplete" ||
+      /cpe\s*ไม่ครบ/i.test(raw)
     ) {
       return {
-        label: "ใบอนุญาตหมดอายุ",
-        className: styles.statusExpired,
-        iconClassName: styles.statusIconExpired,
-        Icon: CalendarX2,
+        label: "CPE ไม่ครบ",
+        className: styles.statusCpe,
+        iconClassName: styles.statusIconCpe,
+        Icon: AlertTriangle,
       };
     }
 
-    // "ใช้งาน" / "ปกติ" / อื่นๆ ที่ไม่ใช่สถานะผิดปกติ
     return {
       label: "ปกติ",
       className: styles.statusNormal,
@@ -305,10 +265,13 @@ function LicenseSearchResultsInner() {
               <Search size={18} className={styles.inputIcon} />
               <input
                 type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
+                autoComplete="off"
                 className={styles.input}
                 placeholder={selectedOption.label}
                 value={query}
-                onChange={(e) => setQuery(e.target.value)}
+                onChange={(e) => setQuery(normalizeLicenseDigits(e.target.value))}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
               />
             </div>
@@ -423,19 +386,10 @@ function LicenseSearchResultsInner() {
                       <div className={styles.qualContent}>
                         <Award size={18} className={styles.certIcon} />
                         <span className={styles.certText}>
-                          <strong>ประกาศนียบัตร:</strong> -
+                          <strong>ประกาศนียบัตร:</strong>{" "}
+                          {item.qualification?.courseName || "-"}
                         </span>
                       </div>
-                    </div>
-
-                    <div className={styles.qualDivider} />
-
-                    <div className={styles.qualColumnSub}>
-                      <div className={styles.qualHeader}>
-                        <Calendar size={18} className={styles.qualIcon} />
-                        <span>วันที่ได้รับ</span>
-                      </div>
-                      <div className={styles.qualSubValue}>-</div>
                     </div>
 
                     <div className={styles.qualDivider} />
@@ -445,7 +399,9 @@ function LicenseSearchResultsInner() {
                         <Building2 size={18} className={styles.qualIcon} />
                         <span>หน่วยงานที่จัด</span>
                       </div>
-                      <div className={styles.qualSubValue}>-</div>
+                      <div className={styles.qualSubValue}>
+                        {item.qualification?.organization || "-"}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -22,7 +22,7 @@ const navLinks: NavLink[] = [
     { name: "งานประชุม", href: "/meeting" },
     { name: "ข่าวสาร", href: "/news" },
     { name: "กฎหมาย", href: "/laws" },
-    { name: "บริการอื่นๆ", href: "/other-service" },
+    { name: "ดาวน์โหลด", href: "/other-service" },
     { name: "ติดต่อ", href: "/contact" },
 ];
 

@@ -18,7 +18,6 @@ export default function ServiceList({ services }: ServiceListProps) {
   return (
     <section className={styles.section}>
       <div className={styles.sectionCon}>
-      <h2 className={`${styles.title} ThaiFont`}>บริการเภสัชกร</h2>
       <div className={styles.serviceListGrid}>
         {regularServices.map((item) => {
           const localHref = resolveEServiceHref(item.name, item.shortName);
