@@ -23,7 +23,7 @@ export default function PopularServices({
     <section className={styles.section}>
       <div className={styles.sectionCon}>
         <SectionHeader
-          title="บริการเภสัชกร"
+          title="E-service"
           viewAllHref={viewAllHref}
           viewAllText={viewAllText}
         />
