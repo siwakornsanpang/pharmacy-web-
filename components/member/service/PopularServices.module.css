@@ -20,10 +20,29 @@
 
 .popularGrid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
     gap: 24px;
     align-items: stretch;
     margin-top: 0;
+    width: 100%;
+}
+
+/* Adapt columns to how many popular services are shown */
+.count1 {
+    grid-template-columns: minmax(0, 1fr);
+    max-width: 280px;
+    margin-inline: auto;
+}
+
+.count2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.count3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.count4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .popularCard {
@@ -90,15 +109,21 @@
 }
 
 @media (max-width: 1024px) {
-    .popularGrid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 20px;
+    .count3,
+    .count4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .count1 {
+        max-width: none;
     }
 }
 
 @media (max-width: 768px) {
-    .popularGrid {
-        grid-template-columns: repeat(2, 1fr);
+    .count2,
+    .count3,
+    .count4 {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
         gap: 16px;
     }
 
@@ -117,8 +142,12 @@
 }
 
 @media (max-width: 600px) {
-    .popularGrid {
+    .count1,
+    .count2,
+    .count3,
+    .count4 {
         grid-template-columns: 1fr;
+        max-width: none;
         gap: 16px;
     }
 

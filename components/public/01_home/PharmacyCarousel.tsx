@@ -95,7 +95,7 @@ export default function PharmacyCarousel() {
       <Container size="2xl" className={styles.sectionInner}>
         {/* Header */}
         <div className={styles.headerGroup}>
-          <h2 className={styles.sectionTitle}>6 สายงานวิชาชีพเภสัชกร</h2>
+          <h2 className={styles.sectionTitle}>สายงานวิชาชีพเภสัชกร</h2>
           <p className={styles.sectionSubtitle}>
             วิชาชีพเภสัชกรมีความหลากหลายในการปฏิบัติงานเพื่อดูแลประชาชนในมิติต่าง ๆ
           </p>

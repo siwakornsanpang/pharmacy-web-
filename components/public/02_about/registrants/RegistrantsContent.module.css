@@ -1,0 +1,136 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.introTitle {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #3a4b0f;
+  line-height: 1.55;
+}
+
+.introSubtitle {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+.tableScroll {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid #d9e0c8;
+  border-radius: 16px;
+  background: #ffffff;
+  box-shadow: 0 8px 24px rgba(58, 75, 15, 0.06);
+}
+
+.table {
+  width: 100%;
+  min-width: 760px;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.table thead th {
+  background: #737300;
+  color: #ffffff;
+  font-weight: 700;
+  text-align: center;
+  padding: 0.85rem 0.75rem;
+  vertical-align: middle;
+  line-height: 1.35;
+  border-right: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.table thead th:last-child {
+  border-right: none;
+}
+
+.table tbody td,
+.table tfoot td {
+  padding: 0.8rem 0.75rem;
+  text-align: center;
+  color: #1f2937;
+  border-bottom: 1px dashed #d9e0c8;
+  vertical-align: middle;
+  line-height: 1.45;
+}
+
+.table tbody tr:nth-child(even) {
+  background: #fafaf5;
+}
+
+.table tbody tr:hover {
+  background: #f4f7ee;
+}
+
+.colIndex {
+  width: 64px;
+  white-space: nowrap;
+}
+
+.colSpecialty {
+  text-align: left !important;
+  min-width: 220px;
+  font-weight: 600;
+  color: #3a4b0f !important;
+}
+
+.table tfoot td {
+  background: #eef0d5;
+  border-bottom: none;
+  border-top: 2px solid #737300;
+  font-weight: 700;
+  color: #3a4b0f;
+}
+
+.totalLabel {
+  text-align: center !important;
+  font-weight: 800 !important;
+}
+
+.notes {
+  padding: 1rem 1.15rem;
+  background: #f8f9f3;
+  border: 1px solid #e4e8d4;
+  border-radius: 14px;
+}
+
+.notesTitle {
+  margin: 0 0 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #3a4b0f;
+}
+
+.notesList {
+  margin: 0;
+  padding-left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  color: #64748b;
+  font-size: 0.88rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .introTitle {
+    font-size: 0.98rem;
+  }
+
+  .table {
+    font-size: 0.85rem;
+  }
+}

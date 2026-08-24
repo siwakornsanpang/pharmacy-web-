@@ -19,6 +19,9 @@ export default function PopularServices({
 }: PopularServicesProps) {
   if (!services || services.length === 0) return null;
 
+  const count = Math.min(Math.max(services.length, 1), 4);
+  const gridClass = `${styles.popularGrid} ${styles[`count${count}`]}`;
+
   return (
     <section className={styles.section}>
       <div className={styles.sectionCon}>
@@ -27,7 +30,7 @@ export default function PopularServices({
           viewAllHref={viewAllHref}
           viewAllText={viewAllText}
         />
-        <div className={styles.popularGrid}>
+        <div className={gridClass}>
           {services.map((service) => {
             const localHref = resolveEServiceHref(service.name, service.shortName);
             const href = localHref || service.linkUrl || "/service";

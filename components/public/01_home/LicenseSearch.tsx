@@ -83,7 +83,7 @@ export default function LicenseSearch() {
                 <input
                   type="text"
                   className={styles.input}
-                  placeholder="ชื่อ"
+                  placeholder="ชื่อ (ไม่ต้องใส่คำนำหน้า ภก.)"
                   value={firstName}
                   onChange={(e) => setFirstName(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSearch()}
@@ -110,7 +110,7 @@ export default function LicenseSearch() {
                 pattern="[0-9]*"
                 autoComplete="off"
                 className={styles.input}
-                placeholder={selectedOption.label}
+                placeholder="เลขที่ใบอนุญาต (ใส่เฉพาะตัวเลข)"
                 value={query}
                 onChange={(e) => setQuery(normalizeLicenseDigits(e.target.value))}
                 onKeyDown={(e) => e.key === "Enter" && handleSearch()}
