@@ -6,8 +6,10 @@ import {
   Geographies,
   Geography,
   ZoomableGroup,
+  Marker,
 } from "react-simple-maps";
 import { scaleLinear } from "d3-scale";
+import { geoCentroid } from "d3-geo";
 
 import styles from "./MembersContent.module.css";
 import { Clock } from "lucide-react";
@@ -94,6 +96,35 @@ const provinceMapping: { [key: string]: string } = {
   "Uttaradit": "อุตรดิตถ์",
   "Yala": "ยะลา",
   "Yasothon": "ยโสธร"
+};
+
+/** ชื่อย่อบนแผนที่ (เมื่อซูมออก) เพื่อลดการทับกัน */
+const provinceShortLabels: { [key: string]: string } = {
+  "Bangkok Metropolis": "กทม.",
+  "Phra Nakhon Si Ayutthaya": "อยุธยา",
+  "Nakhon Si Thammarat": "นครศรีฯ",
+  "Prachuap Khiri Khan": "ประจวบฯ",
+  "Ubon Ratchathani": "อุบลฯ",
+  "Nakhon Ratchasima": "นครราชฯ",
+  "Surat Thani": "สุราษฎร์ฯ",
+  "Samut Prakan": "สมุทรปราการ",
+  "Samut Sakhon": "สมุทรสาคร",
+  "Samut Songkhram": "สมุทรสงคราม",
+  "Nong Bua Lam Phu": "หนองบัวฯ",
+  "Kanchanaburi": "กาญจนฯ",
+  "Kamphaeng Phet": "กำแพงเพชร",
+  "Chachoengsao": "ฉะเชิงเทรา",
+};
+
+/** เลื่อนตำแหน่งป้ายชื่อเล็กน้อยสำหรับจังหวัดที่ centroid ทับกัน */
+const labelOffsets: { [key: string]: [number, number] } = {
+  "Bangkok Metropolis": [0.15, -0.05],
+  "Nonthaburi": [-0.15, -0.08],
+  "Pathum Thani": [0.12, 0.12],
+  "Samut Prakan": [0.18, 0.1],
+  "Samut Sakhon": [-0.2, 0.05],
+  "Samut Songkhram": [-0.25, 0.12],
+  "Nakhon Pathom": [-0.2, -0.05],
 };
 
 // ชุดสี ขาว -> เขียวมะกอก (Olive Palette)
@@ -387,6 +418,37 @@ const MembersContent = () => {
                             pressed: activeStyle
                           }}
                         />
+                      );
+                    })}
+
+                    {/* Layer 3: ชื่อจังหวัด */}
+                    {geographies.map((geo) => {
+                      const provinceId = geo.properties.name || geo.properties.NAME || geo.properties.name_en || "";
+                      const [cx, cy] = geoCentroid(geo);
+                      if (!Number.isFinite(cx) || !Number.isFinite(cy)) return null;
+
+                      const [dx, dy] = labelOffsets[provinceId] || [0, 0];
+                      const useShort = position.zoom < 2;
+                      const label = useShort
+                        ? (provinceShortLabels[provinceId] || provinceMapping[provinceId] || provinceId)
+                        : (provinceMapping[provinceId] || provinceId);
+                      const fontSize = Math.max(5.5, 7.5 / Math.sqrt(position.zoom));
+                      const strokeWidth = Math.max(1.5, 2.4 / Math.sqrt(position.zoom));
+
+                      return (
+                        <Marker key={`label-${geo.rsmKey}`} coordinates={[cx + dx, cy + dy]}>
+                          <text
+                            textAnchor="middle"
+                            dominantBaseline="central"
+                            className={styles.provinceLabel}
+                            style={{
+                              fontSize: `${fontSize}px`,
+                              strokeWidth: `${strokeWidth}px`,
+                            }}
+                          >
+                            {label}
+                          </text>
+                        </Marker>
                       );
                     })}
                   </>

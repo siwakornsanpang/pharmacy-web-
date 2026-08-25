@@ -1,20 +1,26 @@
+export interface CertificateItem {
+  name: string;
+  date?: string;
+  organization?: string;
+}
+
 export interface PharmacistData {
   id?: string | number;
   title?: string;
   name: string;
   licenseNo: string;
-  status: string;
-  statusType: "normal" | "suspended" | "cpe_incomplete";
-  /** Months of suspension — used when statusType is suspended */
-  suspensionMonths?: number;
+  /** License status: normal vs abnormal (with reason) */
+  statusType: "normal" | "abnormal";
+  statusReason?: string;
+  /** CPE continuous education status */
+  cpeStatus: "complete" | "incomplete";
   expiryDate?: string;
   replacementInfo?: string;
+  contactProvince?: string;
+  contactPostalCode?: string;
   image?: string | null;
-  qualification?: {
-    type: string;
-    courseName: string;
-    organization: string;
-  };
+  /** Newest first — UI shows up to 3 */
+  certificates?: CertificateItem[];
 }
 
 export const searchOptions = [
@@ -37,76 +43,136 @@ export function stripNameTitles(value: string): string {
     .trim();
 }
 
-/** Mock examples covering all 3 license statuses. */
-export const mockPharmacistsList: PharmacistData[] = [
-  {
-    id: "11111",
-    title: "ภก.",
-    name: "สมชาย ใจดีภักดี",
-    licenseNo: "ภ. 11111",
-    status: "ปกติ",
-    statusType: "normal",
-    expiryDate: "15 สิงหาคม 2569",
-    replacementInfo: "(ไม่เคยขอใบแทน)",
-    image: "/images/public/pharmacist-sample.png",
-    qualification: {
-      type: "ประกาศนียบัตร",
-      courseName: 'การอบรมเชิงปฏิบัติการ "การสร้างเสริมภูมิคุ้มกันโรคโดยเภสัชกร"',
-      organization: "สภาเภสัชกรรม",
-    },
-  },
-  {
-    id: "22222",
-    title: "ภญ.",
-    name: "วิราภรณ์ วงศ์ประเสริฐ",
-    licenseNo: "ภ. 22222",
-    status: "พักใช้ใบอนุญาต",
-    statusType: "suspended",
-    suspensionMonths: 3,
-    expiryDate: "10 มีนาคม 2569",
-    replacementInfo: "(ไม่เคยขอใบแทน)",
-    image: null,
-    qualification: {
-      type: "ประกาศนียบัตร",
-      courseName: "-",
-      organization: "สภาเภสัชกรรม",
-    },
-  },
-  {
-    id: "33333",
-    title: "ภญ.",
-    name: "สุนิสา วงศ์สว่าง",
-    licenseNo: "ภ. 33333",
-    status: "CPE ไม่ครบ",
-    statusType: "cpe_incomplete",
-    expiryDate: "25 พฤษภาคม 2568",
-    replacementInfo: "(ไม่เคยขอใบแทน)",
-    image: null,
-    qualification: {
-      type: "ประกาศนียบัตร",
-      courseName: "-",
-      organization: "-",
-    },
-  },
+const THAI_MONTHS = [
+  "มกราคม",
+  "กุมภาพันธ์",
+  "มีนาคม",
+  "เมษายน",
+  "พฤษภาคม",
+  "มิถุนายน",
+  "กรกฎาคม",
+  "สิงหาคม",
+  "กันยายน",
+  "ตุลาคม",
+  "พฤศจิกายน",
+  "ธันวาคม",
 ];
 
+const LAST_NAMES = [
+  "ใจดี",
+  "รักเรียน",
+  "สมบูรณ์",
+  "พูนสุข",
+  "ศรีสุข",
+  "ทองดี",
+  "บุญมี",
+  "แก้วกาญจน์",
+  "วัฒนา",
+  "สุวรรณ",
+  "จันทร์เพ็ญ",
+  "อรุณรุ่ง",
+  "มณีรัตน์",
+  "ชัยสิทธิ์",
+  "ประเสริฐ",
+  "วงศ์สว่าง",
+  "พงษ์ไทย",
+  "ตั้งใจ",
+  "สุขใจ",
+  "นันทิชา",
+];
+
+const PROVINCES = [
+  { name: "กรุงเทพมหานคร", zip: "10310" },
+  { name: "นนทบุรี", zip: "11000" },
+  { name: "ปทุมธานี", zip: "12120" },
+  { name: "เชียงใหม่", zip: "50200" },
+  { name: "ขอนแก่น", zip: "40000" },
+  { name: "สงขลา", zip: "90110" },
+  { name: "ชลบุรี", zip: "20130" },
+  { name: "นครราชสีมา", zip: "30000" },
+  { name: "ภูเก็ต", zip: "83000" },
+  { name: "อุบลราชธานี", zip: "34000" },
+];
+
+const ABNORMAL_REASONS = [
+  "พักใช้ใบอนุญาต 3 เดือน",
+  "ถูกเพิกถอนใบอนุญาตชั่วคราว",
+  "อยู่ระหว่างสอบสวนวินัย",
+  "ใบอนุญาตถูกระงับ",
+];
+
+const CERT_POOL = [
+  "เภสัชกรรมคลินิก",
+  "เภสัชกรรมชุมชน",
+  "การสร้างเสริมภูมิคุ้มกันโรคโดยเภสัชกร",
+  "เภสัชกรรมอุตสาหการ",
+  "การคุ้มครองผู้บริโภคด้านยา",
+  "เภสัชกรรมโรงพยาบาล",
+  "เภสัชกรรมสมุนไพร",
+  "การบริหารร้านยา",
+];
+
+function seededRandom(seed: number) {
+  let t = seed + 0x6d2b79f5;
+  return () => {
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function buildCertificates(rand: () => number): CertificateItem[] {
+  const count = 3 + Math.floor(rand() * 2); // 3–4 items, show latest 3
+  const picked = [...CERT_POOL].sort(() => rand() - 0.5).slice(0, count);
+  return picked.map((name, i) => {
+    const year = 2566 + Math.floor(rand() * 4);
+    const month = THAI_MONTHS[Math.floor(rand() * 12)];
+    const day = 1 + Math.floor(rand() * 28);
+    return {
+      name,
+      date: `${day} ${month} ${year}`,
+      organization: rand() > 0.3 ? "สภาเภสัชกรรม" : "ราชวิทยาลัยเภสัชกรรมฯ",
+    };
+  });
+}
+
+/** 20 mock pharmacists named กิตติ for search testing (licenses 1–20 exact). */
+export const mockPharmacistsList: PharmacistData[] = Array.from(
+  { length: 20 },
+  (_, i) => {
+    const rand = seededRandom(1000 + i * 97);
+    const n = i + 1;
+    const isAbnormal = n % 5 === 0;
+    const cpeIncomplete = n % 3 === 0;
+    const province = PROVINCES[i % PROVINCES.length];
+    const month = THAI_MONTHS[i % 12];
+    const day = 5 + (i % 20);
+    const year = 2568 + (i % 3);
+
+    return {
+      id: String(n),
+      title: n % 2 === 0 ? "ภญ." : "ภก.",
+      name: `กิตติ ${LAST_NAMES[i]}`,
+      licenseNo: `ภ. ${n}`,
+      statusType: isAbnormal ? "abnormal" : "normal",
+      statusReason: isAbnormal
+        ? ABNORMAL_REASONS[i % ABNORMAL_REASONS.length]
+        : undefined,
+      cpeStatus: cpeIncomplete ? "incomplete" : "complete",
+      expiryDate: `${day} ${month} ${year}`,
+      replacementInfo:
+        n % 7 === 0 ? "(เคยขอใบแทน 1 ครั้ง)" : "(ไม่เคยขอใบแทน)",
+      contactProvince: province.name,
+      contactPostalCode: province.zip,
+      image: n === 1 ? "/images/public/pharmacist-sample.png" : null,
+      certificates: buildCertificates(rand),
+    };
+  }
+);
+
 export function getFormattedThaiDateTime(date: Date = new Date()): string {
-  const thaiMonths = [
-    "มกราคม",
-    "กุมภาพันธ์",
-    "มีนาคม",
-    "เมษายน",
-    "พฤษภาคม",
-    "มิถุนายน",
-    "กรกฎาคม",
-    "สิงหาคม",
-    "กันยายน",
-    "ตุลาคม",
-    "พฤศจิกายน",
-    "ธันวาคม",
-  ];
   const day = date.getDate();
-  const month = thaiMonths[date.getMonth()];
+  const month = THAI_MONTHS[date.getMonth()];
   const year = date.getFullYear() + 543;
   const hours = String(date.getHours()).padStart(2, "0");
   const minutes = String(date.getMinutes()).padStart(2, "0");

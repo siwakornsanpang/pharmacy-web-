@@ -17,8 +17,8 @@ const PUBLIC_SERVICES = [
   {
     id: 2,
     img: "/images/public/service/service3.jpg",
-    title: "แจ้งเบาะแสร้านยา",
-    description: "แจ้งเบาะแสเภสัชกรเเขวนป้าย",
+    title: "แจ้งเบาะแสร้านยาแขวนป้าย",
+    description: "รายงานร้านยาที่ไม่อาจปฏิบัติตามมาตรฐาน",
     href: "https://law.pharmacycouncil.org/tip-report",
   },
   {

@@ -10,7 +10,7 @@ import styles from "./MemberNavbar.module.css";
 const memberLinks = [
     { name: "หน้าแรก", href: "/home" },
     { name: "ข้อมูลของฉัน", href: "/profile" },
-    { name: "งานบริการ", href: "/service" },
+    { name: "e-service", href: "/service" },
     { name: "งานประชุม", href: "/meeting" },
     { name: "การศึกษา", href: "/learning" },
     // { name: "การสมัครงาน", href: "/careers" },

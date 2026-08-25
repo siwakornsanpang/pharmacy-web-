@@ -10,11 +10,11 @@ import {
   ChevronLeft,
   ListFilter,
   CheckCircle2,
-  Ban,
   AlertTriangle,
   GraduationCap,
   Award,
   Building2,
+  MapPin,
   Info,
   RotateCcw,
   User,
@@ -34,7 +34,7 @@ import {
   stripNameTitles,
 } from "./licenseSearchShared";
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 10;
 
 function isExactLicenseMatch(licenseValue: string, searchTerm: string) {
   const licenseDigits = normalizeLicenseDigits(licenseValue);
@@ -43,7 +43,8 @@ function isExactLicenseMatch(licenseValue: string, searchTerm: string) {
   return licenseDigits === searchDigits;
 }
 
-function matchesName(itemName: string, searchTerm: string) {
+/** Keyword match: every non-empty token must appear somewhere in the name. */
+function matchesNameKeywords(itemName: string, searchTerm: string) {
   const searchWords = stripNameTitles(searchTerm)
     .toLowerCase()
     .split(/\s+/)
@@ -57,14 +58,15 @@ async function fetchPharmacistResults(
   searchType: SearchType,
   searchTerm: string
 ): Promise<PharmacistData[]> {
-  // Mock-first while status UX is still demo data
   if (searchType === "license") {
     return mockPharmacistsList.filter((item) =>
       isExactLicenseMatch(item.licenseNo, searchTerm)
     );
   }
 
-  return mockPharmacistsList.filter((item) => matchesName(item.name, searchTerm));
+  return mockPharmacistsList.filter((item) =>
+    matchesNameKeywords(item.name, searchTerm)
+  );
 }
 
 function LicenseSearchResultsInner() {
@@ -125,6 +127,12 @@ function LicenseSearchResultsInner() {
     };
   }, [activeTerm, initialType]);
 
+  const totalPages = Math.max(1, Math.ceil(searchResults.length / ITEMS_PER_PAGE));
+  const pageItems = searchResults.slice(
+    (currentPage - 1) * ITEMS_PER_PAGE,
+    currentPage * ITEMS_PER_PAGE
+  );
+
   const handleSearch = () => {
     const path = buildLicenseSearchPath({
       type: searchType,
@@ -143,33 +151,27 @@ function LicenseSearchResultsInner() {
     router.push("/");
   };
 
-  const getStatusDisplay = (item: PharmacistData) => {
-    const raw = (item.status || "").replace(/^สถานะใบอนุญาต:\s*/i, "").trim();
-
-    if (
-      item.statusType === "suspended" ||
-      raw.includes("พักใช้")
-    ) {
-      const months =
-        item.suspensionMonths ??
-        (() => {
-          const match = raw.match(/(\d+)\s*เดือน/);
-          return match ? Number(match[1]) : undefined;
-        })();
+  const getLicenseStatusDisplay = (item: PharmacistData) => {
+    if (item.statusType === "abnormal") {
       return {
-        label: months
-          ? `พักใช้ใบอนุญาต ${months} เดือน`
-          : "พักใช้ใบอนุญาต",
+        label: item.statusReason
+          ? `ไม่ปกติ — ${item.statusReason}`
+          : "ไม่ปกติ",
         className: styles.statusSuspended,
         iconClassName: styles.statusIconSuspended,
-        Icon: Ban,
+        Icon: AlertTriangle,
       };
     }
+    return {
+      label: "ปกติ",
+      className: styles.statusNormal,
+      iconClassName: styles.statusIcon,
+      Icon: CheckCircle2,
+    };
+  };
 
-    if (
-      item.statusType === "cpe_incomplete" ||
-      /cpe\s*ไม่ครบ/i.test(raw)
-    ) {
+  const getCpeStatusDisplay = (item: PharmacistData) => {
+    if (item.cpeStatus === "incomplete") {
       return {
         label: "CPE ไม่ครบ",
         className: styles.statusCpe,
@@ -177,9 +179,8 @@ function LicenseSearchResultsInner() {
         Icon: AlertTriangle,
       };
     }
-
     return {
-      label: "ปกติ",
+      label: "CPE ครบ",
       className: styles.statusNormal,
       iconClassName: styles.statusIcon,
       Icon: CheckCircle2,
@@ -301,9 +302,14 @@ function LicenseSearchResultsInner() {
           </div>
         ) : searchResults.length > 0 ? (
           <div className={styles.resultsList}>
-            {searchResults
-              .slice((currentPage - 1) * ITEMS_PER_PAGE, currentPage * ITEMS_PER_PAGE)
-              .map((item, index) => (
+            {pageItems.map((item, index) => {
+              const licenseStatus = getLicenseStatusDisplay(item);
+              const cpeStatus = getCpeStatusDisplay(item);
+              const LicenseIcon = licenseStatus.Icon;
+              const CpeIcon = cpeStatus.Icon;
+              const recentCerts = (item.certificates || []).slice(0, 3);
+
+              return (
                 <div key={item.id || index} className={styles.resultItemBlock}>
                   <div className={styles.profileCard}>
                     <div className={styles.avatarWrapper}>
@@ -340,16 +346,15 @@ function LicenseSearchResultsInner() {
 
                         <div className={styles.detailRow}>
                           <span className={styles.detailLabel}>สถานะ</span>
-                          {(() => {
-                            const status = getStatusDisplay(item);
-                            const StatusIcon = status.Icon;
-                            return (
-                              <span className={`${styles.detailValue} ${status.className}`}>
-                                <StatusIcon size={16} className={status.iconClassName} />
-                                {status.label}
-                              </span>
-                            );
-                          })()}
+                          <span
+                            className={`${styles.detailValue} ${licenseStatus.className}`}
+                          >
+                            <LicenseIcon
+                              size={16}
+                              className={licenseStatus.iconClassName}
+                            />
+                            {licenseStatus.label}
+                          </span>
                         </div>
 
                         {item.expiryDate && (
@@ -359,13 +364,33 @@ function LicenseSearchResultsInner() {
                           </div>
                         )}
 
+                        <div className={styles.detailRow}>
+                          <span className={styles.detailLabel}>
+                            สถานะการศึกษาต่อเนื่อง
+                          </span>
+                          <span className={`${styles.detailValue} ${cpeStatus.className}`}>
+                            <CpeIcon size={16} className={cpeStatus.iconClassName} />
+                            {cpeStatus.label}
+                          </span>
+                        </div>
+
+                        <div className={styles.detailRow}>
+                          <span className={styles.detailLabel}>
+                            ใบอนุญาตเป็นผู้ประกอบวิชาชีพเภสัชกรรม
+                          </span>
+                          <span className={styles.detailValueMuted}>
+                            {item.replacementInfo || "(ไม่เคยขอใบแทน)"}
+                          </span>
+                        </div>
+
                         <div className={styles.detailRowStacked}>
                           <div className={styles.detailRow}>
-                            <span className={styles.detailLabel}>
-                              ใบอนุญาตเป็นผู้ประกอบวิชาชีพเภสัชกรรม
-                            </span>
-                            <span className={styles.detailValueMuted}>
-                              {item.replacementInfo || "(ไม่เคยขอใบแทน)"}
+                            <span className={styles.detailLabel}>ที่อยู่ที่ติดต่อได้</span>
+                            <span className={styles.detailValue}>
+                              <MapPin size={15} className={styles.infoIcon} />
+                              {[item.contactProvince, item.contactPostalCode]
+                                .filter(Boolean)
+                                .join(" ") || "-"}
                             </span>
                           </div>
                           <div className={styles.timestampUnderField}>
@@ -383,12 +408,25 @@ function LicenseSearchResultsInner() {
                         <GraduationCap size={20} className={styles.qualIcon} />
                         <span>คุณวุฒิและการอบรม</span>
                       </div>
-                      <div className={styles.qualContent}>
-                        <Award size={18} className={styles.certIcon} />
-                        <span className={styles.certText}>
-                          <strong>ประกาศนียบัตร:</strong>{" "}
-                          {item.qualification?.courseName || "-"}
-                        </span>
+                      <div className={styles.certList}>
+                        {recentCerts.length > 0 ? (
+                          recentCerts.map((cert, certIdx) => (
+                            <div key={certIdx} className={styles.qualContent}>
+                              <Award size={18} className={styles.certIcon} />
+                              <span className={styles.certText}>
+                                <strong>ประกาศนียบัตร:</strong> {cert.name}
+                                {cert.date ? ` (${cert.date})` : ""}
+                              </span>
+                            </div>
+                          ))
+                        ) : (
+                          <div className={styles.qualContent}>
+                            <Award size={18} className={styles.certIcon} />
+                            <span className={styles.certText}>
+                              <strong>ประกาศนียบัตร:</strong> -
+                            </span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -400,18 +438,19 @@ function LicenseSearchResultsInner() {
                         <span>หน่วยงานที่จัด</span>
                       </div>
                       <div className={styles.qualSubValue}>
-                        {item.qualification?.organization || "-"}
+                        {recentCerts[0]?.organization || "-"}
                       </div>
                     </div>
                   </div>
                 </div>
-              ))}
+              );
+            })}
 
-            {Math.ceil(searchResults.length / ITEMS_PER_PAGE) > 1 && (
+            {totalPages > 1 && (
               <div className={pageStyles.paginationWrap}>
                 <MeetingPagination
                   currentPage={currentPage}
-                  totalPages={Math.ceil(searchResults.length / ITEMS_PER_PAGE)}
+                  totalPages={totalPages}
                   onPageChange={setCurrentPage}
                 />
               </div>

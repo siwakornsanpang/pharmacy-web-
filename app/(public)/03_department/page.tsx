@@ -62,13 +62,13 @@ export default async function DepartmentPage() {
 
             {/* วิทยาลัย */}
             <DepartmentColleges
-                title="วิทยาลัยสภาเภสัชกรรมแห่งประเทศไทย"
+                title="ราชวิทยาลัยเภสัชกรรมแห่งประเทศไทย"
                 agencies={collegeAgencies}
             />
 
-            {/* ข้อมูลตัวอย่าง — layout แบบหน่วยงานในกำกับ */}
+            {/* สถาบันเภสัช — layout แบบหน่วยงานในกำกับ */}
             <DepartmentAgencies
-                title="ข้อมูลตัวอย่าง"
+                title="สถาบันเภสัช"
                 agencies={sampleDataAgencies}
             />
 

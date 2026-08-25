@@ -8,7 +8,7 @@ interface DepartmentStatsProps {
 const CATEGORY_LABELS: Record<string, string> = {
   supervised: "หน่วยงานในกำกับ",
   college: "วิทยาลัย",
-  sample_data: "ข้อมูลตัวอย่าง",
+  sample_data: "สถาบันเภสัช",
   professional_network: "เครือข่ายวิชาชีพ",
   institution: "สถาบันการศึกษา",
   other: "หน่วยงานอื่น ๆ",

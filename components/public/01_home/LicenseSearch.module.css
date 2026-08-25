@@ -294,6 +294,9 @@
   color: #1E293B;
   font-weight: 600;
   text-align: left;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .detailValueMuted {
@@ -423,6 +426,12 @@
   font-weight: 700;
   color: #3A4B0F;
   margin-bottom: 0.65rem;
+}
+
+.certList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
 }
 
 .qualIcon {

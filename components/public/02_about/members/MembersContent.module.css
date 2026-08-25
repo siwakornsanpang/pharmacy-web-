@@ -129,6 +129,16 @@
     }
 }
 
+.provinceLabel {
+    fill: #1f2937;
+    stroke: rgba(255, 255, 255, 0.92);
+    paint-order: stroke fill;
+    font-weight: 600;
+    pointer-events: none;
+    user-select: none;
+    letter-spacing: -0.02em;
+}
+
 .zoomControls {
     position: absolute;
     top: 2rem;

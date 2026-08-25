@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { FaFacebookF, FaYoutube, FaTiktok, FaGlobe, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import { SiLine } from "react-icons/si";
 import { MdEmail } from "react-icons/md";
@@ -56,37 +55,45 @@ export default function Footer() {
                         <div className={styles.extensionSection}>
                             <h3 className={styles.sectionTitle}>หมายเลขภายในหน่วยงานต่าง ๆ</h3>
                             <div className={styles.extensionGrid}>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 1</span>
-                                    <span>ฝ่ายทะเบียนฯ</span>
+                                <div className={styles.extensionCol}>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 1</span>
+                                        <span>ฝ่ายทะเบียนและใบอนุญาต</span>
+                                    </div>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 2</span>
+                                        <span>ฝ่ายการศึกษาฯ</span>
+                                    </div>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 3</span>
+                                        <span>ฝ่ายกฎหมาย</span>
+                                    </div>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 4</span>
+                                        <span>ศูนย์การศึกษาต่อเนื่องฯ</span>
+                                    </div>
                                 </div>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 5</span>
-                                    <span>ศูนย์สอบความรู้</span>
-                                </div>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 2</span>
-                                    <span>ฝ่ายการศึกษาฯ</span>
-                                </div>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 6</span>
-                                    <span>สำนักงานรับรองร้านยา</span>
-                                </div>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 3</span>
-                                    <span>ฝ่ายกฎหมาย</span>
-                                </div>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 7</span>
-                                    <span>ราชวิทยาลัยเภสัชกรรมฯ</span>
-                                </div>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 4</span>
-                                    <span>ศูนย์การศึกษาต่อเนื่องฯ</span>
-                                </div>
-                                <div className={styles.extensionItem}>
-                                    <span className={styles.extKey}>กด 0</span>
-                                    <span>ประชาสัมพันธ์</span>
+                                <div className={styles.extensionCol}>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 5</span>
+                                        <span>ศูนย์สอบความรู้</span>
+                                    </div>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 7</span>
+                                        <span>สำนักงานรับรองร้านยา</span>
+                                    </div>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 8</span>
+                                        <span>ราชวิทยาลัย</span>
+                                    </div>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 9</span>
+                                        <span>ประชาสัมพันธ์</span>
+                                    </div>
+                                    <div className={styles.extensionItem}>
+                                        <span className={styles.extKey}>กด 0</span>
+                                        <span>Operator</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -96,12 +103,6 @@ export default function Footer() {
 
             {/* Bottom Bar */}
             <div className={styles.bottomBar}>
-                <div className={styles.privacyText}>
-                    ท่านสามารถศึกษารายละเอียดการดำเนินการตาม พระราชบัญญัติคุ้มครองข้อมูลส่วนบุคคล{" "}
-                    <Link href="#" className={styles.privacyLink}>
-                        ได้ที่นี่
-                    </Link>
-                </div>
                 <div className={styles.copyright}>© 2012-{currentYear}</div>
             </div>
         </footer>

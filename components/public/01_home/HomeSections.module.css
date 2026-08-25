@@ -182,13 +182,13 @@
 .roleTitleCard {
     background: linear-gradient(202deg, rgba(232, 229, 198, 1) 0%, rgba(115, 115, 0, 1) 100%);
     border-radius: 24px;
-    padding: 32px;
+    padding: 24px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     position: relative;
     overflow: hidden;
-    height: 280px;
+    height: 220px;
     box-sizing: border-box;
 }
 
@@ -222,8 +222,8 @@
     flex-direction: column;
     position: relative;
     overflow: hidden;
-    height: 280px;
-    padding: 24px;
+    height: 220px;
+    padding: 20px;
     box-sizing: border-box;
 }
 
@@ -411,8 +411,8 @@
     .roleTitleCard,
     .roleCard {
         height: auto;
-        min-height: 200px;
-        padding: 20px;
+        min-height: 170px;
+        padding: 18px;
     }
 
     .otherServiceCard {

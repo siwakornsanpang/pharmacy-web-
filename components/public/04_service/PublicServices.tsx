@@ -4,32 +4,33 @@ import { useAuth } from "@/context/AuthContext";
 import styles from "./PublicServices.module.css";
 
 const publicServices = [
+  
   {
     id: 1,
-    img: "/images/public/service/service1.jpg",
-    title: "โครงการสำหรับประชาชน",
-    description: "กิจกรรมและบริการเพื่อสุขภาพ\nสำหรับทุกคน",
-    href: "/service/people-project",
-  },
-  {
-    id: 2,
     img: "/images/public/service/service2.jpg",
     title: "ร้องเรียนเภสัชกร",
     description: "แจ้งปัญหาการให้บริการไม่เหมาะสม",
-    href: "https://law.pharmacycouncil.org/",
+    href: "https://law.pharmacycouncil.org/complaint",
+  },
+  {
+    id: 2,
+    img: "/images/public/service/service3.jpg",
+    title: "แจ้งเบาะแสร้านยาแขวนป้าย",
+    description: "รายงานร้านยาที่ไม่อาจปฏิบัติตามมาตรฐาน",
+    href: "https://law.pharmacycouncil.org/tip-report",
   },
   {
     id: 3,
-    img: "/images/public/service/service3.jpg",
-    title: "แจ้งเบาะแสร้านยา",
-    description: "รายงานร้านยาที่ไม่อาจปฏิบัติตามมาตรฐาน",
-    href: "#",
-  },
-  {
-    id: 4,
     img: "/images/public/service/service4.jpg",
     title: "ตรวจสอบคำร้อง",
     description: "ตรวจสอบคำร้องเรียน",
+    href: "https://law.pharmacycouncil.org/tracking",
+  },
+  {
+    id: 4,
+    img: "/images/public/service/service1.jpg",
+    title: "โครงการสำหรับประชาชน",
+    description: "กิจกรรมและบริการเพื่อสุขภาพ\nสำหรับทุกคน",
     href: "/service/people-project",
   },
   {

@@ -102,8 +102,21 @@
 /* === Grid Cards === */
 .agencyGrid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
+  width: 100%;
+}
+
+.count1 {
+  grid-template-columns: minmax(0, 1fr);
+  max-width: 420px;
+}
+
+.count2 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.count3 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .agencyCard {
@@ -181,8 +194,12 @@
 
 /* === Responsive === */
 @media (max-width: 1024px) {
-  .agencyGrid {
-    grid-template-columns: repeat(2, 1fr);
+  .count3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .count1 {
+    max-width: none;
   }
 
   .heroCard {
@@ -200,8 +217,11 @@
     max-width: 90%;
   }
 
-  .agencyGrid {
+  .count1,
+  .count2,
+  .count3 {
     grid-template-columns: 1fr;
+    max-width: none;
   }
   
   .heroContent {

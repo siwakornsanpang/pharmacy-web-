@@ -22,7 +22,6 @@ export default async function Home() {
   ]);
 
   const highlights = allNews.filter(n => n.isHighlight && n.status === 'published');
-  const regularNews = allNews.filter(n => !n.isHighlight && n.status === 'published');
 
   const activeBanners = (homeContent.banners || [])
     .filter(b => b.active)
@@ -53,8 +52,8 @@ export default async function Home() {
       {/* 2. บริการประชาชน */}
       <PublicServiceSection />
 
-      {/* 3. บริการเภสัชกร */}
-      <PopularServices services={popularServices} />
+      {/* 3. E-service (คำขอเด่น) */}
+      <PopularServices services={popularServices} viewAllHref="/service" />
       <PharmacistRolesSection />
 
       {/* 4. 6 สายงานวิชาชีพเภสัชกร */}
@@ -65,7 +64,7 @@ export default async function Home() {
       <HomeMeetings />
 
       {/* 6. เรื่องเด่นและข่าวสาร (Full) */}
-      <HomeNewsSection highlights={highlights} newsList={regularNews} />
+      <HomeNewsSection highlights={highlights} />
     </div>
   );
 }

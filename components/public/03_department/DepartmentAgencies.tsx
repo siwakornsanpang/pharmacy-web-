@@ -15,6 +15,8 @@ export default function DepartmentAgencies({ title, agencies }: DepartmentAgenci
   // First agency is the hero card
   const hero = agencies[0];
   const rest = agencies.slice(1);
+  const gridCount = Math.min(Math.max(rest.length, 1), 3);
+  const gridClass = `${styles.agencyGrid} ${styles[`count${gridCount}`]}`;
 
   return (
     <section className={styles.section}>
@@ -48,7 +50,7 @@ export default function DepartmentAgencies({ title, agencies }: DepartmentAgenci
 
         {/* Grid of remaining agencies */}
         {rest.length > 0 && (
-          <div className={styles.agencyGrid}>
+          <div className={gridClass}>
             {rest.map((agency) => (
               <Link
                 key={agency.id}

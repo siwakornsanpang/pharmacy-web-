@@ -9,7 +9,6 @@ import { News, NewsCategory } from "@/lib/api";
 
 interface HomeNewsSectionProps {
   highlights: News[];
-  newsList: News[];
 }
 
 const getCategoryLabel = (cat: NewsCategory) => {
@@ -31,7 +30,7 @@ const getExcerpt = (news: News) => {
     .substring(0, 180) + (news.content.length > 180 ? "..." : "");
 };
 
-export default function HomeNewsSection({ highlights, newsList }: HomeNewsSectionProps) {
+export default function HomeNewsSection({ highlights }: HomeNewsSectionProps) {
   const [activeSlide, setActiveSlide] = useState(0);
 
   const handlePrev = () => {
@@ -137,47 +136,6 @@ export default function HomeNewsSection({ highlights, newsList }: HomeNewsSectio
              <div style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
                ไม่พบข้อมูลเรื่องเด่น
              </div>
-          )}
-        </div>
-
-        {/* === News List Section === */}
-        <div>
-          <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>ข่าวสาร</h2>
-            <Link href="/news" className={styles.viewAll}>
-              ดูทั้งหมด
-              <ArrowRight size={18} strokeWidth={2} />
-            </Link>
-          </div>
-
-          {newsList.length > 0 ? (
-            <div className={styles.newsGrid}>
-              {newsList.slice(0, 6).map((news, i) => (
-                <Link href={`/news/${news.id}`} key={news.id} className={styles.newsCard} style={{ textDecoration: 'none' }}>
-                  <div className={styles.newsImageWrapper}>
-                    {news.thumbnailUrl ? (
-                      <Image 
-                         src={news.thumbnailUrl} 
-                         alt={news.title} 
-                         fill 
-                         className={styles.newsImage} 
-                      />
-                    ) : (
-                      <div className={styles.newsImage} style={{ background: '#e5e7eb' }} />
-                    )}
-                    <span className={styles.badgeOverImage}>{getCategoryLabel(news.category)}</span>
-                  </div>
-                  <div className={styles.newsCardContent}>
-                    <h3 className={styles.newsCardTitle}>{news.title}</h3>
-                    <p className={styles.newsCardDesc}>{getExcerpt(news)}</p>
-                  </div>
-                </Link>
-              ))}
-            </div>
-          ) : (
-            <div style={{ textAlign: "center", padding: "2rem", color: "#6b7280" }}>
-               ไม่พบข้อมูลข่าวสาร
-            </div>
           )}
         </div>
       </div>
