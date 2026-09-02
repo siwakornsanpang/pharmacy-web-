@@ -173,14 +173,14 @@ function LicenseSearchResultsInner() {
   const getCpeStatusDisplay = (item: PharmacistData) => {
     if (item.cpeStatus === "incomplete") {
       return {
-        label: "CPE ไม่ครบ",
+        label: "ไม่ครบตามเกณฑ์",
         className: styles.statusCpe,
         iconClassName: styles.statusIconCpe,
         Icon: AlertTriangle,
       };
     }
     return {
-      label: "CPE ครบ",
+      label: "ครบตามเกณฑ์",
       className: styles.statusNormal,
       iconClassName: styles.statusIcon,
       Icon: CheckCircle2,

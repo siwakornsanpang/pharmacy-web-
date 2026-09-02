@@ -10,7 +10,7 @@ const PUBLIC_SERVICES = [
   {
     id: 1,
     img: "/images/public/service/service2.jpg",
-    title: "ร้องเรียนเภสัชกร",
+    title: "ร้องเรียนจรรยาบรรณ",
     description: "แจ้งปัญหาการให้บริการไม่เหมาะสม",
     href: "https://law.pharmacycouncil.org/complaint",
   },
@@ -48,7 +48,7 @@ const PUBLIC_SERVICES = [
   {
     id: 6,
     img: "/images/public/service/service6.jpg",
-    title: "เภสัชกรออนไลน์",
+    title: "เภสัชกรทางไกล",
     description: "ปรึกษาเภสัชกรออนไลน์",
     href: "#",
   },
