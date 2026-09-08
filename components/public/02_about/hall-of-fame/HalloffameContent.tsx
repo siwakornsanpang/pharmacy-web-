@@ -180,14 +180,7 @@ export default function HalloffameContent({ initialData = [] }: Props) {
     return (
         <section className={styles.wrapper}>
             <div className={styles.headerSection}>
-                <div className={styles.descriptionBox}>
-                    <p className={styles.descriptionText}>
-                        สภาเภสัชกรรมขอเชิดชูเกียรติบุคคลผู้ทรงคุณวุฒิ และนิคุณปการต่อวิชาชีพเภสัชกรรม
-                    </p>
-                    <p className={styles.descriptionText}>
-                        การคุ้มครองผู้บริโภคด้านยาและสุขภาพของประเทศ
-                    </p>
-                </div>
+                <h2 className={`${styles.pageTitle} ThaiFont`}>เกียรติประวัติ</h2>
 
                 <div className={styles.toolbar}>
                     <div className={styles.filterBox}>

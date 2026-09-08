@@ -43,6 +43,10 @@
   border-radius: 1.5rem;
 }
 
+.newsListSection {
+  margin-top: 3rem;
+}
+
 /* === Section Header common === */
 .sectionHeader {
   display: flex;

@@ -8,9 +8,9 @@ export default function EServiceBanner() {
     <div className={styles.banner}>
       <div className={styles.bannerOverlay}>
         <div className={styles.bannerContent}>
-          <h1 className={`${styles.bannerTitle} ThaiFont`}>e-service</h1>
+          <h1 className={`${styles.bannerTitle} ThaiFont`}>E-service</h1>
           <p className={`${styles.bannerSubtitle} ThaiFont`}>
-            e-serviceสำหรับผู้ประกอบวิชาชีพ
+            ระบบให้บริการผู้ประกอบวิชาชีพ
           </p>
         </div>
       </div>

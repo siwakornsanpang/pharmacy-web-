@@ -56,8 +56,7 @@
 }
 
 .meetingCard:last-child {
-  
- margin-bottom: 4rem;
+  margin-bottom: 0;
 }
 
 /* === Date Box === */

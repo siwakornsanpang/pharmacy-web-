@@ -11,7 +11,7 @@
 }
 
 .pageWrapper {
-    min-height: 100vh;
+
     background:
         radial-gradient(ellipse 80% 40% at 10% 0%, rgba(115, 115, 0, 0.08), transparent 55%),
         radial-gradient(ellipse 60% 35% at 90% 10%, rgba(163, 163, 77, 0.1), transparent 50%),
@@ -36,7 +36,7 @@
         rgba(30, 40, 20, 0.4) 30%,
         transparent 70%
     );
-    padding: 2rem 5% 4.5rem;
+    padding: 2rem 0 4.5rem;
 }
 
 .bannerContent {
@@ -47,8 +47,8 @@
     margin-left: auto;
     margin-right: auto;
     color: white;
-    max-width: var(--max-width-xl);
-    width: 90%;
+    max-width: 1080px;
+    width: 92%;
     z-index: 5;
 }
 
@@ -73,7 +73,7 @@
 .contentBody {
     max-width: 1080px;
     width: 92%;
-    margin: 2rem auto 4rem;
+    margin: 2rem auto 0;
 }
 
 .pageHeader {

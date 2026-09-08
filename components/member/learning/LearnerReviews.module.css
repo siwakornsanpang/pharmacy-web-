@@ -1,5 +1,5 @@
 .section {
-    padding: 6rem 0;
+    padding: 6rem 0 0;
     background-color: #fff;
 }
 
@@ -132,7 +132,7 @@
 /* === Responsive === */
 @media (max-width: 768px) {
     .section {
-        padding: 4rem 0;
+        padding: 4rem 0 0;
     }
     
     .card {

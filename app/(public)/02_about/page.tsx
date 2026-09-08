@@ -5,7 +5,7 @@ export default function AboutHistoryPage() {
   return (
     <>
       <h2 className={`${styles.contentTitle} ThaiFont`}>
-        ความเป็นมาการประกอบวิชาชีพเภสัชกรรม
+        ประวัติความเป็นมา
       </h2>
 
       <div className={`${styles.contentBody} ThaiFont`}>

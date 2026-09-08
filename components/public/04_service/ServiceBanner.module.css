@@ -14,12 +14,16 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(30, 40, 20, 0.4) 30%, transparent 70%);
     display: flex;
     align-items: flex-end;
-    padding: 0 10% 4.5rem;
+    justify-content: center;
+    padding: 0 0 4.5rem;
 }
 
 .bannerContent {
     color: white !important;
-    max-width: 1000px;
+    width: 90%;
+    max-width: var(--max-width-2xl);
+    margin: 0 auto;
+    padding: 0 20px;
     z-index: 5;
     position: relative;
     animation: slideUpFade 1s ease-out forwards;
@@ -49,13 +53,17 @@
     }
 
     .bannerOverlay {
-        padding: 0 5% 3rem;
+        padding: 0 0 3rem;
     }
 }
 
 @media (max-width: 480px) {
     .bannerOverlay {
-        padding: 0 1rem 2rem;
+        padding: 0 0 2rem;
+    }
+
+    .bannerContent {
+        padding: 0 1rem;
     }
 }
 

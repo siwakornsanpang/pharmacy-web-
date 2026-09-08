@@ -1,5 +1,5 @@
 .pageWrapper {
-    min-height: 100vh;
+
     background-color: #f9f9f9;
 }
 
@@ -16,7 +16,7 @@
     inset: 0;
     z-index: 2;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(30, 40, 20, 0.4) 30%, transparent 70%);
-    padding: 2rem 5% 4.5rem;
+    padding: 2rem 0 4.5rem;
 }
 
 .bannerContent {
@@ -29,6 +29,7 @@
     color: white !important;
     max-width: var(--max-width-xl);
     width: 90%;
+    padding: 0 2rem;
     z-index: 5;
     animation: slideUpFade 1s ease-out forwards;
 }
@@ -54,7 +55,7 @@
 .contentBody {
     max-width: var(--max-width-xl);
     width: 90%;
-    margin: 3rem auto 5rem;
+    margin: 3rem auto 0;
     padding: 0 2rem;
 }
 
@@ -560,11 +561,11 @@
         height: 250px;
     }
     .bannerOverlay {
-        padding: 0 5% 3rem;
+        padding: 0 0 3rem;
     }
     .bannerContent {
         bottom: 3rem;
-        left: 5%;
+        padding: 0 1rem;
     }
 }
 
@@ -573,11 +574,11 @@
         height: 200px;
     }
     .bannerOverlay {
-        padding: 0 1rem 2rem;
+        padding: 0 0 2rem;
     }
     .bannerContent {
         bottom: 2rem;
-        left: 1rem;
+        padding: 0 1rem;
     }
 }
 

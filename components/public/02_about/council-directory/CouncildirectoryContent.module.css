@@ -1,6 +1,6 @@
 .wrapper {
     width: 100%;
-    padding: 0 16px 80px;
+    padding: 0 16px 0;
     background: transparent;
     font-family: var(--font-kanit), var(--font-geist-sans), sans-serif;
     display: flex;

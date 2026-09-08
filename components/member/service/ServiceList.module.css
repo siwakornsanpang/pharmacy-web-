@@ -1,7 +1,7 @@
 .section {
     background: #ffffff;
     margin: auto;
-    padding: 40px 20px;
+    padding: 40px 0 0;
     overflow: hidden;
 }
 
@@ -9,7 +9,7 @@
     max-width: var(--max-width-2xl);
     width: 90%;
     margin: auto;
-    padding: 20px;
+    padding: 20px 20px 0;
 }
 
 .title {

@@ -25,7 +25,7 @@ export default async function CommitteePage() {
     return (
         <>
             <h2 className={`${styles.contentTitle} ThaiFont`}>
-                กรรมการสภา
+                กรรมการเภสัชกรรม
             </h2>
 
             <CommitteeContent initialMembers={members} />

@@ -1,7 +1,7 @@
 .pageWrapper {
-    min-height: 100vh;
+
     background-color: #ffffff;
-    padding-bottom: 3rem;
+
 }
 
 .banner {
@@ -19,13 +19,17 @@
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(30, 40, 20, 0.4) 30%, transparent 70%);
     display: flex;
     align-items: flex-end;
-    padding: 0 10% 4.5rem;
+    justify-content: center;
+    padding: 0 0 4.5rem;
 }
 
 .bannerContent {
     animation: slideUpFade 1s ease-out forwards;
     color: white;
-    max-width: 1000px;
+    width: 90%;
+    max-width: var(--max-width-2xl);
+    margin: 0 auto;
+    padding: 0 20px;
 }
 
 .bannerTitle {
@@ -47,8 +51,8 @@
 .container {
     max-width: var(--max-width-2xl);
     width: 90%;
-    margin: 4rem auto 4rem;
-    padding: 20px;
+    margin: 4rem auto 0;
+    padding: 20px 20px 0;
     
     position: relative;
     z-index: 2;

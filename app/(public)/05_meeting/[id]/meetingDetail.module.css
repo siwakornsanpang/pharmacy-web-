@@ -1,5 +1,5 @@
 .pageWrapper {
-    min-height: 100vh;
+
     background: #ffffff;
 }
 
@@ -23,7 +23,7 @@
     inset: 0;
     z-index: 2;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.75) 0%, rgba(30, 40, 20, 0.4) 35%, transparent 70%);
-    padding: 2rem 5% 4.5rem;
+    padding: 2rem 0 4.5rem;
 }
 
 .backBtn {
@@ -76,8 +76,9 @@
     margin-left: auto;
     margin-right: auto;
     color: white;
-    max-width: var(--max-width-xl);
+    max-width: 90%;
     width: 90%;
+    padding: 0 1.5rem;
     z-index: 5;
     animation: slideUpFade 0.8s ease-out forwards;
 }
@@ -140,7 +141,7 @@
 .container {
     max-width: 90%;
     margin: 0 auto;
-    padding: 3rem 1.5rem 6rem;
+    padding: 3rem 1.5rem 0;
 }
 
 .mainGrid {
@@ -427,11 +428,11 @@
         min-height: unset;
     }
     .bannerOverlay {
-        padding: 0 5% 3rem;
+        padding: 0 0 3rem;
     }
     .bannerContent {
         bottom: 3rem;
-        left: 5%;
+        padding: 0 1rem;
     }
     .backBtn {
         top: 1rem;
@@ -443,7 +444,7 @@
         gap: 1rem;
     }
     .container {
-        padding: 2rem 1rem 4rem;
+        padding: 2rem 1rem 0;
     }
     .sectionCard {
         padding: 1.5rem;
@@ -728,7 +729,7 @@
 /* === Responsive Media Queries === */
 @media (max-width: 768px) {
     .container {
-        padding: 2rem 1rem 4rem;
+        padding: 2rem 1rem 0;
         max-width: 100% !important;
     }
 }
@@ -739,11 +740,11 @@
         min-height: unset;
     }
     .bannerOverlay {
-        padding: 0 1rem 2rem;
+        padding: 0 0 2rem;
     }
     .bannerContent {
         bottom: 2rem;
-        left: 1rem;
+        padding: 0 1rem;
     }
     .bannerTitle {
         font-size: 1.45rem;
@@ -814,7 +815,7 @@
 
 @media (max-width: 480px) {
     .container {
-        padding: 1rem 0.5rem 3rem;
+        padding: 1rem 0.5rem 0;
     }
     .sectionCard {
         padding: 1.25rem 1rem;

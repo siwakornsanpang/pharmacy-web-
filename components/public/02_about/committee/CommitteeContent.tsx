@@ -204,7 +204,7 @@ function MemberCard({
                     className={`${styles.bioBtn} ThaiFont`}
                     onClick={() => onSelect(member)}
                 >
-                    ดูประวัติ
+                    ดูรายละเอียด
                 </button>
             </div>
         </article>

@@ -56,7 +56,7 @@
   width: 90%;
   max-width: var(--max-width-xl, 1200px);
   margin: 2rem auto 0;
-  padding-bottom: 3rem;
+
   flex: 1 0 auto;
 }
 

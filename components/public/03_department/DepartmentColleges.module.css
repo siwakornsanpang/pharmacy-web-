@@ -1,7 +1,7 @@
 /* === Department Colleges Section === */
 .section {
   position: relative;
-  padding: 4rem 1.5rem 6rem; /* เพิ่ม padding ล่างให้ดูมีพื้นที่ */
+  padding: 4rem 0 6rem; /* เพิ่ม padding ล่างให้ดูมีพื้นที่ */
   background-color: #f7f7f0; 
   overflow: hidden;
 }
@@ -28,7 +28,7 @@
   max-width: var(--max-width-2xl);
   width: 90%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .sectionTitle {

@@ -68,7 +68,7 @@ export default async function DepartmentPage() {
 
             {/* สถาบันเภสัช — layout แบบหน่วยงานในกำกับ */}
             <DepartmentAgencies
-                title="สถาบันเภสัช"
+                title="สภาบันไภษัชชยพัฒน์"
                 agencies={sampleDataAgencies}
             />
 

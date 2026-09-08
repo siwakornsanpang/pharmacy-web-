@@ -15,7 +15,7 @@
     inset: 0;
     z-index: 2;
     background: linear-gradient(to top, rgba(0, 0, 0, 0.7) 0%, rgba(30, 40, 20, 0.4) 30%, transparent 70%);
-    padding: 2rem 5% 4.5rem; /* Adjusted top padding */
+    padding: 2rem 0 4.5rem; /* Adjusted top padding */
 }
 
 .backBtn {
@@ -70,6 +70,7 @@
     color: white !important;
     max-width: var(--max-width-xl);
     width: 90%;
+    padding: 0 1.5rem;
     z-index: 5;
     animation: slideUpFade 1s ease-out forwards;
 }
@@ -111,12 +112,16 @@
     }
 
     .bannerOverlay {
-        padding: 0 5% 3rem;
+        padding: 0 0 3rem;
     }
 }
 
 @media (max-width: 480px) {
     .bannerOverlay {
-        padding: 0 1rem 2rem;
+        padding: 0 0 2rem;
+    }
+
+    .bannerContent {
+        padding: 0 1rem;
     }
 }

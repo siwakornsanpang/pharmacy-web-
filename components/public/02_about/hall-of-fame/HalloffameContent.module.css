@@ -6,31 +6,40 @@
 
 .headerSection {
   display: flex;
-  gap: 24px;
-  align-items: flex-start;
+  gap: 1rem 1.5rem;
+  align-items: center;
   justify-content: space-between;
+  flex-wrap: wrap;
 }
 
-.descriptionBox {
-  flex: 1;
-  padding: 0;
-  display: flex;
+.pageTitle {
+  display: inline-flex;
   flex-direction: column;
-  gap: 12px;
+  align-items: flex-start;
+  gap: 0.8rem;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.1;
+  flex-shrink: 0;
 }
 
-.descriptionText {
-  margin: 0;
-  color: #3f484f;
-  font-size: 1.05rem;
-  line-height: 1.8;
-  font-weight: 500;
+.pageTitle::after {
+  content: "";
+  width: 72px;
+  height: 4px;
+  border-radius: 999px;
+  background: #737300;
+  display: block;
 }
 
 .toolbar {
   display: flex;
   gap: 16px;
   flex-shrink: 0;
+  margin-left: auto;
+  align-items: center;
 }
 
 .filterBox {
@@ -391,9 +400,16 @@
 }
 
 @media (max-width: 720px) {
+  .headerSection {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
   .toolbar {
     flex-direction: column;
     align-items: stretch;
+    margin-left: 0;
+    width: 100%;
   }
 
   .cardMedia {

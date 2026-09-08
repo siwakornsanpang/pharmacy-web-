@@ -1,14 +1,14 @@
 /* === Department Other Agencies === */
 .section {
   background: white;
-  padding: 4rem 1.5rem 4rem;
+  padding: 4rem 0 0;
 }
 
 .container {
   max-width: var(--max-width-2xl);
   width: 90%;
   margin: 0 auto;
-  padding: 20px;
+  padding: 0 20px;
 }
 
 .card {

@@ -22,6 +22,7 @@ export default async function Home() {
   ]);
 
   const highlights = allNews.filter(n => n.isHighlight && n.status === 'published');
+  const regularNews = allNews.filter(n => !n.isHighlight && n.status === 'published');
 
   const activeBanners = (homeContent.banners || [])
     .filter(b => b.active)
@@ -63,8 +64,8 @@ export default async function Home() {
       {/* 5. การประชุม */}
       <HomeMeetings />
 
-      {/* 6. เรื่องเด่นและข่าวสาร (Full) */}
-      <HomeNewsSection highlights={highlights} />
+      {/* 6. เรื่องเด่นและข่าวสาร */}
+      <HomeNewsSection highlights={highlights} newsList={regularNews} />
     </div>
   );
 }

@@ -10,9 +10,9 @@ import styles from "./MemberNavbar.module.css";
 const memberLinks = [
     { name: "หน้าแรก", href: "/home" },
     { name: "ข้อมูลของฉัน", href: "/profile" },
-    { name: "e-service", href: "/service" },
+    { name: "E-service", href: "/service" },
     { name: "งานประชุม", href: "/meeting" },
-    { name: "การศึกษา", href: "/learning" },
+    { name: "pharmacy academy", href: "/learning" },
     // { name: "การสมัครงาน", href: "/careers" },
     // { name: "เครื่องมือเภสัชกร", href: "/tools" },
     { name: "สินค้าสภาเภสัชกรรม", href: "/store" },

@@ -74,12 +74,6 @@ export default function ProductCard({ product }: ProductCardProps) {
                             {Number(product.price).toLocaleString()}
                         </span>
                     </div>
-
-                    {product.description && (
-                        <p className={`${styles.description} ThaiFont`}>
-                            {product.description}
-                        </p>
-                    )}
                 </div>
             </button>
 
