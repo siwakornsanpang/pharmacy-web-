@@ -116,6 +116,59 @@
   justify-content: center;
 }
 
+.tableWrap {
+  overflow-x: auto;
+  background: #fff;
+  border: 1px solid #d9e0c8;
+  border-radius: 16px;
+  box-shadow: 0 4px 16px rgba(45, 50, 20, 0.04);
+}
+
+.resultsTable {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.resultsTable thead {
+  background: #f4f7ee;
+  color: #3a4b0f;
+}
+
+.resultsTable th,
+.resultsTable td {
+  padding: 0.95rem 1.25rem;
+  border-bottom: 1px solid #eef2e3;
+}
+
+.resultsTable tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.resultsTable tbody tr:hover {
+  background: #fafbf6;
+}
+
+.nameLink {
+  color: #737300;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+
+.nameLink:hover {
+  color: #5a5a00;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.licenseCell {
+  font-weight: 600;
+  color: #334155;
+  font-variant-numeric: tabular-nums;
+}
+
 @media (max-width: 640px) {
   .banner {
     height: 200px;
@@ -123,5 +176,11 @@
 
   .bannerContent {
     bottom: 2rem;
+  }
+
+  .resultsTable th,
+  .resultsTable td {
+    padding: 0.8rem 0.9rem;
+    font-size: 0.88rem;
   }
 }

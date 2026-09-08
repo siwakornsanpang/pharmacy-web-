@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useMemo, useState, Suspense } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import {
@@ -9,15 +8,7 @@ import {
   ChevronDown,
   ChevronLeft,
   ListFilter,
-  CheckCircle2,
-  AlertTriangle,
-  GraduationCap,
-  Award,
-  Building2,
-  MapPin,
-  Info,
   RotateCcw,
-  User,
   Loader2,
 } from "lucide-react";
 import MeetingPagination from "@/components/public/05_meeting/MeetingPagination";
@@ -28,8 +19,8 @@ import {
   SearchType,
   searchOptions,
   mockPharmacistsList,
-  getFormattedThaiDateTime,
   buildLicenseSearchPath,
+  buildLicenseDetailPath,
   normalizeLicenseDigits,
   stripNameTitles,
 } from "./licenseSearchShared";
@@ -43,7 +34,6 @@ function isExactLicenseMatch(licenseValue: string, searchTerm: string) {
   return licenseDigits === searchDigits;
 }
 
-/** Keyword match: every non-empty token must appear somewhere in the name. */
 function matchesNameKeywords(itemName: string, searchTerm: string) {
   const searchWords = stripNameTitles(searchTerm)
     .toLowerCase()
@@ -88,11 +78,10 @@ function LicenseSearchResultsInner() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [searchResults, setSearchResults] = useState<PharmacistData[]>([]);
-  const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({});
-  const [searchTime, setSearchTime] = useState(getFormattedThaiDateTime());
   const [currentPage, setCurrentPage] = useState(1);
 
   const selectedOption = searchOptions.find((o) => o.value === searchType)!;
+  const currentSearchQuery = searchParams.toString();
 
   const activeTerm = useMemo(() => {
     if (initialType === "license") return initialQuery.trim();
@@ -110,9 +99,7 @@ function LicenseSearchResultsInner() {
       }
 
       setIsLoading(true);
-      setImageErrors({});
       setCurrentPage(1);
-      setSearchTime(getFormattedThaiDateTime());
 
       const results = await fetchPharmacistResults(initialType, activeTerm);
       if (!cancelled) {
@@ -149,42 +136,6 @@ function LicenseSearchResultsInner() {
     setFirstName("");
     setLastName("");
     router.push("/");
-  };
-
-  const getLicenseStatusDisplay = (item: PharmacistData) => {
-    if (item.statusType === "abnormal") {
-      return {
-        label: item.statusReason
-          ? `ไม่ปกติ — ${item.statusReason}`
-          : "ไม่ปกติ",
-        className: styles.statusSuspended,
-        iconClassName: styles.statusIconSuspended,
-        Icon: AlertTriangle,
-      };
-    }
-    return {
-      label: "ปกติ",
-      className: styles.statusNormal,
-      iconClassName: styles.statusIcon,
-      Icon: CheckCircle2,
-    };
-  };
-
-  const getCpeStatusDisplay = (item: PharmacistData) => {
-    if (item.cpeStatus === "incomplete") {
-      return {
-        label: "ไม่ครบตามเกณฑ์",
-        className: styles.statusCpe,
-        iconClassName: styles.statusIconCpe,
-        Icon: AlertTriangle,
-      };
-    }
-    return {
-      label: "ครบตามเกณฑ์",
-      className: styles.statusNormal,
-      iconClassName: styles.statusIcon,
-      Icon: CheckCircle2,
-    };
   };
 
   return (
@@ -302,149 +253,36 @@ function LicenseSearchResultsInner() {
           </div>
         ) : searchResults.length > 0 ? (
           <div className={styles.resultsList}>
-            {pageItems.map((item, index) => {
-              const licenseStatus = getLicenseStatusDisplay(item);
-              const cpeStatus = getCpeStatusDisplay(item);
-              const LicenseIcon = licenseStatus.Icon;
-              const CpeIcon = cpeStatus.Icon;
-              const recentCerts = (item.certificates || []).slice(0, 3);
+            <div className={pageStyles.tableWrap}>
+              <table className={pageStyles.resultsTable}>
+                <thead>
+                  <tr>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>เลขที่ใบอนุญาต</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {pageItems.map((item, index) => {
+                    const fullName = `${item.title ? `${item.title} ` : ""}${item.name}`;
+                    const detailHref = buildLicenseDetailPath(
+                      item.id ?? index + 1,
+                      currentSearchQuery
+                    );
 
-              return (
-                <div key={item.id || index} className={styles.resultItemBlock}>
-                  <div className={styles.profileCard}>
-                    <div className={styles.avatarWrapper}>
-                      {item.image && !imageErrors[index] ? (
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          fill
-                          sizes="140px"
-                          className={styles.avatarImage}
-                          unoptimized
-                          onError={() =>
-                            setImageErrors((prev) => ({ ...prev, [index]: true }))
-                          }
-                        />
-                      ) : (
-                        <div className={styles.avatarPlaceholder}>
-                          <User size={56} className={styles.avatarPlaceholderIcon} />
-                        </div>
-                      )}
-                    </div>
-
-                    <div className={styles.profileDetails}>
-                      <h4 className={styles.pharmacistName}>
-                        {item.title ? `${item.title} ` : ""}
-                        {item.name}
-                      </h4>
-
-                      <div className={styles.detailRows}>
-                        <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>เลขที่ใบอนุญาต</span>
-                          <span className={styles.detailValue}>{item.licenseNo}</span>
-                        </div>
-
-                        <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>สถานะ</span>
-                          <span
-                            className={`${styles.detailValue} ${licenseStatus.className}`}
-                          >
-                            <LicenseIcon
-                              size={16}
-                              className={licenseStatus.iconClassName}
-                            />
-                            {licenseStatus.label}
-                          </span>
-                        </div>
-
-                        {item.expiryDate && (
-                          <div className={styles.detailRow}>
-                            <span className={styles.detailLabel}>ใบอนุญาตหมดอายุ</span>
-                            <span className={styles.detailValue}>{item.expiryDate}</span>
-                          </div>
-                        )}
-
-                        <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>
-                            สถานะการศึกษาต่อเนื่อง
-                          </span>
-                          <span className={`${styles.detailValue} ${cpeStatus.className}`}>
-                            <CpeIcon size={16} className={cpeStatus.iconClassName} />
-                            {cpeStatus.label}
-                          </span>
-                        </div>
-
-                        <div className={styles.detailRow}>
-                          <span className={styles.detailLabel}>
-                            ใบอนุญาตเป็นผู้ประกอบวิชาชีพเภสัชกรรม
-                          </span>
-                          <span className={styles.detailValueMuted}>
-                            {item.replacementInfo || "(ไม่เคยขอใบแทน)"}
-                          </span>
-                        </div>
-
-                        <div className={styles.detailRowStacked}>
-                          <div className={styles.detailRow}>
-                            <span className={styles.detailLabel}>ที่อยู่ที่ติดต่อได้</span>
-                            <span className={styles.detailValue}>
-                              <MapPin size={15} className={styles.infoIcon} />
-                              {[item.contactProvince, item.contactPostalCode]
-                                .filter(Boolean)
-                                .join(" ") || "-"}
-                            </span>
-                          </div>
-                          <div className={styles.timestampUnderField}>
-                            <Info size={14} className={styles.infoIcon} />
-                            <span>ข้อมูล ณ วันที่ค้นหา {searchTime}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={styles.qualificationCard}>
-                    <div className={styles.qualColumnMain}>
-                      <div className={styles.qualHeader}>
-                        <GraduationCap size={20} className={styles.qualIcon} />
-                        <span>คุณวุฒิและการอบรม</span>
-                      </div>
-                      <div className={styles.certList}>
-                        {recentCerts.length > 0 ? (
-                          recentCerts.map((cert, certIdx) => (
-                            <div key={certIdx} className={styles.qualContent}>
-                              <Award size={18} className={styles.certIcon} />
-                              <span className={styles.certText}>
-                                <strong>ประกาศนียบัตร:</strong> {cert.name}
-                                {cert.date ? ` (${cert.date})` : ""}
-                              </span>
-                            </div>
-                          ))
-                        ) : (
-                          <div className={styles.qualContent}>
-                            <Award size={18} className={styles.certIcon} />
-                            <span className={styles.certText}>
-                              <strong>ประกาศนียบัตร:</strong> -
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className={styles.qualDivider} />
-
-                    <div className={styles.qualColumnSub}>
-                      <div className={styles.qualHeader}>
-                        <Building2 size={18} className={styles.qualIcon} />
-                        <span>หน่วยงานที่จัด</span>
-                      </div>
-                      <div className={styles.qualSubValue}>
-                        {recentCerts[0]?.organization || "-"}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+                    return (
+                      <tr key={item.id || index}>
+                        <td>
+                          <Link href={detailHref} className={pageStyles.nameLink}>
+                            {fullName}
+                          </Link>
+                        </td>
+                        <td className={pageStyles.licenseCell}>{item.licenseNo}</td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
 
             {totalPages > 1 && (
               <div className={pageStyles.paginationWrap}>

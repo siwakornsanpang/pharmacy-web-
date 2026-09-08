@@ -202,3 +202,18 @@ export function buildLicenseSearchPath(params: {
 
   return `/license-search?${searchParams.toString()}`;
 }
+
+export function getPharmacistById(id: string): PharmacistData | undefined {
+  return mockPharmacistsList.find((item) => String(item.id) === String(id));
+}
+
+/** Detail URL; pass current search query so the back link can restore results. */
+export function buildLicenseDetailPath(
+  id: string | number,
+  searchQuery?: string
+): string {
+  const base = `/license-search/${encodeURIComponent(String(id))}`;
+  if (!searchQuery) return base;
+  return `${base}?${searchQuery.replace(/^\?/, "")}`;
+}
+
