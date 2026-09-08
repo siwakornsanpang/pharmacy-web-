@@ -122,18 +122,23 @@ function seededRandom(seed: number) {
 }
 
 function buildCertificates(rand: () => number): CertificateItem[] {
-  const count = 3 + Math.floor(rand() * 2); // 3–4 items, show latest 3
+  const count = 5 + Math.floor(rand() * 4); // 5–8 items; UI shows latest 3 then expand
   const picked = [...CERT_POOL].sort(() => rand() - 0.5).slice(0, count);
-  return picked.map((name, i) => {
-    const year = 2566 + Math.floor(rand() * 4);
-    const month = THAI_MONTHS[Math.floor(rand() * 12)];
+  const items = picked.map((name) => {
+    const year = 2564 + Math.floor(rand() * 6);
+    const monthIndex = Math.floor(rand() * 12);
     const day = 1 + Math.floor(rand() * 28);
     return {
       name,
-      date: `${day} ${month} ${year}`,
+      date: `${day} ${THAI_MONTHS[monthIndex]} ${year}`,
       organization: rand() > 0.3 ? "สภาเภสัชกรรม" : "ราชวิทยาลัยเภสัชกรรมฯ",
+      /** sort key: newer first */
+      _sort: year * 10000 + monthIndex * 100 + day,
     };
   });
+  return items
+    .sort((a, b) => b._sort - a._sort)
+    .map(({ name, date, organization }) => ({ name, date, organization }));
 }
 
 /** 20 mock pharmacists named กิตติ for search testing (licenses 1–20 exact). */

@@ -32,7 +32,15 @@
   margin: 0 auto;
   padding: 0 20px;
   z-index: 1;
-  overflow: hidden;
+  overflow: visible;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 2rem;
+  color: #6b7280;
+  background: #fff;
+  border-radius: 1.5rem;
 }
 
 /* === Section Header common === */

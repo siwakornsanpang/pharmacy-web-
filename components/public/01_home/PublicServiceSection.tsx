@@ -16,17 +16,17 @@ const PUBLIC_SERVICES = [
   },
   {
     id: 2,
-    img: "/images/public/service/service3.jpg",
-    title: "แจ้งเบาะแสร้านยาแขวนป้าย",
-    description: "รายงานร้านยาที่ไม่อาจปฏิบัติตามมาตรฐาน",
-    href: "https://law.pharmacycouncil.org/tip-report",
-  },
-  {
-    id: 3,
     img: "/images/public/service/service4.jpg",
     title: "ตรวจสอบคำร้อง",
     description: "ตรวจสอบคำร้องเรียน",
     href: "https://law.pharmacycouncil.org/tracking",
+  },
+  {
+    id: 3,
+    img: "/images/public/service/service3.jpg",
+    title: "แจ้งเบาะแสร้านยาแขวนป้าย",
+    description: "รายงานร้านยาที่ไม่อาจปฏิบัติตามมาตรฐาน",
+    href: "https://law.pharmacycouncil.org/tip-report",
   },
   {
     

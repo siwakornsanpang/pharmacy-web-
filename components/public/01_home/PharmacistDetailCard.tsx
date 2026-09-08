@@ -11,6 +11,7 @@ import {
   MapPin,
   Info,
   User,
+  ChevronDown,
 } from "lucide-react";
 import styles from "./LicenseSearch.module.css";
 import {
@@ -62,11 +63,15 @@ export default function PharmacistDetailCard({
   searchTime?: string;
 }) {
   const [imageError, setImageError] = useState(false);
+  const [certsExpanded, setCertsExpanded] = useState(false);
   const licenseStatus = getLicenseStatusDisplay(item);
   const cpeStatus = getCpeStatusDisplay(item);
   const LicenseIcon = licenseStatus.Icon;
   const CpeIcon = cpeStatus.Icon;
-  const recentCerts = (item.certificates || []).slice(0, 3);
+
+  const allCerts = item.certificates || [];
+  const visibleCerts = certsExpanded ? allCerts : allCerts.slice(0, 3);
+  const hiddenCount = Math.max(0, allCerts.length - 3);
 
   return (
     <div className={styles.resultItemBlock}>
@@ -102,10 +107,18 @@ export default function PharmacistDetailCard({
             </div>
 
             <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>สถานะ</span>
+              <span className={styles.detailLabel}>สถานะใบอนุญาตประกอบวิชาชีพ</span>
               <span className={`${styles.detailValue} ${licenseStatus.className}`}>
                 <LicenseIcon size={16} className={licenseStatus.iconClassName} />
                 {licenseStatus.label}
+              </span>
+            </div>
+
+            <div className={styles.detailRow}>
+              <span className={styles.detailLabel}>สถานะการศึกษา</span>
+              <span className={`${styles.detailValue} ${cpeStatus.className}`}>
+                <CpeIcon size={16} className={cpeStatus.iconClassName} />
+                {cpeStatus.label}
               </span>
             </div>
 
@@ -115,14 +128,6 @@ export default function PharmacistDetailCard({
                 <span className={styles.detailValue}>{item.expiryDate}</span>
               </div>
             )}
-
-            <div className={styles.detailRow}>
-              <span className={styles.detailLabel}>สถานะการศึกษาต่อเนื่อง</span>
-              <span className={`${styles.detailValue} ${cpeStatus.className}`}>
-                <CpeIcon size={16} className={cpeStatus.iconClassName} />
-                {cpeStatus.label}
-              </span>
-            </div>
 
             <div className={styles.detailRow}>
               <span className={styles.detailLabel}>
@@ -151,44 +156,66 @@ export default function PharmacistDetailCard({
       </div>
 
       <div className={styles.qualificationCard}>
-        <div className={styles.qualColumnMain}>
+        <div className={styles.qualHeaderRow}>
           <div className={styles.qualHeader}>
             <GraduationCap size={20} className={styles.qualIcon} />
             <span>คุณวุฒิและการอบรม</span>
           </div>
-          <div className={styles.certList}>
-            {recentCerts.length > 0 ? (
-              recentCerts.map((cert, certIdx) => (
-                <div key={certIdx} className={styles.qualContent}>
-                  <Award size={18} className={styles.certIcon} />
-                  <span className={styles.certText}>
-                    <strong>ประกาศนียบัตร:</strong> {cert.name}
-                    {cert.date ? ` (${cert.date})` : ""}
-                  </span>
-                </div>
-              ))
-            ) : (
-              <div className={styles.qualContent}>
-                <Award size={18} className={styles.certIcon} />
-                <span className={styles.certText}>
-                  <strong>ประกาศนียบัตร:</strong> -
-                </span>
-              </div>
-            )}
-          </div>
+          {allCerts.length > 0 && (
+            <span className={styles.qualCount}>
+              แสดง {visibleCerts.length} จาก {allCerts.length} รายการ
+            </span>
+          )}
         </div>
 
-        <div className={styles.qualDivider} />
-
-        <div className={styles.qualColumnSub}>
-          <div className={styles.qualHeader}>
-            <Building2 size={18} className={styles.qualIcon} />
+        <div className={styles.certTableWrap}>
+          <div className={styles.certTableHead} aria-hidden="true">
+            <span>ชื่อประกาศนียบัตร</span>
+            <span>วันที่จัด</span>
             <span>หน่วยงานที่จัด</span>
           </div>
-          <div className={styles.qualSubValue}>
-            {recentCerts[0]?.organization || "-"}
-          </div>
+
+          {visibleCerts.length > 0 ? (
+            <ul className={styles.certTableBody}>
+              {visibleCerts.map((cert, certIdx) => (
+                <li key={`${cert.name}-${cert.date}-${certIdx}`} className={styles.certRow}>
+                  <div className={styles.certCellName}>
+                    <Award size={16} className={styles.certIcon} />
+                    <span>{cert.name || "-"}</span>
+                  </div>
+                  <div className={styles.certCellDate} data-label="วันที่จัด">
+                    {cert.date || "-"}
+                  </div>
+                  <div className={styles.certCellOrg} data-label="หน่วยงานที่จัด">
+                    <Building2 size={14} className={styles.certOrgIcon} />
+                    <span>{cert.organization || "-"}</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <div className={styles.certEmpty}>ยังไม่มีข้อมูลคุณวุฒิและการอบรม</div>
+          )}
         </div>
+
+        {hiddenCount > 0 && (
+          <button
+            type="button"
+            className={styles.certExpandBtn}
+            onClick={() => setCertsExpanded((v) => !v)}
+            aria-expanded={certsExpanded}
+          >
+            <ChevronDown
+              size={16}
+              className={`${styles.certExpandIcon} ${
+                certsExpanded ? styles.certExpandIconOpen : ""
+              }`}
+            />
+            {certsExpanded
+              ? "ย่อรายการ"
+              : `ดูทั้งหมดอีก ${hiddenCount} รายการ`}
+          </button>
+        )}
       </div>
     </div>
   );

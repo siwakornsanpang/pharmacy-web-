@@ -56,9 +56,9 @@ export default async function Home() {
       <PopularServices services={popularServices} viewAllHref="/service" />
       <PharmacistRolesSection />
 
-      {/* 4. 6 สายงานวิชาชีพเภสัชกร */}
-      <PharmacyCarousel />
+      {/* 4. สถิติ + สายงานวิชาชีพเภสัชกร */}
       <HomeStats />
+      <PharmacyCarousel />
 
       {/* 5. การประชุม */}
       <HomeMeetings />

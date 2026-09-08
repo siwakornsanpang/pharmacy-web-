@@ -2,7 +2,7 @@
     position: relative;
     width: 100%;
     margin-bottom: 2rem;
-    overflow: hidden;
+    overflow: visible;
 }
 
 .header {
@@ -10,6 +10,7 @@
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2rem;
+    gap: 1rem;
 }
 
 .sectionTitle {
@@ -19,31 +20,57 @@
     margin: 0;
 }
 
-.navigation {
+.viewAll {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    color: #737300;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: opacity 0.2s;
+    white-space: nowrap;
+}
+
+.viewAll:hover {
+    opacity: 0.75;
+}
+
+.carouselStage {
+    position: relative;
     display: flex;
+    align-items: center;
     gap: 1rem;
 }
 
-.navBtn {
-    background: transparent;
-    border: 1px solid #737300;
-    width: 3.5rem;
-    height: 3.5rem;
-    border-radius: 50%;
+.sideNav {
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 50%;
+    border: 1px solid #737300;
+    background: transparent;
     color: #737300;
+    cursor: pointer;
     transition: all 0.3s ease;
+    padding: 0;
 }
 
-.navBtn:hover {
+.sideNav:hover {
     background-color: #737300;
     color: white;
 }
 
+.sideNavLabel {
+    display: none;
+}
+
 .card {
+    flex: 1;
+    min-width: 0;
     background: white;
     border-radius: 2rem;
     overflow: hidden;
@@ -62,7 +89,6 @@
 .imageSection {
     position: relative;
     flex: 65;
-    /* Strict 65% ratio */
     flex-basis: 0;
     min-width: 0;
     min-height: 350px;
@@ -83,7 +109,6 @@
 
 .contentSection {
     flex: 35;
-    /* Strict 35% ratio */
     flex-basis: 0;
     min-width: 0;
     padding: 3rem;
@@ -98,6 +123,7 @@
     align-items: center;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
 }
 
 .badge {
@@ -146,7 +172,6 @@
     white-space: pre-line;
 }
 
-/* Keep only line breaks, remove other formatting for content preview */
 .content :global(*) {
     font-size: 1.125rem !important;
     font-weight: 400 !important;
@@ -217,9 +242,13 @@
     .title {
         font-size: 1.5rem;
     }
+
+    .sideNav {
+        width: 3rem;
+        height: 3rem;
+    }
 }
 
-/* Transitions */
 .fadeIn {
     animation: fadeInEffect 1.5s ease-in-out;
 }
@@ -246,6 +275,31 @@
 
     to {
         opacity: 1;
+    }
+}
+
+@media (max-width: 640px) {
+    .carouselStage {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.75rem;
+        justify-items: center;
+    }
+
+    .card {
+        grid-column: 1 / -1;
+        order: -1;
+        min-height: 0;
+    }
+
+    .sideNavLeft {
+        order: 1;
+        justify-self: end;
+    }
+
+    .sideNavRight {
+        order: 2;
+        justify-self: start;
     }
 }
 
