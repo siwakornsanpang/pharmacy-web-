@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { X } from "lucide-react";
 import styles from "./CommitteeContent.module.css";
 
 export type CouncilMember = {
@@ -141,8 +142,9 @@ export default function CommitteeContent({ initialMembers = [] }: CommitteeConte
                             className={styles.closeButton}
                             onClick={() => setSelected(null)}
                             aria-label="ปิด"
+                            type="button"
                         >
-                            ×
+                            <X size={18} strokeWidth={2.5} />
                         </button>
 
                         <div className={styles.modalImageBox}>

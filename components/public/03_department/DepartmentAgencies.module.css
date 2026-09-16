@@ -74,14 +74,17 @@
 .heroImageWrapper {
   flex: 1;
   position: relative;
-  min-height: 280px; /* บังคับความสูงขั้นต่ำเผื่อข้อความสั้น */
+  /* สัดส่วนจริงบนหน้าเว็บ (การ์ดแนวนอน) — ต้องตรงกับครอปใน backoffice */
+  aspect-ratio: 3 / 2;
+  min-height: 0;
+  align-self: stretch;
 }
 
 .heroImage {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  position: absolute; /* เพื่อให้รูปยืดเต็มพื้นที่ของ Wrapper */
+  position: absolute;
   top: 0;
   left: 0;
 }
@@ -208,7 +211,8 @@
 
   .heroImageWrapper {
     width: 100%;
-    min-height: 300px;
+    aspect-ratio: 3 / 2;
+    min-height: 0;
   }
 }
 

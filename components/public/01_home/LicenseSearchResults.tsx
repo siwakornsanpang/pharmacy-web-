@@ -10,6 +10,9 @@ import {
   ListFilter,
   RotateCcw,
   Loader2,
+  CheckCircle2,
+  AlertTriangle,
+  ChevronRight,
 } from "lucide-react";
 import MeetingPagination from "@/components/public/05_meeting/MeetingPagination";
 import styles from "./LicenseSearch.module.css";
@@ -24,6 +27,21 @@ import {
   normalizeLicenseDigits,
   stripNameTitles,
 } from "./licenseSearchShared";
+
+function getRowStatus(item: PharmacistData) {
+  if (item.statusType === "abnormal") {
+    return {
+      label: "ไม่ปกติ",
+      className: pageStyles.statusAbnormal,
+      Icon: AlertTriangle,
+    };
+  }
+  return {
+    label: "ปกติ",
+    className: pageStyles.statusNormal,
+    Icon: CheckCircle2,
+  };
+}
 
 const ITEMS_PER_PAGE = 10;
 
@@ -257,26 +275,42 @@ function LicenseSearchResultsInner() {
               <table className={pageStyles.resultsTable}>
                 <thead>
                   <tr>
-                    <th>ชื่อ-นามสกุล</th>
+                    <th className={pageStyles.colIndex}>ลำดับ</th>
                     <th>เลขที่ใบอนุญาต</th>
+                    <th>ชื่อ-นามสกุล</th>
+                    <th>สถานะ</th>
+                    <th className={pageStyles.colAction}></th>
                   </tr>
                 </thead>
                 <tbody>
                   {pageItems.map((item, index) => {
+                    const rowNumber =
+                      (currentPage - 1) * ITEMS_PER_PAGE + index + 1;
                     const fullName = `${item.title ? `${item.title} ` : ""}${item.name}`;
                     const detailHref = buildLicenseDetailPath(
-                      item.id ?? index + 1,
+                      item.id ?? rowNumber,
                       currentSearchQuery
                     );
+                    const status = getRowStatus(item);
+                    const StatusIcon = status.Icon;
 
                     return (
                       <tr key={item.id || index}>
+                        <td className={pageStyles.indexCell}>{rowNumber}</td>
+                        <td className={pageStyles.licenseCell}>{item.licenseNo}</td>
+                        <td className={pageStyles.nameCell}>{fullName}</td>
                         <td>
-                          <Link href={detailHref} className={pageStyles.nameLink}>
-                            {fullName}
+                          <span className={status.className}>
+                            <StatusIcon size={16} />
+                            {status.label}
+                          </span>
+                        </td>
+                        <td className={pageStyles.actionCell}>
+                          <Link href={detailHref} className={pageStyles.detailBtn}>
+                            ดูรายละเอียด
+                            <ChevronRight size={16} />
                           </Link>
                         </td>
-                        <td className={pageStyles.licenseCell}>{item.licenseNo}</td>
                       </tr>
                     );
                   })}

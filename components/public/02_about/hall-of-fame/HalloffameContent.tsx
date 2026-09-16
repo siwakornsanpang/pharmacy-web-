@@ -180,7 +180,7 @@ export default function HalloffameContent({ initialData = [] }: Props) {
     return (
         <section className={styles.wrapper}>
             <div className={styles.headerSection}>
-                <h2 className={`${styles.pageTitle} ThaiFont`}>เกียรติประวัติ</h2>
+                <h2 className={`${styles.pageTitle} ThaiFont`}>หอเกียรติประวัติ</h2>
 
                 <div className={styles.toolbar}>
                     <div className={styles.filterBox}>

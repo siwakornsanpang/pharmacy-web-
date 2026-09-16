@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRight, GraduationCap } from "lucide-react";
 import { Agency } from "@/lib/api";
@@ -10,6 +11,10 @@ interface DepartmentCollegesProps {
 
 export default function DepartmentColleges({ title, agencies }: DepartmentCollegesProps) {
   if (agencies.length === 0) return null;
+
+  const hero = agencies[0];
+  const rest = agencies.slice(1);
+  const heroIcon = hero.iconUrl || hero.logoUrl;
 
   return (
     <section className={styles.section}>
@@ -39,36 +44,74 @@ export default function DepartmentColleges({ title, agencies }: DepartmentColleg
       <div className={styles.container}>
         <h2 className={styles.sectionTitle}>{title}</h2>
 
-        <div className={styles.collegeGrid}>
-          {agencies.map((agency) => (
-            <Link
-              key={agency.id}
-              href={agency.url || "#"}
-              target={agency.url ? "_blank" : "_self"}
-              rel="noreferrer"
-              className={styles.collegeCard}
-            >
-              <ArrowUpRight size={20} className={styles.cardArrow} />
-
-              {agency.logoUrl ? (
-                <div className={styles.logoWrapper}>
-                  <img src={agency.logoUrl} alt="" className={styles.logo} />
-                </div>
-              ) : (
-                <div className={styles.logoPlaceholder}>
-                  <GraduationCap size={28} />
-                </div>
-              )}
-
-              <div className={styles.cardContent}>
-                <h3 className={styles.cardTitle}>{agency.name}</h3>
-                {agency.description && (
-                  <p className={styles.cardDesc}>{agency.description}</p>
-                )}
+        {/* ลำดับที่ 1 — การ์ดใหญ่แบบหน่วยงานในกำกับ */}
+        <Link
+          href={hero.url || "#"}
+          target={hero.url ? "_blank" : "_self"}
+          rel="noreferrer"
+          className={styles.heroCard}
+        >
+          <div className={styles.heroContent}>
+            {heroIcon ? (
+              <img src={heroIcon} alt="" className={styles.heroIcon} />
+            ) : (
+              <div className={styles.heroIconPlaceholder}>
+                <GraduationCap size={28} />
               </div>
-            </Link>
-          ))}
-        </div>
+            )}
+            <h3 className={styles.heroTitle}>{hero.name}</h3>
+            {hero.description && (
+              <p className={styles.heroDesc}>{hero.description}</p>
+            )}
+          </div>
+          {hero.thumbnailUrl && (
+            <div className={styles.heroImageWrapper}>
+              <Image
+                src={hero.thumbnailUrl}
+                alt={hero.name}
+                fill
+                className={styles.heroImage}
+              />
+              <ArrowUpRight size={24} className={styles.heroArrow} />
+            </div>
+          )}
+          {!hero.thumbnailUrl && (
+            <ArrowUpRight size={20} className={styles.heroFallbackArrow} />
+          )}
+        </Link>
+
+        {rest.length > 0 && (
+          <div className={styles.collegeGrid}>
+            {rest.map((agency) => (
+              <Link
+                key={agency.id}
+                href={agency.url || "#"}
+                target={agency.url ? "_blank" : "_self"}
+                rel="noreferrer"
+                className={styles.collegeCard}
+              >
+                <ArrowUpRight size={20} className={styles.cardArrow} />
+
+                {agency.logoUrl ? (
+                  <div className={styles.logoWrapper}>
+                    <img src={agency.logoUrl} alt="" className={styles.logo} />
+                  </div>
+                ) : (
+                  <div className={styles.logoPlaceholder}>
+                    <GraduationCap size={28} />
+                  </div>
+                )}
+
+                <div className={styles.cardContent}>
+                  <h3 className={styles.cardTitle}>{agency.name}</h3>
+                  {agency.description && (
+                    <p className={styles.cardDesc}>{agency.description}</p>
+                  )}
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
