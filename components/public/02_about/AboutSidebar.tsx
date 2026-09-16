@@ -6,7 +6,7 @@ import styles from "./AboutSidebar.module.css";
 
 const SIDEBAR_LINKS = [
   { href: "/about", label: "ประวัติความเป็นมา" },
-  { href: "/about/council-directory", label: "ทำเนียบสภา" },
+  { href: "/about/council-directory", label: "ทำเนียบสภาเภสัชกรรม" },
   { href: "/about/committee", label: "กรรมการเภสัชกรรม" },
   { href: "/about/hall-of-fame", label: "หอเกียรติประวัติ" },
   { href: "/about/members", label: "ข้อมูลสมาชิก" },

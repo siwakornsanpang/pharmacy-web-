@@ -113,7 +113,7 @@ export default function CouncildirectoryContent({
             {/* EMPTY STATE */}
             {sortedData.length === 0 && (
                 <div className={styles.emptyBox}>
-                    ยังไม่มีข้อมูลทำเนียบสภา
+                    ยังไม่มีข้อมูลทำเนียบสภาเภสัชกรรม
                 </div>
             )}
 

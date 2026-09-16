@@ -65,6 +65,7 @@
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
     flex-shrink: 0;
+    z-index: 2;
 }
 
 .scrollBtn:hover {
@@ -78,33 +79,36 @@
 .timelineScroll {
     flex: 1;
     overflow-x: auto;
-    scrollbar-width: none; /* Firefox */
+    overflow-y: hidden;
+    scrollbar-width: none;
     position: relative;
-    padding: 10px 0;
+    /* Room so card shadows aren't clipped into a hard rectangle */
+    padding: 28px 8px 24px;
+    margin: -12px 0;
     scroll-snap-type: x mandatory;
 }
 
 .timelineScroll::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
 }
 
 .timelineLine {
     position: absolute;
-    bottom: 14px; /* Align precisely with the dots */
-    left: -680px;
-    right: -680px;
+    bottom: 18px;
+    left: 0;
+    right: 0;
     height: 2px;
     background: #737300;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
     z-index: 1;
 }
 
 .termsList {
     display: flex;
     gap: 18px;
-    padding: 8px 20px 8px 20px; /* add side padding to avoid touching edges */
+    padding: 0 12px;
     position: relative;
     z-index: 2;
+    align-items: flex-end;
 }
 
 .termNode {
@@ -121,38 +125,37 @@
 }
 
 .termCard {
-    width: 95px;
-    height: 115px;
+    width: 104px;
+    height: 104px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.08);
-    border-radius: 90%;
+    background: #ffffff;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
     transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+    box-shadow: none;
     padding: 12px 6px;
     box-sizing: border-box;
     text-align: center;
 }
 
-.termNode:hover .termCard {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(115, 115, 0, 0.08);
-    border-color: rgba(115, 115, 0, 0.25);
+.termNode:hover .termCard:not(.activeCard) {
+    transform: translateY(-4px);
+    border-color: rgba(115, 115, 0, 0.35);
 }
 
 .activeCard {
     background: linear-gradient(180deg, #737300 0%, #5a5a00 100%);
     border: 1.5px solid #d4af37;
-    border-radius: 18px; /* rounded square */
+    border-radius: 18px;
     color: white;
-    transform: translateY(-3px) scale(1.03);
-    box-shadow: 0 18px 36px rgba(212, 175, 55, 0.16), 0 0 22px rgba(212, 175, 55, 0.32), 0 0 0 1px rgba(212, 175, 55, 0.22) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(115, 115, 0, 0.22);
     transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease;
-    width: 130px;
-    height: 130px;
+    width: 118px;
+    height: 118px;
     padding: 14px 10px;
     display: flex;
     flex-direction: column;
@@ -182,9 +185,9 @@
 
 .activeCard .termNodeNum {
     color: #ffffff;
-    text-shadow: 0 2px 6px rgba(0,0,0,0.22);
-    font-size: 36px;
+    font-size: 34px;
     font-weight: 900;
+    text-shadow: none;
 }
 
 .termNodeYears {
@@ -207,40 +210,25 @@
     border: 3px solid #737300;
     margin-top: 14px;
     position: relative;
-    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    transition: transform 0.25s ease, border-color 0.25s ease;
     z-index: 3;
-    box-shadow: 0 0 6px rgba(115, 115, 0, 0.06);
+    box-shadow: none;
 }
 
 .activeDot {
-    width: 18px;
-    height: 18px;
+    width: 14px;
+    height: 14px;
     border-radius: 50%;
-    background: transparent;
-    border: none;
-    position: relative;
-    transform: translateY(-2px);
-    box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.12), 0 0 18px rgba(212, 175, 55, 0.35);
+    background: #d4af37;
+    border: 2px solid #ffffff;
+    outline: 2px solid #737300;
+    outline-offset: 0;
+    transform: none;
+    box-shadow: none;
 }
 
 .activeDot::after {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) scale(1);
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #d4af37;
-    box-shadow: 0 0 8px rgba(212, 175, 55, 0.7), 0 0 20px rgba(212, 175, 55, 0.35);
-    animation: glowPulse 1.8s infinite ease-in-out;
-}
-
-@keyframes glowPulse {
-    0% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.9; }
-    50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
-    100% { transform: translate(-50%, -50%) scale(0.95); opacity: 0.9; }
+    display: none;
 }
 
 /* DETAIL CARD */

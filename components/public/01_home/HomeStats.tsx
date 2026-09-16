@@ -102,49 +102,30 @@ export default function HomeStats() {
 
   return (
     <section className={styles.statsSection}>
-      {/* Decorative background elements */}
-      <div className={styles.decorationBlur1} />
-      <div className={styles.decorationBlur2} />
-      
       <div className={styles.statsContainer}>
         <div className={styles.statsGrid}>
           {/* Stat Item 1 */}
           <div className={styles.statItem}>
-            <div className={styles.statIconWrapper}>
-              <div className={styles.statIconGlow} />
-              <h3 className={styles.statNumber}>
-                <AnimatedNumber value={pharmacistsCount} />
-                <div className={styles.numberShine} />
-              </h3>
-            </div>
+            <h3 className={styles.statNumber}>
+              <AnimatedNumber value={pharmacistsCount} />
+            </h3>
             <p className={styles.statLabel}>เภสัชกร</p>
-            
           </div>
 
           {/* Stat Item 2 */}
           <div className={styles.statItem}>
-            <div className={styles.statIconWrapper}>
-              <div className={styles.statIconGlow} />
-              <h3 className={styles.statNumber}>
-                <AnimatedNumber value={qualityPharmacies} />
-                <div className={styles.numberShine} />
-              </h3>
-            </div>
+            <h3 className={styles.statNumber}>
+              <AnimatedNumber value={qualityPharmacies} />
+            </h3>
             <p className={styles.statLabel}>ร้านยาคุณภาพ</p>
-            
           </div>
 
           {/* Stat Item 3 */}
           <div className={styles.statItem}>
-            <div className={styles.statIconWrapper}>
-              <div className={styles.statIconGlow} />
-              <h3 className={styles.statNumber}>
-                <AnimatedNumber value={faculties} />
-                <div className={styles.numberShine} />
-              </h3>
-            </div>
+            <h3 className={styles.statNumber}>
+              <AnimatedNumber value={faculties} />
+            </h3>
             <p className={styles.statLabel}>คณะเภสัชศาสตร์ประเทศไทย</p>
-            
           </div>
         </div>
         <div className={styles.updateTimeContainer}>

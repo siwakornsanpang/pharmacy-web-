@@ -13,7 +13,7 @@ interface ServiceListProps {
 
 export default function ServiceList({
   services,
-  title = "E-service",
+  title = "E-Service",
   viewAllHref,
   viewAllText = "ดูทั้งหมด",
 }: ServiceListProps) {

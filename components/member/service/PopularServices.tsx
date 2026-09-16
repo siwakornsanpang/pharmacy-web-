@@ -26,7 +26,7 @@ export default function PopularServices({
     <section className={styles.section}>
       <div className={styles.sectionCon}>
         <SectionHeader
-          title="E-service"
+          title="E-Service"
           viewAllHref={viewAllHref}
           viewAllText={viewAllText}
         />

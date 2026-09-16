@@ -163,10 +163,6 @@ export default function PassportProfileContent() {
             <div className={styles.docHeaderText}>
               <h2 className={styles.authorityTh}>{p.issuingAuthority.nameTh}</h2>
               <p className={styles.authorityEn}>{p.issuingAuthority.nameEn}</p>
-              <p className={styles.regulator}>
-                ภายใต้การกำกับของ{p.issuingAuthority.regulatorTh} ·{" "}
-                {p.issuingAuthority.regulatorEn}
-              </p>
             </div>
             <div className={styles.profileTag}>
               <span className={styles.profileTagPill}>

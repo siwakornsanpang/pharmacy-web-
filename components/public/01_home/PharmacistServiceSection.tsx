@@ -15,7 +15,7 @@ export default function PharmacistServiceSection({ services }: PharmacistService
     return (
         <section className={styles.serviceSection}>
             <Container>
-                <SectionHeader title="E-service" viewAllHref="/service" />
+                <SectionHeader title="E-Service" viewAllHref="/service" />
                 <div className={styles.pharmaGrid}>
                     {services.map((svc) => (
                         <Link 

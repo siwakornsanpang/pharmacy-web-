@@ -8,7 +8,7 @@ export default async function CouncilDirectoryPage() {
     return (
         <main className={styles.mainContainer}>
             <h2 className={`${styles.contentTitle} ThaiFont`}>
-                ทำเนียบสภา
+                ทำเนียบสภาเภสัชกรรม
             </h2>
 
             <div className={styles.contentWrapper}>

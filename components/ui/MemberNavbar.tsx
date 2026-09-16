@@ -3,28 +3,65 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogOut } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { ChevronDown, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import styles from "./MemberNavbar.module.css";
 
-const memberLinks = [
+type NavLink =
+    | { name: string; href: string; children?: undefined }
+    | {
+          name: string;
+          href: string;
+          children: { name: string; href: string }[];
+      };
+
+const memberLinks: NavLink[] = [
     { name: "หน้าแรก", href: "/home" },
     { name: "ข้อมูลของฉัน", href: "/profile" },
-    { name: "E-service", href: "/service" },
+    {
+        name: "E-Service",
+        href: "/service",
+        children: [
+            { name: "ยื่นคำขอ", href: "/service" },
+            { name: "ประวัติคำขอ", href: "/service/e-service/sap-33/history" },
+        ],
+    },
     { name: "งานประชุม", href: "/meeting" },
-    { name: "pharmacy academy", href: "/learning" },
-    // { name: "การสมัครงาน", href: "/careers" },
-    // { name: "เครื่องมือเภสัชกร", href: "/tools" },
+    { name: "Pharmacy Academy", href: "/learning" },
     { name: "สินค้าสภาเภสัชกรรม", href: "/store" },
 ];
+
+function isLinkActive(pathname: string, href: string) {
+    if (href === "/home") return pathname === "/" || pathname === "/home";
+    if (href === "/service") {
+        return pathname === "/service" || pathname.startsWith("/service/");
+    }
+    return pathname === href || pathname.startsWith(`${href}/`);
+}
 
 export default function MemberNavbar() {
     const pathname = usePathname();
     const { userName, userId, logout } = useAuth();
+    const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+    const dropdownRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setOpenDropdown(null);
+    }, [pathname]);
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+                setOpenDropdown(null);
+            }
+        };
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
 
     return (
         <nav className={`${styles.navbar} ThaiFont`}>
-            {/* Top Banner (Green — same color as public navbar) */}
             <div className={styles.topBanner}>
                 <div className={styles.brandArea}>
                     <Image
@@ -39,13 +76,11 @@ export default function MemberNavbar() {
                         <p className={styles.brandSubtitle}>The Pharmacy Council of Thailand</p>
                     </div>
 
-                    {/* Divider + System Name */}
                     <div className={styles.navDivider}></div>
                     <h2 className={styles.systemName}>ระบบบริการผู้ประกอบวิชาชีพเภสัชกรรม</h2>
                 </div>
 
                 <div className={styles.actionsArea}>
-                    {/* Language Switcher */}
                     <div className={styles.langSwitch}>
                         <svg
                             className={styles.langSwitchIcon}
@@ -63,7 +98,6 @@ export default function MemberNavbar() {
                         <span className={styles.langSwitchText}>TH</span>
                     </div>
 
-                    {/* User Info & Logout */}
                     <div className={styles.userArea}>
                         <div className={styles.userInfo}>
                             <div className={styles.userDetails}>
@@ -85,18 +119,65 @@ export default function MemberNavbar() {
                             <span>ออกจากระบบ</span>
                         </button>
                     </div>
-
                 </div>
             </div>
 
-            {/* Bottom Nav (White) */}
             <div className={styles.lowerNav}>
                 <div className={styles.navContainer}>
                     {memberLinks.map((link) => {
-                        const isActive =
-                            link.href === "/home"
-                                ? pathname === "/" || pathname === "/home"
-                                : pathname === link.href;
+                        const isActive = isLinkActive(pathname, link.href);
+
+                        if (link.children) {
+                            const isOpen = openDropdown === link.name;
+                            return (
+                                <div
+                                    key={link.name}
+                                    className={styles.dropdownWrap}
+                                    ref={dropdownRef}
+                                >
+                                    <button
+                                        type="button"
+                                        className={`${isActive ? styles.navItemActive : styles.navItem} ${styles.dropdownTrigger} ThaiFont`}
+                                        aria-expanded={isOpen}
+                                        aria-haspopup="menu"
+                                        onClick={() =>
+                                            setOpenDropdown(isOpen ? null : link.name)
+                                        }
+                                    >
+                                        {link.name}
+                                        <ChevronDown
+                                            size={14}
+                                            className={`${styles.dropdownChevron} ${isOpen ? styles.dropdownChevronOpen : ""}`}
+                                        />
+                                        {isActive && <div className={styles.activeIndicator} />}
+                                    </button>
+
+                                    {isOpen && (
+                                        <div className={styles.dropdownMenu} role="menu">
+                                            {link.children.map((child) => {
+                                                const childActive =
+                                                    child.href === "/service"
+                                                        ? pathname === "/service"
+                                                        : pathname === child.href ||
+                                                          pathname.startsWith(`${child.href}/`);
+                                                return (
+                                                    <Link
+                                                        key={child.href}
+                                                        href={child.href}
+                                                        role="menuitem"
+                                                        className={`${styles.dropdownItem} ${childActive ? styles.dropdownItemActive : ""} ThaiFont`}
+                                                        onClick={() => setOpenDropdown(null)}
+                                                    >
+                                                        {child.name}
+                                                    </Link>
+                                                );
+                                            })}
+                                        </div>
+                                    )}
+                                </div>
+                            );
+                        }
+
                         return (
                             <Link
                                 key={link.href}
