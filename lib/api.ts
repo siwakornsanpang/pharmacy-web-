@@ -476,6 +476,7 @@ export interface HonorRecipient {
     awardName: string;
     workName: string;
     awardDetail: string;
+    fullDetail?: string | null;
     imageUrl: string;
     originalImageUrl: string;
     videoUrl: string;
