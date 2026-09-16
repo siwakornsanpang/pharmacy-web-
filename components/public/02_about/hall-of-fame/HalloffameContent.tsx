@@ -20,6 +20,11 @@ function getYouTubeId(url: string): string | null {
     return null;
 }
 
+function hasHtmlContent(html?: string | null): boolean {
+    if (!html) return false;
+    return html.replace(/<[^>]*>/g, "").replace(/&nbsp;/g, " ").trim() !== "";
+}
+
 function VideoEmbed({ url }: { url: string }) {
     const ytId = getYouTubeId(url);
 
@@ -168,7 +173,8 @@ export default function HalloffameContent({ initialData = [] }: Props) {
                     (m.prefix || "").toLowerCase().includes(lowerQuery) ||
                     (m.workName || "").toLowerCase().includes(lowerQuery) ||
                     (m.awardName || "").toLowerCase().includes(lowerQuery) ||
-                    (m.awardDetail || "").toLowerCase().includes(lowerQuery)
+                    (m.awardDetail || "").toLowerCase().includes(lowerQuery) ||
+                    (m.fullDetail || "").toLowerCase().includes(lowerQuery)
                 );
             }
             return true;
@@ -314,15 +320,29 @@ export default function HalloffameContent({ initialData = [] }: Props) {
                                 )}
 
                                 {modalMember.awardDetail && (
-                                    <>
-                                        <div className={styles.modalInfoRow}>
-                                            <span>ผลงาน / เหตุผลที่ได้รับรางวัล</span>
-                                        </div>
-                                        <p className={styles.modalDetail}>{modalMember.awardDetail}</p>
-                                    </>
+                                    <p className={styles.modalDetail}>{modalMember.awardDetail}</p>
                                 )}
                             </div>
                         </div>
+
+                        {hasHtmlContent(modalMember.fullDetail) && (
+                            <div className={styles.modalFullDetail}>
+                                <div className={styles.modalVideoHeader}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                                        <polyline points="14 2 14 8 20 8" />
+                                        <line x1="16" y1="13" x2="8" y2="13" />
+                                        <line x1="16" y1="17" x2="8" y2="17" />
+                                        <polyline points="10 9 9 9 8 9" />
+                                    </svg>
+                                    <h3 className={styles.modalSectionTitle}>ข้อมูลผู้ได้รับรางวัล</h3>
+                                </div>
+                                <div
+                                    className={styles.fullDetailHtml}
+                                    dangerouslySetInnerHTML={{ __html: modalMember.fullDetail! }}
+                                />
+                            </div>
+                        )}
 
                         {/* ── Bottom section: Video (full-width) ── */}
                         {hasVideo(modalMember) && (
