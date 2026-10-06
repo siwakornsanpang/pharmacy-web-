@@ -74,11 +74,11 @@ function AnimatedNumber({ value, duration = 2000, suffix = "" }: AnimatedNumberP
   );
 }
 
-export default function LearningStats() {
+export default function LearningStats({ courseCount, learnerCount, instructorCount }: { courseCount: number; learnerCount: number; instructorCount: number }) {
   const stats = [
-    { label: "คอร์สเรียนออนไลน์", value: 124, suffix: "+" },
-    { label: "สมาชิกเข้าเรียน", value: 15800, suffix: "+" },
-    { label: "วิทยากรผู้เชี่ยวชาญ", value: 85, suffix: "+" },
+    { label: "คอร์สเรียนออนไลน์", value: courseCount, suffix: "" },
+    { label: "สมาชิกเข้าเรียน", value: learnerCount, suffix: "" },
+    { label: "วิทยากรผู้เชี่ยวชาญ", value: instructorCount, suffix: "" },
   ];
 
   return (
@@ -99,7 +99,7 @@ export default function LearningStats() {
           ))}
         </div>
         <div className={styles.updateTimeContainer}>
-          อัพเดทข้อมูลล่าสุดเมื่อวันที่ 14 มิถุนายน 2569 เวลา 13:00 น.
+          จำนวนนับจากข้อมูลที่เผยแพร่ในระบบ Academy
         </div>
       </div>
     </section>

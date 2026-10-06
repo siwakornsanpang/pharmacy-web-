@@ -1,78 +1,47 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from 'react';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { ArrowLeft, Search } from 'lucide-react';
-import styles from './courses.module.css';
-import LearningBanner from '@/components/member/learning/LearningBanner';
-import CourseCard from '@/components/member/learning/courses/CourseCard';
-import CourseFilters from '@/components/member/learning/courses/CourseFilters';
-
-const ALL_COURSES = [
-    { id: 1, title: "การจัดการความดันโลหิตสูงในผู้ป่วยสูงอายุ", category: "เภสัชกรรมโรงพยาบาล", type: "online", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=600&auto=format&fit=crop" },
-    { id: 2, title: "ทักษะการสื่อสารเพื่อการดูแลผู้ป่วยเบาหวาน", category: "เภสัชกรรมชุมชน", type: "online", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b?q=80&w=600&auto=format&fit=crop" },
-    { id: 3, title: "เภสัชกรรมคลินิกในโรคไตเรื้อรัง", category: "เภสัชกรรมชุมชน", type: "onsite", duration: "3 ชม.", cpe: "3.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1579684385127-1ef15d508118?q=80&w=600&auto=format&fit=crop" },
-    { id: 4, title: "การบริบาลทางเภสัชกรรมในผู้ป่วยมะเร็ง", category: "เภสัชกรรมโรงพยาบาล", type: "online", duration: "2 ชม.", cpe: "2.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1530026405186-ed1f139313f8?q=80&w=600&auto=format&fit=crop" },
-    { id: 5, title: "การประเมินความปลอดภัยของผลิตภัณฑ์สมุนไพร", category: "การผลิตและควบคุม", type: "onsite", duration: "4 ชม.", cpe: "4.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1512290923902-8a9f81dc236c?q=80&w=600&auto=format&fit=crop" },
-    { id: 6, title: "กฎหมายและจรรยาบรรณวิชาชีพเภสัชกรรม 2024", category: "กฎหมายและจริยธรรม", type: "online", duration: "1.5 ชม.", cpe: "1.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1589829545856-d10d557cf95f?q=80&w=600&auto=format&fit=crop" },
-    { id: 7, title: "เทคโนโลยี AI ในงานเภสัชกรรมสมัยใหม่", category: "เภสัชศาสตร์นวัตกรรม", type: "online", duration: "2.5 ชม.", cpe: "2.5 หน่วยกิต", image: "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=600&auto=format&fit=crop" },
-    { id: 8, title: "การจัดการคลังยาและโลจิสติกส์การแพทย์", category: "การบริหารงานคลัง", type: "onsite", duration: "3 ชม.", cpe: "3.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=600&auto=format&fit=crop" },
-    { id: 9, title: "จิตวิทยาการบริการสำหรับเภสัชกรชุมชน", category: "เภสัชกรรมชุมชน", type: "online", duration: "2 ชม.", cpe: "2.0 หน่วยกิต", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=600&auto=format&fit=crop" },
-];
-
-const CATEGORIES = [
-    "ทั้งหมด",
-    "เภสัชกรรมชุมชน",
-    "เภสัชกรรมโรงพยาบาล",
-    "การผลิตและควบคุม",
-    "กฎหมายและจริยธรรม",
-    "เภสัชศาสตร์นวัตกรรม",
-    "การบริหารงานคลัง",
-    "เภสัชกรรมคลินิก"
-];
-
-const getCategoryColor = (category: string) => {
-    switch (category) {
-        case 'เภสัชกรรมชุมชน': return '#4e73df';
-        case 'เภสัชกรรมโรงพยาบาล': return '#1cc88a';
-        case 'การผลิตและควบคุม': return '#f6c23e';
-        case 'กฎหมายและจริยธรรม': return '#e74a3b';
-        case 'เภสัชวิเคราะห์': return '#36b9cc';
-        case 'การคุ้มครองผู้บริโภค': return '#f6c23e';
-        case 'เภสัชศาสตร์นวัตกรรม': return '#4e73df';
-        case 'การบริหารงานคลัง': return '#1cc88a';
-        default: return '#737300';
-    }
-};
+import React, { useEffect, useState, Suspense } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Search } from "lucide-react";
+import styles from "./courses.module.css";
+import LearningBanner from "@/components/member/learning/LearningBanner";
+import CourseCard from "@/components/member/learning/courses/CourseCard";
+import CourseFilters from "@/components/member/learning/courses/CourseFilters";
+import { getAcademyCategories, getAcademyCourses, type AcademyCourse } from "@/lib/academy";
 
 function CoursesContent() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedCategory, setSelectedCategory] = useState("ทั้งหมด");
+    const [categories, setCategories] = useState<string[]>(["ทั้งหมด"]);
+    const [courses, setCourses] = useState<AcademyCourse[]>([]);
 
     useEffect(() => {
-        const catParam = searchParams.get('category');
-        if (catParam && CATEGORIES.includes(catParam)) {
-            setSelectedCategory(catParam);
-        }
+        const catParam = searchParams.get("category");
+        if (catParam) setSelectedCategory(catParam);
     }, [searchParams]);
 
-    const filteredCourses = ALL_COURSES.filter(course => {
-        const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = selectedCategory === "ทั้งหมด" || course.category === selectedCategory;
-        return matchesSearch && matchesCategory;
-    });
+    useEffect(() => {
+        getAcademyCategories()
+            .then((rows) => setCategories(["ทั้งหมด", ...rows.map((row) => row.name)]))
+            .catch(() => undefined);
+    }, []);
+
+    useEffect(() => {
+        getAcademyCourses({
+            category: selectedCategory === "ทั้งหมด" ? undefined : selectedCategory,
+            q: searchTerm.trim() || undefined,
+        }).then(setCourses).catch(() => setCourses([]));
+    }, [selectedCategory, searchTerm]);
 
     return (
         <div className={styles.page}>
             <LearningBanner onBack={() => router.back()} />
-            
             <section className={styles.searchSection}>
                 <div className={styles.container}>
-                    <CourseFilters 
-                        categories={CATEGORIES}
+                    <CourseFilters
+                        categories={categories}
                         selectedCategory={selectedCategory}
                         searchTerm={searchTerm}
                         onCategoryChange={setSelectedCategory}
@@ -80,22 +49,26 @@ function CoursesContent() {
                     />
                 </div>
             </section>
-
             <section className={styles.coursesSection}>
                 <div className={styles.container}>
                     <div className={styles.resultsBar}>
                         <div className={styles.resultsCount}>
-                            พบทั้งหมด <span>{filteredCourses.length}</span> รายการ
+                            พบทั้งหมด <span>{courses.length}</span> รายการ
                         </div>
                     </div>
-
-                    {filteredCourses.length > 0 ? (
+                    {courses.length > 0 ? (
                         <div className={styles.grid}>
-                            {filteredCourses.map((course) => (
-                                <CourseCard 
+                            {courses.map((course) => (
+                                <CourseCard
                                     key={course.id}
-                                    {...course}
-                                    getCategoryColor={getCategoryColor}
+                                    id={course.id}
+                                    title={course.title}
+                                    category={course.categoryName || "ทั่วไป"}
+                                    duration={course.durationLabel || "—"}
+                                    cpe={course.cpeLabel}
+                                    image={course.coverUrl || ""}
+                                    color={course.categoryColor || "#737300"}
+                                    format={course.format}
                                 />
                             ))}
                         </div>

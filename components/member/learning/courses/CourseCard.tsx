@@ -13,28 +13,26 @@ interface CourseCardProps {
     duration: string;
     cpe: string;
     image: string;
-    getCategoryColor: (category: string) => string;
+    color: string;
+    format?: "online" | "onsite";
 }
 
-export default function CourseCard({ id, title, category, duration, cpe, image, getCategoryColor }: CourseCardProps) {
+export default function CourseCard({ id, title, category, duration, cpe, image, color, format = "online" }: CourseCardProps) {
     return (
         <Link href={`/learning/${id}`} className={styles.card}>
             <div className={styles.imageWrapper}>
-                <Image 
-                    src={image} 
-                    alt={title} 
-                    fill 
-                    className={styles.image} 
-                />
-                <div
-                    className={styles.badge}
-                    style={{ backgroundColor: getCategoryColor(category) }}
-                >
+                {image ? (
+                    <Image src={image} alt={title} fill className={styles.image} />
+                ) : (
+                    <div className={styles.image} />
+                )}
+                <div className={styles.badge} style={{ backgroundColor: color }}>
                     {category}
                 </div>
             </div>
             <div className={styles.content}>
                 <h3 className={styles.title}>{title}</h3>
+                <p>{format === "onsite" ? "ออนไซต์" : "ออนไลน์"}</p>
                 <div className={styles.meta}>
                     <div className={styles.metaItem}>
                         <Clock size={16} />
