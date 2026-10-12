@@ -1,85 +1,72 @@
 .section {
-    padding: 48px 0;
-    background: #fff;
+    padding: 3rem 0;
+    background: #ffffff;
 }
 
 .container {
-    box-sizing: border-box;
-    max-width: 1280px;
-    width: 100%;
+    max-width: var(--max-width-xl);
+    width: 90%;
     margin: 0 auto;
-    padding: 0 24px;
-}
-
-.container h2 {
-    font-weight: 600;
-    color: #1e293b;
-}
-
-.container a {
-    font-weight: 500;
+    padding: 0 1.5rem;
 }
 
 .cardWrapper {
     position: relative;
-    margin-top: 24px;
+    padding: 0;
+    margin-top: 2rem;
 }
 
-.card {
-    position: relative;
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
-    background: #fff;
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #e2e8f0;
-}
-
+/* === Nav Buttons === */
 .navBtn {
     position: absolute;
-    top: 20px;
-    width: 44px;
-    height: 44px;
-    border-radius: 8px;
-    border: 1px solid #cbd5e1;
-    background: #fff;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid #e5e7eb;
+    background: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 2;
-    color: #1e293b;
-    transition: background-color 180ms ease;
+    z-index: 10;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s;
+    color: #4b5563;
 }
 
 .navBtn:hover {
-    background: #f0f1df;
-}
-
-.navBtn:focus-visible, .enrollBtn:focus-visible {
-    outline: 3px solid #a6a66c;
-    outline-offset: 3px;
+    background-color: var(--primary-olive);
+    color: white;
+    border-color: var(--primary-olive);
 }
 
 .prevBtn {
-    left: 20px;
+    left: 1.5rem;
 }
 
 .nextBtn {
-    left: 76px;
+    right: 1.5rem;
+}
+
+/* === Card === */
+.card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    background: white;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+    border: 1px solid #eee;
 }
 
 .imageSide {
     position: relative;
     width: 100%;
-    min-height: 380px;
-    background: #eef0e6;
-}
-
-.placeholder {
-    position: absolute;
-    inset: 0;
-    background: #eef0e6;
+    min-height: 450px;
+    background-color: #e5e7eb;
 }
 
 .image {
@@ -87,132 +74,163 @@
 }
 
 .contentSide {
-    padding: 32px;
+    padding: 3rem;
     display: flex;
     flex-direction: column;
-    min-width: 0;
+}
+
+.label {
+    display: block;
+    color: #f6c23e;
+    font-weight: 800;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    margin-bottom: 0.75rem;
 }
 
 .title {
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: #1e293b;
-    margin: 0 0 16px;
-    line-height: 1.4;
+    font-size: 2.25rem;
+    font-weight: 800;
+    color: #1f2937;
+    margin-bottom: 1rem;
+    line-height: 1.2;
 }
 
 .description {
     font-size: 1rem;
-    color: #475569;
-    line-height: 1.7;
-    margin: 0 0 24px;
+    color: #6b7280;
+    line-height: 1.6;
+    margin-bottom: 2rem;
 }
 
 .subTitle {
     font-size: 1rem;
-    font-weight: 500;
-    color: #1e293b;
-    margin: 0 0 12px;
+    font-weight: 800;
+    color: #1f2937;
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    letter-spacing: 0.5px;
 }
 
 .outcomesList {
     list-style: none;
     padding: 0;
-    margin: 0 0 24px;
+    margin: 0 0 3.5rem;
     display: grid;
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
 }
 
 .outcomeItem {
     display: flex;
-    align-items: flex-start;
-    gap: 10px;
-    font-size: .95rem;
-    line-height: 1.6;
-    color: #475569;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: #4b5563;
 }
 
 .checkIcon {
-    color: #737300;
-    flex: none;
-    margin-top: 4px;
+    color: #1cc88a;
+    flex-shrink: 0;
 }
 
 .enrollBtn {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+    display: inline-block;
     width: fit-content;
-    min-height: 48px;
-    padding: 12px 32px;
-    background: #737300;
-    color: #fff;
-    text-decoration: none;
-    border: 1px solid #737300;
-    border-radius: 8px;
-    font-weight: 500;
+    padding: 1rem 2.5rem;
+    background: linear-gradient(90deg, #c5c178 0%, #737300 100%);
+    color: white;
+    border: none;
+    border-radius: 1rem;
+    font-weight: 700;
     font-size: 1rem;
-    transition: background-color 180ms ease;
-    margin-bottom: 24px;
+    text-decoration: none;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 2.5rem;
 }
 
 .enrollBtn:hover {
-    background: #606000;
+    opacity: 0.95;
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(115, 115, 0, 0.25);
 }
 
+/* === Footer === */
 .footer {
     margin-top: auto;
-    padding-top: 20px;
-    border-top: 1px solid #e2e8f0;
+    padding-top: 1.5rem;
+    border-top: 1px solid #eee;
     display: flex;
-    gap: 24px;
+    gap: 3rem;
 }
 
 .footerItem {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 0.25rem;
 }
 
 .footerLabel {
-    font-size: .85rem;
-    color: #475569;
-    font-weight: 400;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.5px;
 }
 
 .footerValue {
     font-size: 1rem;
-    font-weight: 500;
-    color: #1e293b;
+    font-weight: 700;
+    color: #374151;
 }
 
+.ratingBox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.stars {
+    display: flex;
+    gap: 2px;
+}
+
+/* === Responsive === */
 @media (max-width: 1024px) {
     .card {
         grid-template-columns: 1fr;
     }
+
     .imageSide {
-        min-height: 0;
-        aspect-ratio: 16 / 9;
+        min-height: 250px;
+    }
+
+    .outcomesList {
+        grid-template-columns: 1fr;
+    }
+
+    .footer {
+        flex-wrap: wrap;
+        gap: 1.5rem;
     }
 }
 
 @media (max-width: 640px) {
-    .container {
-        padding: 0 20px;
+    .cardWrapper {
+        padding: 0;
     }
-    .contentSide {
-        padding: 24px;
-    }
-    .title {
-        font-size: 1.5rem;
-    }
+
     .navBtn {
-        top: 12px;
+        display: none;
     }
-    .prevBtn {
-        left: 12px;
+
+    .contentSide {
+        padding: 2rem;
     }
-    .nextBtn {
-        left: 64px;
+
+    .title {
+        font-size: 1.75rem;
     }
 }
