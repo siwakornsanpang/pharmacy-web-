@@ -18,6 +18,20 @@ describe('Academy return scroll position', () => {
   });
   afterEach(() => { cleanup(); vi.restoreAllMocks(); vi.unstubAllGlobals(); });
 
+  it('reveals search results instead of resetting a new search navigation to the banner', () => {
+    route.pathname = '/learning/courses';
+    history.replaceState({}, '', '/learning/courses?search=test#course-results');
+    const results = document.createElement('div');
+    results.id = 'course-results';
+    results.scrollIntoView = vi.fn();
+    document.body.appendChild(results);
+    try {
+      render(<ScrollToTopOnNavigate />);
+      expect(results.scrollIntoView).toHaveBeenCalledWith({block:'start', behavior:'instant'});
+      expect(window.scrollTo).not.toHaveBeenCalled();
+    } finally { results.remove(); }
+  });
+
   it('keeps the saved position while sections grow and releases restoration when the user scrolls', () => {
     let resize: (() => void) | undefined;
     let connected = false;

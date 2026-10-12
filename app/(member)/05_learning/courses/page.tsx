@@ -43,6 +43,7 @@ function CoursesContent() {
     const pendingReload = useRef(true);
     const pendingMore = useRef(false);
     const activeFilters = useRef({ search: searchQuery, category: categoryQuery });
+    const resultsRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         if (activeFilters.current.search === searchQuery && activeFilters.current.category === categoryQuery) return;
@@ -153,7 +154,11 @@ function CoursesContent() {
                         searchTerm={searchDraft}
                         onCategoryChange={(category) => updateFilters(searchDraft, category)}
                         onSearchChange={setSearchDraft}
-                        onSearch={() => updateFilters(searchDraft, selectedCategory)}
+                        onSearch={() => {
+                            updateFilters(searchDraft, selectedCategory);
+                            resultsRef.current?.focus({ preventScroll: true });
+                            resultsRef.current?.scrollIntoView?.({ block: 'start', behavior: 'instant' });
+                        }}
                     />
                     {categoryError && <div className={styles.categoryError} role="alert">
                         <p>{categoryError}</p>
@@ -170,7 +175,7 @@ function CoursesContent() {
             </section>
             <section className={styles.coursesSection}>
                 <div className={styles.container}>
-                    <div className={styles.resultsBar}>
+                    <div id="course-results" ref={resultsRef} tabIndex={-1} className={styles.resultsBar}>
                         <div className={styles.resultsCount} aria-live="polite">{loading ? 'กำลังค้นหาคอร์ส...' : <>พบทั้งหมด <span>{total}</span> รายการ</>}</div>
                     </div>
                     {error ? <div className={styles.emptyState} role="alert"><p>{error}</p><button type="button" className={styles.resetButton} onClick={() => updateFilters(searchTerm, selectedCategory)}>ลองอีกครั้ง</button></div> : loading ? (

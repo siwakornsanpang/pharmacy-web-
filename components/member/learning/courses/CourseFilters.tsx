@@ -10,9 +10,10 @@ interface CourseFiltersProps {
     onCategoryChange: (category: string) => void;
     onSearchChange: (term: string) => void;
     onSearch?: () => void;
+    searching?: boolean;
 }
 
-export default function CourseFilters({ categories, selectedCategory, searchTerm, onCategoryChange, onSearchChange, onSearch }: CourseFiltersProps) {
+export default function CourseFilters({ categories, selectedCategory, searchTerm, onCategoryChange, onSearchChange, onSearch, searching = false }: CourseFiltersProps) {
     return (
         <form className={styles.wrapper} role="search" onSubmit={(event) => { event.preventDefault(); onSearch?.(); }}>
             <div className={styles.header}>
@@ -34,7 +35,9 @@ export default function CourseFilters({ categories, selectedCategory, searchTerm
                         placeholder="ชื่อคอร์ส, วิทยากร หรือเนื้อหา..." value={searchTerm}
                         onChange={(event) => onSearchChange(event.target.value)} />
                 </div>
-                <button type="submit" className={styles.searchButton}>ค้นหา</button>
+                <button type="submit" className={styles.searchButton} disabled={searching} aria-busy={searching}>
+                    <Search size={18} aria-hidden="true" />{searching ? 'กำลังค้นหา...' : 'ค้นหา'}
+                </button>
             </div>
         </form>
     );

@@ -2,7 +2,7 @@
 
 import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import LearningBanner from '@/components/member/learning/LearningBanner';
 import CourseFilters from '@/components/member/learning/courses/CourseFilters';
@@ -66,6 +66,7 @@ function SectionState({ title, href, loadingText, emptyText, section }: {
 
 export default function LearningPage() {
     const router = useRouter();
+    const [searching, startSearch] = useTransition();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedCategory, setSelectedCategory] = useState('ทั้งหมด');
     const categories = useAcademySection(listAcademyCategories, [], 'โหลดหมวดหมู่ไม่สำเร็จ');
@@ -92,11 +93,11 @@ export default function LearningPage() {
         try { sessionStorage.setItem('academy-home-filters', JSON.stringify({search, category})); } catch { /* Storage may be disabled. */ }
     };
 
-    const openCourses = () => {
+    const openCourses = (search = searchTerm, category = selectedCategory) => {
         const query = new URLSearchParams();
-        if (searchTerm.trim()) query.set('search', searchTerm.trim());
-        if (selectedCategory !== 'ทั้งหมด') query.set('category', selectedCategory);
-        router.push(`/learning/courses${query.size ? `?${query}` : ''}`);
+        if (search.trim()) query.set('search', search.trim());
+        if (category !== 'ทั้งหมด') query.set('category', category);
+        startSearch(() => router.push(`/learning/courses${query.size ? `?${query}` : ''}#course-results`));
     };
 
     return <div className={styles.page}>
@@ -104,7 +105,10 @@ export default function LearningPage() {
         <div className={`${styles.container} ${styles.search}`}>
             <CourseFilters categories={['ทั้งหมด', ...categories.data.map((item) => item.name)]}
                 selectedCategory={selectedCategory} searchTerm={searchTerm}
-                onCategoryChange={category => rememberFilters(searchTerm, category)} onSearchChange={search => rememberFilters(search, selectedCategory)} onSearch={openCourses} />
+                onCategoryChange={category => {
+                    rememberFilters(searchTerm, category);
+                    openCourses(searchTerm, category);
+                }} onSearchChange={search => rememberFilters(search, selectedCategory)} onSearch={openCourses} searching={searching} />
             <div className={styles.myCoursesHeader}><SectionHeader title="คอร์สของฉัน" viewAllHref="/learning/mine" /></div>
         </div>
         {categories.status === 'ready' && categories.data.length > 0 ? <PopularCategories categories={categories.data} /> :

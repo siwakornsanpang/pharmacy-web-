@@ -27,12 +27,21 @@
 
 /* Results Section */
 .resultsBar {
+    scroll-margin-top: 168px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: 2rem;
     padding-bottom: 1rem;
     border-bottom: 1px solid #e2e8f0;
+}
+.resultsBar:focus-visible { outline: 3px solid #a6a66c; outline-offset: 6px; border-radius: 4px; }
+
+@media (max-width: 768px) {
+    .resultsBar { scroll-margin-top: 280px; }
+}
+@media (max-width: 360px) {
+    .resultsBar { scroll-margin-top: 340px; }
 }
 
 .resultsCount {

@@ -3,7 +3,8 @@ import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/re
 import LearningPage from '@/app/(member)/05_learning/page';
 import { getAcademyStats, getAcademyCategories, getAcademyCourses, getAcademyInstructors, getAcademyReviews } from '@/lib/academy';
 
-vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }));
+const { push } = vi.hoisted(() => ({ push: vi.fn() }));
+vi.mock('next/navigation', () => ({ useRouter: () => ({ push }) }));
 vi.mock('@/lib/academy', () => ({
   AcademyError: class extends Error {}, getAcademyStats: vi.fn(), getAcademyCategories: vi.fn(),
   getAcademyCourses: vi.fn(), getAcademyInstructors: vi.fn(), getAcademyReviews: vi.fn(),
@@ -21,7 +22,11 @@ describe('Academy home section loading', () => {
     const view = render(<LearningPage />);
     await screen.findByRole('option', {name:'เภสัชกรรมชุมชน'});
     fireEvent.change(screen.getByRole('textbox',{name:'ค้นหาคอร์ส'}), {target:{value:'diabetes'}});
+    expect(push).not.toHaveBeenCalled();
     fireEvent.change(screen.getByRole('combobox'), {target:{value:'เภสัชกรรมชุมชน'}});
+    expect(push).toHaveBeenLastCalledWith('/learning/courses?search=diabetes&category=%E0%B9%80%E0%B8%A0%E0%B8%AA%E0%B8%B1%E0%B8%8A%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%8A%E0%B8%B8%E0%B8%A1%E0%B8%8A%E0%B8%99#course-results');
+    fireEvent.click(screen.getByRole('button', {name:'ค้นหา'}));
+    expect(push).toHaveBeenLastCalledWith('/learning/courses?search=diabetes&category=%E0%B9%80%E0%B8%A0%E0%B8%AA%E0%B8%B1%E0%B8%8A%E0%B8%81%E0%B8%A3%E0%B8%A3%E0%B8%A1%E0%B8%8A%E0%B8%B8%E0%B8%A1%E0%B8%8A%E0%B8%99#course-results');
     view.unmount();
     render(<LearningPage />);
     await waitFor(() => expect(screen.getByRole('textbox',{name:'ค้นหาคอร์ส'})).toHaveValue('diabetes'));

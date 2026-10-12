@@ -66,6 +66,12 @@ export default function ScrollToTopOnNavigate() {
     }
     returnUrl.current = null;
     restoring.current = false;
+    if (isAcademyPath(pathname) && window.location.hash === '#course-results') {
+      const frame = requestAnimationFrame(() => {
+        document.getElementById('course-results')?.scrollIntoView({ block: 'start', behavior: 'instant' });
+      });
+      return () => cancelAnimationFrame(frame);
+    }
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [pathname]);
 
