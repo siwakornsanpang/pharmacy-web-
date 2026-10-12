@@ -45,14 +45,13 @@ describe('Academy course details', () => {
     expect(vi.mocked(fetch).mock.calls.some(([, init]) => init?.method === 'POST')).toBe(false);
   });
 
-  it('does not present a local mock payment as access to API lessons', async () => {
+  it('ignores old local mock registrations and still offers checkout', async () => {
     vi.mocked(getAcademyCourse).mockResolvedValue({...course(1), price: '1200'});
     vi.mocked(listAcademyReviews).mockResolvedValue([]);
     vi.mocked(getAcademyEnrollments).mockResolvedValue([{courseId: 1, status: 'active'}]);
     render(<CourseDetailPage />);
-    expect(await screen.findByText(/ลงทะเบียนจำลองแล้ว/)).toBeInTheDocument();
-    expect(screen.queryByRole('link', {name: 'เข้าเรียน'})).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', {name: 'ชำระเงินจำลอง'})).not.toBeInTheDocument();
+    expect(await screen.findByRole('button', {name: 'ชำระเงินจำลอง'})).toBeInTheDocument();
+    expect(screen.queryByText(/ลงทะเบียนจำลองแล้ว/)).not.toBeInTheDocument();
   });
 
   it('keeps API enrollment in the restored detail design', async () => {

@@ -59,7 +59,7 @@ export interface AcademyOrder {
   courseId: number;
   courseTitle?: string;
   amountSnapshot: string;
-  status: 'pending' | 'mock_paid' | 'cancelled';
+  status: 'pending' | 'mock_paid' | 'paid' | 'cancelled';
 }
 
 export class AcademyError extends Error {
@@ -118,7 +118,7 @@ export function getAcademyCourse(id: number) {
 }
 
 export function getAcademyEnrollments() {
-  return localCall(() => localRegistration.getEnrollments());
+  return request<AcademyEnrollment[]>('enrollments');
 }
 
 export async function createAcademyOrder(courseId: number, courseSnapshot?: AcademyCourse): Promise<{ type: 'enrolled'; enrollment: AcademyEnrollment } | { type: 'payment_required'; order: AcademyOrder }> {
@@ -126,13 +126,30 @@ export async function createAcademyOrder(courseId: number, courseSnapshot?: Acad
   const existing = enrollments.find((item) => item.courseId === courseId && item.status === 'active');
   if (existing) return { type: 'enrolled', enrollment: existing };
   const course = courseSnapshot?.id === courseId ? courseSnapshot : await getAcademyCourse(courseId);
-  return localCall(() => localRegistration.createOrder(course));
+  if (Number(course.price) <= 0) {
+    await request(`courses/${courseId}/enroll`, { method: 'POST' });
+    return { type: 'enrolled', enrollment: { courseId, status: 'active' } };
+  }
+  return localCall(() => localRegistration.createPendingOrder(course));
 }
 
 export async function getAcademyOrder(orderId: number): Promise<AcademyOrder> {
-  return localCall(() => localRegistration.getOrder(orderId));
+  const order = await localCall(() => localRegistration.getOrder(orderId));
+  const enrollments = await getAcademyEnrollments();
+  const enrolled = enrollments.some(item => item.courseId === order.courseId && item.status === 'active');
+  // Old browser-only mock payments do not prove a registration in the database.
+  return { ...order, status: enrolled ? 'paid' : order.status === 'cancelled' ? 'cancelled' : 'pending' };
 }
 
-export async function completeMockAcademyOrder(orderId: number): Promise<{ status: 'mock_paid'; enrollment: AcademyEnrollment }> {
-  return localCall(() => localRegistration.completeOrder(orderId));
+export async function completeMockAcademyOrder(orderId: number): Promise<{ status: 'paid' }> {
+  const order = await getAcademyOrder(orderId);
+  if (order.status === 'paid') return { status: 'paid' };
+  if (order.status !== 'pending') throw new AcademyError('คำสั่งซื้อนี้ถูกยกเลิกแล้ว', 409);
+  const result = await request<{ success?: boolean; status?: string }>(`courses/${order.courseId}/order`, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({}),
+  });
+  if (!result.success || result.status !== 'paid') {
+    throw new AcademyError('ระบบยังไม่ยืนยันการลงทะเบียน กรุณาตรวจสอบรายการหรือลองใหม่', 409);
+  }
+  return { status: 'paid' };
 }

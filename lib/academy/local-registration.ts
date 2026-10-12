@@ -33,6 +33,18 @@ function enroll(store: LocalStore, courseId: number): AcademyEnrollment {
 }
 
 export const localRegistration = {
+  createPendingOrder(course: AcademyCourse): { type: 'payment_required'; order: AcademyOrder } {
+    const store = readStore();
+    const pending = store.orders.find(item => item.courseId === course.id && item.status === 'pending');
+    if (pending) return { type: 'payment_required', order: pending };
+    const order: AcademyOrder = {
+      id: store.nextOrderId++, courseId: course.id, courseTitle: course.title,
+      amountSnapshot: String(course.price), status: 'pending',
+    };
+    store.orders.push(order);
+    saveStore(store);
+    return { type: 'payment_required', order };
+  },
   getEnrollments() {
     return readStore().enrollments.filter((item) => item.status === 'active');
   },

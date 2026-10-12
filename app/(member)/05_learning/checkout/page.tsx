@@ -45,7 +45,7 @@ function CheckoutContent() {
             const result = await completeMockAcademyOrder(order.id);
             setOrder({ ...order, status: result.status });
         } catch (reason) {
-            setError(reason instanceof AcademyError ? reason.message : 'ดำเนินการไม่สำเร็จ กรุณาลองใหม่');
+            setError(reason instanceof AcademyError ? reason.message : 'บันทึกการลงทะเบียนไม่สำเร็จ กรุณาลองใหม่');
         } finally {
             setBusy(false);
         }
@@ -54,7 +54,7 @@ function CheckoutContent() {
     if (loading) return <main className={styles.page}><div className={styles.container}><AcademySkeleton label="กำลังโหลดคำสั่งซื้อ..." variant="detail" count={2} /></div></main>;
     if (!order) return <main className={styles.page}><div className={styles.container}><div className={styles.backRow}><AcademyBackLink href={source} destination={source.startsWith('/learning/courses') ? 'คอร์สทั้งหมด' : 'Pharmacy Academy'} /></div><div className={styles.state} role="alert"><AlertCircle size={22} aria-hidden="true" />{error || 'ไม่พบคำสั่งซื้อ'}</div></div></main>;
 
-    const completed = order.status === 'mock_paid';
+    const completed = order.status === 'paid';
     const detailHref = academyCourseHref(order.courseId, source);
 
     return (
@@ -63,7 +63,7 @@ function CheckoutContent() {
                 <div className={styles.backRow}><AcademyBackLink href={detailHref} destination="รายละเอียดคอร์ส" /></div>
                 <div className={styles.heading}>
                     <p>PHARMACY ACADEMY</p>
-                    <h1>{completed ? 'ลงทะเบียนจำลองสำเร็จ' : 'ชำระเงินจำลอง'}</h1>
+                    <h1>{completed ? 'ลงทะเบียนสำเร็จ' : 'ชำระเงินจำลอง'}</h1>
                     <p className={styles.mockNotice}>ข้อมูลจำลองสำหรับทดสอบ ไม่มีการเรียกเก็บเงินจริง</p>
                 </div>
                 <section className={styles.panel}>
@@ -85,12 +85,12 @@ function CheckoutContent() {
                         <h2>{completed ? 'ยืนยันสำเร็จ' : 'ขั้นตอนยืนยัน'}</h2>
                         {completed ? (
                             <>
-                                <p className={styles.successMessage}>ยืนยันข้อมูลจำลองแล้ว ไม่มีการชำระเงินจริง ข้อมูลเก็บเฉพาะในเบราว์เซอร์นี้และไม่ปรากฏใน Back Office</p>
+                                <p className={styles.successMessage}>ชำระเงินจำลองสำเร็จ ไม่มีการเรียกเก็บเงินจริง ระบบบันทึกการลงทะเบียนแล้ว ดูรายการได้ในคอร์สเรียนของฉัน</p>
                                 <Link className={styles.primaryLink} href="/learning">ไปหน้า Pharmacy Academy</Link>
                             </>
                         ) : (
                             <>
-                                <p className={styles.mockNotice}>ขั้นตอนนี้เป็นการจำลอง ไม่มีการเรียกเก็บเงินจริง และยังไม่บันทึกในระบบ Academy</p>
+                                <p className={styles.mockNotice}>ขั้นตอนนี้เป็นการจำลอง ไม่มีการเรียกเก็บเงินจริง เมื่อยืนยันจะบันทึกการลงทะเบียนในระบบ Academy</p>
                                 {error && <p className={styles.error} role="alert">{error}</p>}
                                 <button className={styles.primaryButton} type="button" onClick={completePayment} disabled={busy || order.status !== 'pending'}>
                                     {busy ? 'กำลังยืนยัน...' : 'จำลองชำระเงินสำเร็จ'}

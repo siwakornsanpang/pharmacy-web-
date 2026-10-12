@@ -11,7 +11,7 @@ import { AlertCircle, ArrowRight, Award, Check, Clock, UserRound } from 'lucide-
 import styles from './course-detail.module.css';
 import AcademyBackLink from '@/components/member/learning/AcademyBackLink';
 import { academyCheckoutHref, academySource } from '@/lib/academy/navigation';
-import { AcademyCourse, AcademyError, AcademyReview, createAcademyOrder, getAcademyEnrollments, listAcademyReviews } from '@/lib/academy/client';
+import { AcademyCourse, AcademyError, AcademyReview, createAcademyOrder, listAcademyReviews } from '@/lib/academy/client';
 
 import { getAcademyCourse } from '@/lib/academy';
 import { mapIncomingCourse } from '@/lib/academy/incoming';
@@ -49,7 +49,6 @@ export default function CourseDetailPage() {
     const source = academySource(searchParams.get('from'));
     const [course, setCourse] = useState<AcademyCourse | null>(null);
     const [enrolled, setEnrolled] = useState(false);
-    const [mockRegistered, setMockRegistered] = useState(false);
     const [learningState, setLearningState] = useState<LearningState | null>(null);
     const [loading, setLoading] = useState(true);
     const [busy, setBusy] = useState(false);
@@ -64,7 +63,6 @@ export default function CourseDetailPage() {
         setError('');
         setCourse(null);
         setEnrolled(false);
-        setMockRegistered(false);
         if (!Number.isInteger(courseId) || courseId < 1) {
             setError('ไม่พบคอร์สที่ต้องการ');
             setLoading(false);
@@ -79,11 +77,6 @@ export default function CourseDetailPage() {
             setCourse(courseData);
             setLearningState(nextState);
             setEnrolled(Boolean(nextState?.enrolled));
-            if (Number(courseData.price) > 0) {
-                getAcademyEnrollments().then(items => {
-                    if (!cancelled) setMockRegistered(items.some(item => item.courseId === courseData.id && item.status === 'active'));
-                }).catch(() => { /* The checkout reports storage errors when used. */ });
-            }
         })
             .catch((reason: unknown) => {
                 if (cancelled) return;
@@ -113,7 +106,7 @@ export default function CourseDetailPage() {
             if (action === 'order') {
                 const result = await createAcademyOrder(course.id, course);
                 if (result.type === 'payment_required') router.push(academyCheckoutHref(result.order.id, source));
-                else setMockRegistered(true);
+                else setLoadVersion(current => current + 1);
                 return;
             }
             const response = await fetch(`/api/academy/courses/${course.id}/${action}`, {
@@ -192,7 +185,7 @@ export default function CourseDetailPage() {
                             {isClosed && <p className={styles.closed}>คอร์สปิดรับสมัครแล้ว</p>}
                             {enrolled && <p className={styles.success}>คุณลงทะเบียนคอร์สนี้แล้ว</p>}
                             {error && <p className={styles.error} role="alert">{error}</p>}
-                            {mockRegistered && !enrolled ? <p className={styles.success} role="status">ลงทะเบียนจำลองแล้ว ข้อมูลเก็บในเบราว์เซอร์นี้และยังไม่บันทึกในระบบ Academy</p> : enrolled ? <>
+                            {enrolled ? <>
                                 <a className={styles.enrollButton} href={`/learning/${course.id}/learn`}>เข้าเรียน<ArrowRight size={18} aria-hidden="true" /></a>
                                 {Number(learningState?.progressPercent) >= 100 ?
                                     <a className={styles.enrollButton} href={`/learning/${course.id}/certificate`}>ใบประกาศ</a> :
