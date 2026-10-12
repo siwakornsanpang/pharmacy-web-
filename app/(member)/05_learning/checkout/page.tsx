@@ -63,7 +63,8 @@ function CheckoutContent() {
                 <div className={styles.backRow}><AcademyBackLink href={detailHref} destination="รายละเอียดคอร์ส" /></div>
                 <div className={styles.heading}>
                     <p>PHARMACY ACADEMY</p>
-                    <h1>{completed ? 'ลงทะเบียนสำเร็จ' : 'ยืนยันการลงทะเบียน'}</h1>
+                    <h1>{completed ? 'ลงทะเบียนจำลองสำเร็จ' : 'ชำระเงินจำลอง'}</h1>
+                    <p className={styles.mockNotice}>ข้อมูลจำลองสำหรับทดสอบ ไม่มีการเรียกเก็บเงินจริง</p>
                 </div>
                 <section className={styles.panel}>
                     <div className={styles.summaryColumn}>
@@ -76,7 +77,7 @@ function CheckoutContent() {
                             <strong>{order.courseTitle || `คอร์ส #${order.courseId}`}</strong>
                         </div>
                         <div className={styles.amount}>
-                            <span>ยอดที่ต้องชำระ</span>
+                            <span>ยอดชำระจำลอง</span>
                             <strong>{Number(order.amountSnapshot).toLocaleString('th-TH')} บาท</strong>
                         </div>
                     </div>
@@ -84,7 +85,7 @@ function CheckoutContent() {
                         <h2>{completed ? 'ยืนยันสำเร็จ' : 'ขั้นตอนยืนยัน'}</h2>
                         {completed ? (
                             <>
-                                <p className={styles.successMessage}>บันทึกการลงทะเบียนจำลองในเบราว์เซอร์นี้แล้ว ข้อมูลยังไม่ปรากฏใน Back Office</p>
+                                <p className={styles.successMessage}>ยืนยันข้อมูลจำลองแล้ว ไม่มีการชำระเงินจริง ข้อมูลเก็บเฉพาะในเบราว์เซอร์นี้และไม่ปรากฏใน Back Office</p>
                                 <Link className={styles.primaryLink} href="/learning">ไปหน้า Pharmacy Academy</Link>
                             </>
                         ) : (

@@ -204,7 +204,7 @@ export default function CourseDetailPage() {
                                 {!busy && !isClosed && <ArrowRight size={18} aria-hidden="true" />}
                             </button>}
                         </div>
-                        {price > 0 && <p className={styles.note}>การชำระเงินเป็นแบบจำลอง ไม่มีการตัดเงินจริง</p>}
+                        {price > 0 && <p className={styles.note}>ข้อมูลการชำระเงินเป็นข้อมูลจำลองสำหรับทดสอบ ไม่มีการเรียกเก็บเงินจริง</p>}
                     </aside>
                     <div className={styles.moreInfo}>
                         <section id="course-details" className={styles.detailsSection}>
