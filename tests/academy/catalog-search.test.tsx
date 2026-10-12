@@ -36,10 +36,11 @@ describe('Academy catalog search', () => {
     fireEvent.submit(input.closest('form')!);
     await waitFor(() => expect(listAcademyCourses).toHaveBeenLastCalledWith(expect.objectContaining({ search: 'hypertension' })));
     await screen.findByText(/ไม่พบคอร์สสำหรับ “hypertension”/);
-    fireEvent.click(screen.getByRole('button', { name: 'ล้างตัวกรอง' }));
-    await waitFor(() => expect(listAcademyCourses).toHaveBeenLastCalledWith(expect.objectContaining({ search: '', categoryId: undefined })));
-    expect(input).toHaveValue('');
-    expect(replace).toHaveBeenLastCalledWith('/learning/courses', { scroll: false });
+    sessionStorage.setItem('academy-home-filters', JSON.stringify({search:'hypertension',category:'ทั้งหมด'}));
+    expect(screen.queryByRole('link', {name:'ย้อนกลับ'})).not.toBeInTheDocument();
+    fireEvent.click(screen.getAllByRole('button', { name: 'ล้างค่า' })[0]);
+    expect(sessionStorage.getItem('academy-home-filters')).toBeNull();
+    expect(replace).toHaveBeenLastCalledWith('/learning');
   });
 
   it('keeps a failed request visible and retries the submitted query', async () => {

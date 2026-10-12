@@ -114,6 +114,15 @@
 .resetButton:hover {
     background: #5f6100;
 }
+.clearButton {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    color: var(--primary-olive);
+    font-weight: 500;
+}
+.clearButton:hover { background: #f8f9f3; }
 
 .resetButton:focus-visible {
     outline: 3px solid rgba(115, 115, 0, 0.35);

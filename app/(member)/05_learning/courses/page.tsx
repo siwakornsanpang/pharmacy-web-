@@ -4,7 +4,7 @@ import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
 
 import { Suspense, useEffect, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Search } from 'lucide-react';
+import { RotateCcw, Search } from 'lucide-react';
 import styles from './courses.module.css';
 import LearningBanner from '@/components/member/learning/LearningBanner';
 import AcademyBackLink from '@/components/member/learning/AcademyBackLink';
@@ -102,6 +102,11 @@ function CoursesContent() {
     }, [searchTerm, selectedCategory, categories, categoriesLoaded, requestVersion]);
 
     const returnTo = academyCoursesHref(searchTerm, selectedCategory);
+    const hasFilters = Boolean(searchTerm.trim()) || selectedCategory !== ALL;
+    const clearFilters = () => {
+        try { sessionStorage.removeItem('academy-home-filters'); } catch { /* Reset navigation also works when storage is unavailable. */ }
+        router.replace('/learning');
+    };
     const updateFilters = (search: string, category: string) => {
         generation.current += 1;
         pendingReload.current = true;
@@ -145,7 +150,11 @@ function CoursesContent() {
     return (
         <div className={styles.page}>
             <LearningBanner title="คอร์สทั้งหมด" />
-            <div className={`${styles.container} ${styles.backRow}`}><AcademyBackLink href="/learning" destination="Pharmacy Academy" /></div>
+            <div className={`${styles.container} ${styles.backRow}`}>
+                {hasFilters ? <button type="button" className={`${styles.resetButton} ${styles.clearButton}`} onClick={clearFilters}>
+                    <RotateCcw size={18} aria-hidden="true" />ล้างค่า
+                </button> : <AcademyBackLink href="/learning" destination="Pharmacy Academy" />}
+            </div>
             <section className={styles.searchSection}>
                 <div className={styles.container}>
                     <CourseFilters
@@ -205,9 +214,9 @@ function CoursesContent() {
                                 {searchTerm.trim()
                                     ? `ไม่พบคอร์สสำหรับ “${searchTerm.trim()}”${selectedCategory !== ALL ? ` ในหมวด${selectedCategory}` : ''}`
                                     : selectedCategory !== ALL ? `ยังไม่มีคอร์สในหมวด${selectedCategory}` : 'ยังไม่มีคอร์สที่เผยแพร่'}
-                                <br />ลองใช้คำอื่นหรือล้างตัวกรองเพื่อดูคอร์สทั้งหมด
+                                <br />ลองใช้คำอื่นหรือล้างค่าเพื่อกลับหน้า Pharmacy Academy
                             </p>
-                            <button type="button" className={styles.resetButton} onClick={() => updateFilters('', ALL)}>ล้างตัวกรอง</button>
+                            <button type="button" className={styles.resetButton} onClick={clearFilters}>ล้างค่า</button>
                         </div>
                     )}
                     {!loading && !error && moreError && <p className={styles.categoryError} role="alert">{moreError}</p>}
