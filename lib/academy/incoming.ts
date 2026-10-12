@@ -15,6 +15,7 @@ export interface IncomingAcademyCourse {
   coverUrl?: string | null;
   durationLabel?: string | null;
   cpeCredits?: number | string | null;
+  cpeLabel?: string;
   price?: number | string | null;
   categoryId?: number | null;
   categoryName?: string | null;
@@ -42,6 +43,7 @@ export function mapIncomingCourse(course: IncomingAcademyCourse): AcademyCourse 
     durationMinutes: 0,
     durationLabel: course.durationLabel ?? null,
     cpeCredits: course.cpeCredits ?? '0',
+    cpeLabel: course.cpeLabel,
     price: course.price ?? '0',
     categoryId: course.categoryId ?? null,
     categoryName: course.categoryName ?? null,

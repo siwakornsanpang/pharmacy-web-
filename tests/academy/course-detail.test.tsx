@@ -1,24 +1,78 @@
+import { beforeEach } from 'vitest';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import CourseDetailPage from '@/app/(member)/05_learning/[id]/page';
-import { getAcademyCourse, getAcademyEnrollments, listAcademyReviews } from '@/lib/academy/client';
+import { createAcademyOrder, getAcademyEnrollments, listAcademyReviews } from '@/lib/academy/client';
+import { getAcademyCourse } from '@/lib/academy';
 
-const { route } = vi.hoisted(() => ({ route: { id: '1' } }));
+vi.mock('@/lib/academy', () => ({ getAcademyCourse: vi.fn() }));
+
+const { route, push } = vi.hoisted(() => ({ route: { id: '1' }, push: vi.fn() }));
 vi.mock('next/navigation', () => ({
   useParams: () => ({ id: route.id }),
   useSearchParams: () => new URLSearchParams(),
-  useRouter: () => ({ push: vi.fn(), back: vi.fn() }),
+  useRouter: () => ({ push, back: vi.fn() }),
 }));
 vi.mock('@/lib/academy/client', () => ({
   AcademyError: class extends Error {}, getAcademyCourse: vi.fn(), getAcademyEnrollments: vi.fn(),
   listAcademyReviews: vi.fn(), createAcademyOrder: vi.fn(),
 }));
 
-const course = (id: number) => ({ id, title: `คอร์ส ${id}`, summary: 'รายละเอียด', instructorName: 'ผู้สอน',
-  thumbnailUrl: null, durationMinutes: 60, cpeCredits: 1, price: 0, categoryId: null, categoryName: null });
-afterEach(() => { cleanup(); vi.clearAllMocks(); route.id = '1'; });
+const course = (id: number) => ({ id: Number(id), title: `คอร์ส ${id}`, summary: 'รายละเอียด', instructorName: 'ผู้สอน',
+  coverUrl: null, durationLabel: '1 ชั่วโมง', cpeCredits: '1', cpeLabel: '1 หน่วยกิต', price: '0', categoryName: null,
+  categoryColor: null, instructorTitle: null, studentCount: 0, rating: null, reviewCount: 0, outcomes: [],
+  isFeatured: false, format: undefined as unknown as 'online', venue: null, trainingStartsAt: null, trainingEndsAt: null,
+  conferenceCode: null, audience: 'all', instructorExpertise: null, instructorImageUrl: null, lessons: [] });
+
+beforeEach(() => {
+  vi.mocked(getAcademyEnrollments).mockResolvedValue([]);
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: true, json: async () => ({enrolled: false, progressPercent: 0})}));
+});
+
+afterEach(() => { cleanup(); vi.clearAllMocks(); vi.unstubAllGlobals(); route.id = '1'; });
 
 describe('Academy course details', () => {
+  it('opens the original local mock checkout without posting a paid order to the API', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue({...course(1), price: '1200'});
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    vi.mocked(createAcademyOrder).mockResolvedValue({type: 'payment_required', order: {
+      id: 8001, courseId: 1, courseTitle: 'คอร์ส 1', amountSnapshot: '1200', status: 'pending',
+    }});
+    render(<CourseDetailPage />);
+    fireEvent.click(await screen.findByRole('button', {name: 'ชำระเงินจำลอง'}));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/learning/checkout?orderId=8001&from=%2Flearning'));
+    expect(createAcademyOrder).toHaveBeenCalledWith(1, expect.objectContaining({id: 1, price: '1200'}));
+    expect(vi.mocked(fetch).mock.calls.some(([, init]) => init?.method === 'POST')).toBe(false);
+  });
+
+  it('does not present a local mock payment as access to API lessons', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue({...course(1), price: '1200'});
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    vi.mocked(getAcademyEnrollments).mockResolvedValue([{courseId: 1, status: 'active'}]);
+    render(<CourseDetailPage />);
+    expect(await screen.findByText(/ลงทะเบียนจำลองแล้ว/)).toBeInTheDocument();
+    expect(screen.queryByRole('link', {name: 'เข้าเรียน'})).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', {name: 'ชำระเงินจำลอง'})).not.toBeInTheDocument();
+  });
+
+  it('keeps API enrollment in the restored detail design', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue(course(1));
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    render(<CourseDetailPage />);
+    fireEvent.click(await screen.findByRole('button', {name: 'ลงทะเบียนเรียน'}));
+    await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/academy/courses/1/enroll', expect.objectContaining({method: 'POST'})));
+  });
+
+  it('shows learning and certificate links for a completed enrollment', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue(course(1));
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    vi.mocked(fetch).mockResolvedValue({ok: true, json: async () => ({enrolled: true, progressPercent: 100})} as Response);
+    render(<CourseDetailPage />);
+    expect(await screen.findByRole('link', {name: 'เข้าเรียน'})).toHaveAttribute('href', '/learning/1/learn');
+    expect(screen.getByRole('link', {name: 'ใบประกาศ'})).toHaveAttribute('href', '/learning/1/certificate');
+    expect(screen.queryByRole('button', {name: 'ลงทะเบียนเรียน'})).not.toBeInTheDocument();
+  });
+
   it('shows a skeleton during loading and omits absent category and format tags', async () => {
     let resolveCourse!: (value: ReturnType<typeof course>) => void;
     vi.mocked(getAcademyCourse).mockReturnValue(new Promise((resolve) => { resolveCourse = resolve; }));
@@ -69,7 +123,7 @@ describe('Academy course details', () => {
 
   it('replaces previous course content when the route changes', async () => {
     vi.mocked(getAcademyEnrollments).mockResolvedValue([]);
-    vi.mocked(getAcademyCourse).mockImplementation(async (id) => course(id));
+    vi.mocked(getAcademyCourse).mockImplementation(async (id) => course(Number(id)));
     vi.mocked(listAcademyReviews).mockResolvedValue([]);
     const view = render(<CourseDetailPage />);
     await screen.findByRole('heading', { level: 1, name: 'คอร์ส 1' });
@@ -77,7 +131,7 @@ describe('Academy course details', () => {
     view.rerender(<CourseDetailPage />);
     await screen.findByRole('heading', { level: 1, name: 'คอร์ส 2' });
     expect(screen.queryByRole('heading', { level: 1, name: 'คอร์ส 1' })).not.toBeInTheDocument();
-    await waitFor(() => expect(getAcademyCourse).toHaveBeenLastCalledWith(2));
+    await waitFor(() => expect(getAcademyCourse).toHaveBeenLastCalledWith('2'));
   });
 });
 

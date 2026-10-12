@@ -18,6 +18,8 @@
     padding-bottom: 16px;
 }
 
+.myCoursesHeader { margin-top:32px; }
+
 .page h1, .page h2, .page h3, .page h4 {
     font-weight: 600;
 }
@@ -29,6 +31,7 @@
     .search {
         padding-top: 48px;
     }
+    .page h2 { font-size: 1.5rem; line-height: 1.5; }
 }
 
 .sectionState {

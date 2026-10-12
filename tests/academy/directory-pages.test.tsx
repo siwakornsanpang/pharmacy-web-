@@ -3,22 +3,22 @@ import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import CategoriesPage from '@/app/(member)/05_learning/categories/page';
 import InstructorsPage from '@/app/(member)/05_learning/instructors/page';
 import ReviewsPage from '@/app/(member)/05_learning/reviews/page';
-import { listAcademyCategories, listAcademyInstructors, listAcademyReviews } from '@/lib/academy/client';
+import { getAcademyCategories, getAcademyInstructors, getAcademyReviews } from '@/lib/academy';
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ back: vi.fn(), push: vi.fn() }) }));
-vi.mock('@/lib/academy/client', () => ({
-  listAcademyCategories: vi.fn(),
-  listAcademyInstructors: vi.fn(),
-  listAcademyReviews: vi.fn(),
+vi.mock('@/lib/academy', () => ({
+  getAcademyCategories: vi.fn(),
+  getAcademyInstructors: vi.fn(),
+  getAcademyReviews: vi.fn(),
 }));
 
 afterEach(() => { cleanup(); vi.clearAllMocks(); });
 
 describe('Academy directory pages', () => {
   it.each([
-    [CategoriesPage, listAcademyCategories, 'หมวดหมู่คอร์สเรียน'],
-    [InstructorsPage, listAcademyInstructors, 'วิทยากรผู้เชี่ยวชาญ'],
-    [ReviewsPage, listAcademyReviews, 'รีวิวจากผู้เรียน'],
+    [CategoriesPage, getAcademyCategories, 'หมวดหมู่คอร์สเรียน'],
+    [InstructorsPage, getAcademyInstructors, 'วิทยากรผู้เชี่ยวชาญ'],
+    [ReviewsPage, getAcademyReviews, 'รีวิวจากผู้เรียน'],
   ] as const)('keeps its page title through loading and an empty response', async (Page, request, title) => {
     vi.mocked(request).mockResolvedValue([]);
     render(<Page />);
@@ -28,9 +28,9 @@ describe('Academy directory pages', () => {
   });
 
   it('lists every visible category and links it to filtered courses', async () => {
-    vi.mocked(listAcademyCategories).mockResolvedValue([
-      { id: 1, name: 'เภสัชกรรมชุมชน', count: 2 },
-      { id: 2, name: 'กฎหมายและจริยธรรม', count: 1 },
+    vi.mocked(getAcademyCategories).mockResolvedValue([
+      { id: 1, name: 'เภสัชกรรมชุมชน', courseCount: 2, description:null, imageUrl:null, color:null },
+      { id: 2, name: 'กฎหมายและจริยธรรม', courseCount: 1, description:null, imageUrl:null, color:null },
     ]);
     render(<CategoriesPage />);
     expect(await screen.findByRole('link', { name: /กฎหมายและจริยธรรม/ })).toHaveAttribute(
@@ -39,7 +39,7 @@ describe('Academy directory pages', () => {
   });
 
   it('shows all instructors rather than the four shown on the Academy home', async () => {
-    vi.mocked(listAcademyInstructors).mockResolvedValue(Array.from({ length: 5 }, (_, index) => ({
+    vi.mocked(getAcademyInstructors).mockResolvedValue(Array.from({ length: 5 }, (_, index) => ({
       id: index + 1, name: `วิทยากร ${index + 1}`, title: null, expertise: null, imageUrl: null,
     })));
     render(<InstructorsPage />);
@@ -47,7 +47,7 @@ describe('Academy directory pages', () => {
   });
 
   it('shows all reviews rather than the eight shown on the Academy home', async () => {
-    vi.mocked(listAcademyReviews).mockResolvedValue(Array.from({ length: 9 }, (_, index) => ({
+    vi.mocked(getAcademyReviews).mockResolvedValue(Array.from({ length: 9 }, (_, index) => ({
       id: index + 1, rating: 5, body: `รีวิวที่ ${index + 1}`, reviewerName: `ผู้เรียน ${index + 1}`,
       reviewerRole: null, courseTitle: 'คอร์สเรียน',
     })));
@@ -59,9 +59,9 @@ describe('Academy directory pages', () => {
 
 describe('Academy directory recovery', () => {
   it.each([
-    [CategoriesPage, listAcademyCategories],
-    [InstructorsPage, listAcademyInstructors],
-    [ReviewsPage, listAcademyReviews],
+    [CategoriesPage, getAcademyCategories],
+    [InstructorsPage, getAcademyInstructors],
+    [ReviewsPage, getAcademyReviews],
   ] as const)('retries a failed directory request', async (Page, request) => {
     vi.mocked(request).mockRejectedValueOnce(new Error('offline')).mockResolvedValue([]);
     render(<Page />);
@@ -70,8 +70,8 @@ describe('Academy directory recovery', () => {
     expect(request).toHaveBeenCalledTimes(2);
   });
   it('keeps the category order returned by Back Office instead of sorting counts', async () => {
-    vi.mocked(listAcademyCategories).mockResolvedValue([
-      {id:1,name:'ลำดับแรก',count:0}, {id:2,name:'ลำดับสอง',count:10},
+    vi.mocked(getAcademyCategories).mockResolvedValue([
+      {id:1,name:'ลำดับแรก',courseCount:0,description:null,imageUrl:null,color:null}, {id:2,name:'ลำดับสอง',courseCount:10,description:null,imageUrl:null,color:null},
     ]);
     render(<CategoriesPage />);
     await screen.findByText('ลำดับแรก');

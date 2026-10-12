@@ -18,6 +18,9 @@ const course = {
 };
 
 describe('Incoming Academy contract', () => {
+  it('preserves the CPE label supplied by the course listing endpoint', () => {
+    expect(mapIncomingCourse({id:1,title:'คอร์ส',cpeLabel:'3 หน่วยกิต'}).cpeLabel).toBe('3 หน่วยกิต');
+  });
   it('does not invent a course type when the source has no known format', () => {
     expect(mapIncomingCourse({ id: 1, title: 'ไม่มีประเภท' }).format).toBeUndefined();
     expect(mapIncomingCourse({ id: 2, title: 'ประเภทอื่น', format: 'unknown' }).format).toBeUndefined();

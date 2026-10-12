@@ -106,6 +106,8 @@
 
 .orderInfo strong,
 .amount strong {
+    min-width: 0;
+    overflow-wrap: anywhere;
     text-align: right;
     font-weight: 600;
 }
@@ -205,6 +207,8 @@
     .backRow {
         padding: 1rem 0;
     }
+    .summaryColumn, .actionColumn { padding: 20px; }
+    .state { flex-direction: column; text-align: center; }
     .orderInfo,
     .amount {
         flex-direction: column;

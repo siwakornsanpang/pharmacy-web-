@@ -81,7 +81,7 @@ function CheckoutContent() {
                         </div>
                     </div>
                     <div className={styles.actionColumn}>
-                        <h2>{completed ? 'พร้อมเริ่มเรียน' : 'ขั้นตอนยืนยัน'}</h2>
+                        <h2>{completed ? 'ยืนยันสำเร็จ' : 'ขั้นตอนยืนยัน'}</h2>
                         {completed ? (
                             <>
                                 <p className={styles.successMessage}>บันทึกการลงทะเบียนจำลองในเบราว์เซอร์นี้แล้ว ข้อมูลยังไม่ปรากฏใน Back Office</p>

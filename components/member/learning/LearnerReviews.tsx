@@ -11,13 +11,14 @@ import styles from './LearnerReviews.module.css';
 import SectionHeader from '@/components/ui/SectionHeader';
 import type { AcademyReview } from '@/lib/academy';
 
-export default function LearnerReviews({ reviews }: { reviews: AcademyReview[] }) {
+export default function LearnerReviews({ reviews, showAll = false }: { reviews: AcademyReview[]; showAll?: boolean }) {
     if (reviews.length === 0) return null;
     return (
         <section className={styles.section}>
             <div className={styles.container}>
                 <SectionHeader 
-                    title="รีวิวจากผู้เรียน" 
+                    title="รีวิวจากผู้เรียน"
+                    viewAllHref={showAll ? undefined : '/learning/reviews'}
                 />
 
                 <div className={styles.sliderContainer}>
@@ -33,7 +34,7 @@ export default function LearnerReviews({ reviews }: { reviews: AcademyReview[] }
                         }}
                         className={styles.swiper}
                     >
-                        {reviews.map((review) => (
+                        {(showAll ? reviews : reviews.slice(0, 8)).map((review) => (
                             <SwiperSlide key={review.id} style={{ height: 'auto' }}>
                                 <div className={styles.card}>
                                     <div className={styles.quoteWatermark}>
@@ -49,7 +50,7 @@ export default function LearnerReviews({ reviews }: { reviews: AcademyReview[] }
                                             />
                                         ))}
                                     </div>
-                                    <p className={styles.comment}>"{review.body}"</p>
+                                    <p className={styles.comment}>&ldquo;{review.body}&rdquo;</p>
                                     <div className={styles.courseBadge}>
                                         <span className={styles.courseLabel}>คอร์สเรียน:</span>
                                         <span className={styles.courseName}>{review.courseTitle}</span>

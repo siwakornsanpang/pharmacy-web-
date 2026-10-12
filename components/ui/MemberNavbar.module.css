@@ -336,9 +336,19 @@
     .lowerNav {
         padding: 0 1rem;
     }
+    .navContainer {
+        flex-wrap: wrap;
+        gap: 0;
+    }
+    .navItem, .navItemActive {
+        min-height: 44px;
+    }
 }
 
 @media (max-width: 480px) {
+    .navItem, .navItemActive {
+        padding: 0.5rem 0.375rem;
+    }
     .brandTitle {
         font-size: 1.1rem;
         text-align: center;

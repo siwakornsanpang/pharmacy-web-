@@ -21,6 +21,7 @@ export interface AcademyCourse {
   durationMinutes: number;
   durationLabel?: string | null;
   cpeCredits: number | string;
+  cpeLabel?: string;
   price: number | string;
   maxStudents?: number | null;
   enrollmentDeadline?: string | null;
@@ -120,11 +121,11 @@ export function getAcademyEnrollments() {
   return localCall(() => localRegistration.getEnrollments());
 }
 
-export async function createAcademyOrder(courseId: number): Promise<{ type: 'enrolled'; enrollment: AcademyEnrollment } | { type: 'payment_required'; order: AcademyOrder }> {
+export async function createAcademyOrder(courseId: number, courseSnapshot?: AcademyCourse): Promise<{ type: 'enrolled'; enrollment: AcademyEnrollment } | { type: 'payment_required'; order: AcademyOrder }> {
   const enrollments = await getAcademyEnrollments();
   const existing = enrollments.find((item) => item.courseId === courseId && item.status === 'active');
   if (existing) return { type: 'enrolled', enrollment: existing };
-  const course = await getAcademyCourse(courseId);
+  const course = courseSnapshot?.id === courseId ? courseSnapshot : await getAcademyCourse(courseId);
   return localCall(() => localRegistration.createOrder(course));
 }
 

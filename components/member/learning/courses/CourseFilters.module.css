@@ -1,4 +1,5 @@
 .wrapper {
+    box-sizing: border-box;
     width: 100%;
     margin: 0;
     background: #fff;
@@ -86,6 +87,7 @@
 }
 
 .input {
+    box-sizing: border-box;
     width: 100%;
     min-height: 48px;
     padding: 10px 16px 10px 44px;
@@ -133,4 +135,5 @@
     .wrapper {
         padding: 20px;
     }
+    .input, .dropdownButton { font-size: 1rem; }
 }

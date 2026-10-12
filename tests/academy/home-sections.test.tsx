@@ -1,23 +1,40 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
-import { cleanup, fireEvent, render, screen } from '@testing-library/react';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import LearningPage from '@/app/(member)/05_learning/page';
-import { getAcademyStats, listAcademyCategories, listAcademyCourses, listAcademyInstructors, listAcademyReviews } from '@/lib/academy/client';
+import { getAcademyStats, getAcademyCategories, getAcademyCourses, getAcademyInstructors, getAcademyReviews } from '@/lib/academy';
 
 vi.mock('next/navigation', () => ({ useRouter: () => ({ push: vi.fn() }) }));
-vi.mock('@/lib/academy/client', () => ({
-  AcademyError: class extends Error {}, getAcademyStats: vi.fn(), listAcademyCategories: vi.fn(),
-  listAcademyCourses: vi.fn(), listAcademyInstructors: vi.fn(), listAcademyReviews: vi.fn(),
+vi.mock('@/lib/academy', () => ({
+  AcademyError: class extends Error {}, getAcademyStats: vi.fn(), getAcademyCategories: vi.fn(),
+  getAcademyCourses: vi.fn(), getAcademyInstructors: vi.fn(), getAcademyReviews: vi.fn(),
 }));
-afterEach(() => { cleanup(); vi.clearAllMocks(); });
+beforeEach(() => { vi.stubGlobal('IntersectionObserver', class { observe() {} disconnect() {} unobserve() {} }); });
+afterEach(() => { cleanup(); vi.clearAllMocks(); vi.unstubAllGlobals(); sessionStorage.clear(); });
 
 describe('Academy home section loading', () => {
+  it('restores the search draft and category when returning to Academy home', async () => {
+    vi.mocked(getAcademyCategories).mockResolvedValue([{id:1,name:'เภสัชกรรมชุมชน',courseCount:0,description:null,imageUrl:null,color:null}]);
+    vi.mocked(getAcademyCourses).mockResolvedValue([]);
+    vi.mocked(getAcademyInstructors).mockResolvedValue([]);
+    vi.mocked(getAcademyReviews).mockResolvedValue([]);
+    vi.mocked(getAcademyStats).mockResolvedValue({courseCount:0,learnerCount:0,instructorCount:0});
+    const view = render(<LearningPage />);
+    await screen.findByRole('option', {name:'เภสัชกรรมชุมชน'});
+    fireEvent.change(screen.getByRole('textbox',{name:'ค้นหาคอร์ส'}), {target:{value:'diabetes'}});
+    fireEvent.change(screen.getByRole('combobox'), {target:{value:'เภสัชกรรมชุมชน'}});
+    view.unmount();
+    render(<LearningPage />);
+    await waitFor(() => expect(screen.getByRole('textbox',{name:'ค้นหาคอร์ส'})).toHaveValue('diabetes'));
+    expect(screen.getByRole('combobox')).toHaveValue('เภสัชกรรมชุมชน');
+  });
+
   it('keeps successful courses visible when categories fail and retries only the failed section', async () => {
-    vi.mocked(listAcademyCategories).mockRejectedValueOnce(new Error('offline')).mockResolvedValue([{ id: 1, name: 'หมวดหมู่ใหม่', count: 1 }]);
+    vi.mocked(getAcademyCategories).mockRejectedValueOnce(new Error('offline')).mockResolvedValue([{ id: 1, name: 'หมวดหมู่ใหม่', courseCount: 1, description:null, imageUrl:null, color:null }]);
     const course = { id: 1, title: 'คอร์สที่โหลดสำเร็จ', summary: null, instructorName: null,
-      thumbnailUrl: null, durationMinutes: 60, cpeCredits: 1, price: 0, categoryId: null, categoryName: null };
-    vi.mocked(listAcademyCourses).mockResolvedValue({ items: [course], total: 1, page: 1, limit: 9 });
-    vi.mocked(listAcademyInstructors).mockResolvedValue([]);
-    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+      coverUrl:null,durationLabel:'1 ชั่วโมง',cpeLabel:'1 หน่วยกิต',categoryName:null,categoryColor:null,instructorTitle:null,studentCount:0,rating:null,reviewCount:0,outcomes:[],isFeatured:false,format:'online' as const,venue:null,trainingStartsAt:null,trainingEndsAt:null };
+    vi.mocked(getAcademyCourses).mockResolvedValue([course]);
+    vi.mocked(getAcademyInstructors).mockResolvedValue([]);
+    vi.mocked(getAcademyReviews).mockResolvedValue([]);
     vi.mocked(getAcademyStats).mockResolvedValue({ courseCount: 1, learnerCount: 2, instructorCount: 0 });
     render(<LearningPage />);
     expect(screen.queryAllByText(/ยังไม่มี/)).toHaveLength(0);
@@ -25,10 +42,10 @@ describe('Academy home section loading', () => {
     expect(screen.getByRole('status', { name: 'กำลังโหลดคอร์สยอดนิยม...' }).querySelector('[aria-hidden="true"]')).toBeInTheDocument();
     await screen.findByText('คอร์สที่โหลดสำเร็จ');
     expect(await screen.findByRole('alert')).toHaveTextContent('โหลดหมวดหมู่ไม่สำเร็จ');
-    const calls = vi.mocked(listAcademyCourses).mock.calls.length;
+    const calls = vi.mocked(getAcademyCourses).mock.calls.length;
     fireEvent.click(screen.getByRole('button', { name: /ลองอีกครั้ง/ }));
     await screen.findByRole('link', { name: /หมวดหมู่ใหม่/ });
-    expect(listAcademyCourses).toHaveBeenCalledTimes(calls);
+    expect(getAcademyCourses).toHaveBeenCalledTimes(calls);
     expect(screen.getByText('คอร์สที่โหลดสำเร็จ')).toBeInTheDocument();
   });
 });

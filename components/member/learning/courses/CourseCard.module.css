@@ -60,6 +60,7 @@
 }
 
 .title {
+    overflow-wrap: anywhere;
     font-size: 1.2rem;
     font-weight: 600;
     color: #1e293b;
@@ -122,6 +123,7 @@
 }
 
 .instructor {
+    overflow-wrap: anywhere;
     margin: -4px 0 16px;
     color: #475569;
     font-size: .9rem;
@@ -132,4 +134,11 @@
     font-weight: 600;
     font-size: 1.1rem;
     color: #1e293b;
+}
+
+@media (max-width: 640px) {
+    .content { padding: 20px; }
+    .title { font-size: 1.125rem; }
+    .meta { gap: 8px 16px; }
+    .badge { overflow-wrap: anywhere; }
 }

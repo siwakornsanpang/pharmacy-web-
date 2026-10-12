@@ -2,7 +2,11 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import Image from 'next/image';
+import Image from './AcademyImage';
+import AcademyImagePlaceholder from './AcademyImagePlaceholder';
+import { academyCourseHref } from '@/lib/academy/navigation';
+import cardStyles from './courses/CourseCard.module.css';
+import { ArrowRight } from 'lucide-react';
 import { ChevronLeft, ChevronRight, Check, Star } from 'lucide-react';
 import styles from './FeaturedCourse.module.css';
 import SectionHeader from '@/components/ui/SectionHeader';
@@ -36,17 +40,17 @@ export default function FeaturedCourse({ courses }: { courses: AcademyCourse[] }
                 <div className={styles.cardWrapper}>
                     <div className={styles.card}>
                         {/* Navigation Buttons inside Card */}
-                        <button onClick={handlePrev} className={`${styles.navBtn} ${styles.prevBtn}`}>
+                        {courses.length > 1 && <button aria-label="คอร์สแนะนำก่อนหน้า" onClick={handlePrev} className={`${styles.navBtn} ${styles.prevBtn}`}>
                             <ChevronLeft size={24} />
-                        </button>
-                        <button onClick={handleNext} className={`${styles.navBtn} ${styles.nextBtn}`}>
+                        </button>}
+                        {courses.length > 1 && <button aria-label="คอร์สแนะนำถัดไป" onClick={handleNext} className={`${styles.navBtn} ${styles.nextBtn}`}>
                             <ChevronRight size={24} />
-                        </button>
+                        </button>}
                         <div className={styles.imageSide}>
                             {course.coverUrl ? (
-                                <Image src={course.coverUrl} alt={course.title} fill className={styles.image} priority />
+                                <Image src={course.coverUrl} alt={course.title} fill className={styles.image} sizes="(max-width: 850px) 100vw, 45vw" priority />
                             ) : (
-                                <div className={styles.image} />
+                                <AcademyImagePlaceholder />
                             )}
                         </div>
                         
@@ -68,7 +72,7 @@ export default function FeaturedCourse({ courses }: { courses: AcademyCourse[] }
                                 </ul>
                             </div>
 
-                            <Link href={`/learning/${course.id}`} className={styles.enrollBtn}>เข้าสู่บทเรียน</Link>
+                            <Link href={academyCourseHref(course.id, '/learning')} className={`${cardStyles.enrollBtn} ${styles.detailButton}`}>ดูรายละเอียด<ArrowRight size={16} aria-hidden="true" /></Link>
 
                             <div className={styles.footer}>
                                 <div className={styles.footerItem}>
