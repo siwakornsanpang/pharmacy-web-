@@ -10,8 +10,8 @@ import AcademyImage from '@/components/member/learning/AcademyImage';
 import { AlertCircle, ArrowRight, Award, Check, Clock, UserRound } from 'lucide-react';
 import styles from './course-detail.module.css';
 import AcademyBackLink from '@/components/member/learning/AcademyBackLink';
-import { academyCheckoutHref, academySource } from '@/lib/academy/navigation';
-import { AcademyCourse, AcademyError, AcademyReview, createAcademyOrder, listAcademyReviews } from '@/lib/academy/client';
+import { academySource } from '@/lib/academy/navigation';
+import { AcademyCourse, AcademyError, AcademyReview, listAcademyReviews } from '@/lib/academy/client';
 
 import { getAcademyCourse } from '@/lib/academy';
 import { mapIncomingCourse } from '@/lib/academy/incoming';
@@ -103,19 +103,13 @@ export default function CourseDetailPage() {
         setBusy(true);
         setError('');
         try {
-            if (action === 'order') {
-                const result = await createAcademyOrder(course.id, course);
-                if (result.type === 'payment_required') router.push(academyCheckoutHref(result.order.id, source));
-                else setLoadVersion(current => current + 1);
-                return;
-            }
             const response = await fetch(`/api/academy/courses/${course.id}/${action}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(action === 'refund' ? { reason: 'จำลองการคืนเงิน' } : {}),
             });
             const data = await response.json().catch(() => ({}));
             if (!response.ok) throw new Error(data.message || 'ดำเนินการไม่สำเร็จ กรุณาลองใหม่');
-            if (action === 'enroll') {
+            if (action === 'enroll' || action === 'order') {
                 router.push(`/learning/${course.id}/learn`);
             } else {
                 setEnrolled(false);

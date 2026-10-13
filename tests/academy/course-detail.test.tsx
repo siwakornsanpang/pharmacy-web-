@@ -32,17 +32,29 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.clearAllMocks(); vi.unstubAllGlobals(); route.id = '1'; });
 
 describe('Academy course details', () => {
-  it('opens the original local mock checkout without posting a paid order to the API', async () => {
+  it('matches Siwakorn: posts simulated payment directly and opens learning after API success', async () => {
     vi.mocked(getAcademyCourse).mockResolvedValue({...course(1), price: '1200'});
     vi.mocked(listAcademyReviews).mockResolvedValue([]);
-    vi.mocked(createAcademyOrder).mockResolvedValue({type: 'payment_required', order: {
-      id: 8001, courseId: 1, courseTitle: 'คอร์ส 1', amountSnapshot: '1200', status: 'pending',
-    }});
     render(<CourseDetailPage />);
     fireEvent.click(await screen.findByRole('button', {name: 'ชำระเงินจำลอง'}));
-    await waitFor(() => expect(push).toHaveBeenCalledWith('/learning/checkout?orderId=8001&from=%2Flearning'));
-    expect(createAcademyOrder).toHaveBeenCalledWith(1, expect.objectContaining({id: 1, price: '1200'}));
-    expect(vi.mocked(fetch).mock.calls.some(([, init]) => init?.method === 'POST')).toBe(false);
+    await waitFor(() => expect(fetch).toHaveBeenCalledWith('/api/academy/courses/1/order', expect.objectContaining({method: 'POST', body: '{}'})));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/learning/1/learn'));
+    expect(createAcademyOrder).not.toHaveBeenCalled();
+    expect(screen.getByText(/ไม่มีการเรียกเก็บเงินจริง/)).toBeInTheDocument();
+  });
+
+  it('stays on details and shows the API error when simulated payment is rejected', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue({...course(1), price: '1200'});
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    vi.mocked(fetch).mockImplementation(async (_url, init) => ({
+      ok: init?.method !== 'POST',
+      json: async () => init?.method === 'POST' ? {message: 'Unauthorized: Pharmacy session ไม่ถูกต้องหรือหมดอายุ'} : {enrolled: false},
+    }) as Response);
+    render(<CourseDetailPage />);
+    fireEvent.click(await screen.findByRole('button', {name: 'ชำระเงินจำลอง'}));
+    expect(await screen.findByText('Unauthorized: Pharmacy session ไม่ถูกต้องหรือหมดอายุ')).toBeInTheDocument();
+    expect(push).not.toHaveBeenCalled();
+    expect(screen.getByRole('button', {name: 'ชำระเงินจำลอง'})).toBeEnabled();
   });
 
   it('ignores old local mock registrations and still offers checkout', async () => {
