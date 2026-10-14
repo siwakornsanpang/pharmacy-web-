@@ -1,8 +1,9 @@
 "use client";
 
+import {useAcademyUser} from '@/lib/academy/use-academy-refresh';
 import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
 
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { AlertCircle, CheckCircle2, CreditCard } from 'lucide-react';
@@ -13,12 +14,20 @@ import { academyCourseHref, academySource } from '@/lib/academy/navigation';
 import { AcademyError, AcademyOrder, completeMockAcademyOrder, getAcademyOrder } from '@/lib/academy/client';
 
 function CheckoutContent() {
+    const userId = useAcademyUser();
+    return <UserCheckout key={userId} />;
+}
+
+function UserCheckout() {
     const searchParams = useSearchParams();
     const source = academySource(searchParams.get('from'));
     const orderId = Number(searchParams.get('orderId'));
     const [order, setOrder] = useState<AcademyOrder | null>(null);
     const [loading, setLoading] = useState(true);
     const [busy, setBusy] = useState(false);
+    const lock = useRef(false);
+    const active = useRef(true);
+    useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
     const [error, setError] = useState('');
 
     useEffect(() => {
@@ -38,16 +47,17 @@ function CheckoutContent() {
     }, [orderId]);
 
     const completePayment = async () => {
-        if (!order || busy) return;
+        if (!order || lock.current) return;
+        lock.current = true;
         setBusy(true);
         setError('');
         try {
             const result = await completeMockAcademyOrder(order.id);
-            setOrder({ ...order, status: result.status });
+            if (active.current) setOrder({ ...order, status: result.status });
         } catch (reason) {
-            setError(reason instanceof AcademyError ? reason.message : 'บันทึกการลงทะเบียนไม่สำเร็จ กรุณาลองใหม่');
+            if (active.current) setError(reason instanceof AcademyError ? reason.message : 'บันทึกการลงทะเบียนไม่สำเร็จ กรุณาลองใหม่');
         } finally {
-            setBusy(false);
+            if (active.current) { lock.current = false; setBusy(false); }
         }
     };
 

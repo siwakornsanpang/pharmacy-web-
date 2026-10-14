@@ -25,6 +25,7 @@ export type AcademyCourse = {
   reviewCount: number;
   outcomes: string[];
   isFeatured: boolean;
+  status?: 'draft' | 'published' | 'archived';
   format: "online" | "onsite";
   venue: string | null;
   trainingStartsAt: string | null;
@@ -47,6 +48,8 @@ export type AcademyCourseDetail = AcademyCourse & {
   conferenceCode: string | null;
   price: string;
   audience: string;
+  enrollmentDeadline?: string | null;
+  maxStudents?: number | null;
   instructorExpertise: string | null;
   instructorImageUrl: string | null;
   lessons: { id: number; title: string; description: string | null }[];
@@ -91,7 +94,7 @@ export function getAcademyCourses(params?: { category?: string; q?: string; feat
   if (params?.q) query.set("q", params.q);
   if (params?.featured) query.set("featured", "1");
   const suffix = query.toString() ? `?${query.toString()}` : "";
-  return readJson<AcademyCourse[]>(`/academy/courses${suffix}`);
+  return readJson<AcademyCourse[]>(`/academy/courses${suffix}`).then(items => items.filter(course => !course.status || course.status === 'published'));
 }
 
 export function getAcademyCourse(id: string) {

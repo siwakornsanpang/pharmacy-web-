@@ -1,5 +1,6 @@
 "use client";
 
+import {useAcademyUser} from '@/lib/academy/use-academy-refresh';
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import styles from "./learn.module.css";
@@ -27,6 +28,12 @@ function media(url: string) {
 }
 
 export default function AcademyLearnPage() {
+  const userId = useAcademyUser();
+  const {id} = useParams<{id: string}>();
+  return <UserContent key={`${userId}:${id}`} />;
+}
+
+function UserContent() {
   const params = useParams<{ id: string }>();
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [enrolled, setEnrolled] = useState(false);

@@ -35,6 +35,7 @@ describe('Academy data source', () => {
   it('persists simulated payment through the member API, and reloads server registration', async () => {
     let enrolled = false;
     const fetchRequest = vi.fn(async (url: string, init?: RequestInit) => {
+      if (url === '/api/auth/pharmacy/me') return Response.json({user: {pharmacistLicense: '11111'}});
       if (url === '/api/academy/enrollments') return Response.json(enrolled ? [{ courseId: 87, status: 'active' }] : []);
       if (url === '/api/academy/courses/87/order' && init?.method === 'POST') {
         enrolled = true;
@@ -57,13 +58,13 @@ describe('Academy data source', () => {
   });
 
   it.each([500, 401])('does not mark payment successful after API failure %s', async status => {
-    vi.stubGlobal('fetch', vi.fn(async (url: string) => url.endsWith('/order')
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => url === '/api/auth/pharmacy/me' ? Response.json({user: {pharmacistLicense: '11111'}}) : url.endsWith('/order')
       ? Response.json({ message: 'บันทึกไม่สำเร็จ' }, { status })
       : Response.json([])));
     const { localRegistration } = await import('@/lib/academy/local-registration');
     const { mapIncomingCourse } = await import('@/lib/academy/incoming');
     const { completeMockAcademyOrder, getAcademyOrder } = await import('@/lib/academy/client');
-    const { order } = localRegistration.createPendingOrder(mapIncomingCourse({ id: 87, title: 'Test', price: '350' }));
+    const { order } = localRegistration.createPendingOrder(mapIncomingCourse({ id: 87, title: 'Test', price: '350' }), '11111');
     await expect(completeMockAcademyOrder(order.id)).rejects.toThrow('บันทึกไม่สำเร็จ');
     expect(await getAcademyOrder(order.id)).toMatchObject({ status: 'pending' });
   });
@@ -73,19 +74,19 @@ describe('Academy data source', () => {
       enrollments: [{courseId: 87, status: 'active'}], nextOrderId: 8002,
       orders: [{id: 8001, courseId: 87, status: 'mock_paid', amountSnapshot: '350'}],
     }));
-    vi.stubGlobal('fetch', vi.fn(async () => Response.json([])));
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => Response.json(url === '/api/auth/pharmacy/me' ? {user: {pharmacistLicense: '11111'}} : [])));
     const { getAcademyOrder, getAcademyEnrollments } = await import('@/lib/academy/client');
-    expect(await getAcademyOrder(8001)).toMatchObject({status: 'pending'});
+    await expect(getAcademyOrder(8001)).rejects.toThrow('ไม่พบคำสั่งซื้อของบัญชีนี้');
     expect(await getAcademyEnrollments()).toEqual([]);
   });
 
   it('does not show success when the API only accepts a pending payment', async () => {
-    vi.stubGlobal('fetch', vi.fn(async (url: string) => Response.json(url.endsWith('/order')
+    vi.stubGlobal('fetch', vi.fn(async (url: string) => Response.json(url === '/api/auth/pharmacy/me' ? {user: {pharmacistLicense: '11111'}} : url.endsWith('/order')
       ? {success: true, status: 'pending'} : [])));
     const { localRegistration } = await import('@/lib/academy/local-registration');
     const { mapIncomingCourse } = await import('@/lib/academy/incoming');
     const { completeMockAcademyOrder } = await import('@/lib/academy/client');
-    const {order} = localRegistration.createPendingOrder(mapIncomingCourse({id: 87, title: 'Test', price: '350'}));
+    const {order} = localRegistration.createPendingOrder(mapIncomingCourse({id: 87, title: 'Test', price: '350'}), '11111');
     await expect(completeMockAcademyOrder(order.id)).rejects.toThrow('ระบบยังไม่ยืนยัน');
   });
 });

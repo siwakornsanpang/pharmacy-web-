@@ -1,5 +1,6 @@
 "use client";
 
+import {useAcademyRefresh} from '@/lib/academy/use-academy-refresh';
 import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
 
 import { Suspense, useEffect, useRef, useState } from 'react';
@@ -27,6 +28,7 @@ function CoursesContent() {
     const categoryQuery = searchParams.get('category') ?? ALL;
     const [searchTerm, setSearchTerm] = useState(() => searchParams.get('search') ?? '');
     const [searchDraft, setSearchDraft] = useState(() => searchParams.get('search') ?? '');
+    const refreshVersion = useAcademyRefresh();
     const [requestVersion, setRequestVersion] = useState(0);
     const [selectedCategory, setSelectedCategory] = useState(() => searchParams.get('category') ?? ALL);
     const [categories, setCategories] = useState<AcademyCategory[]>([]);
@@ -68,7 +70,7 @@ function CoursesContent() {
             if (!cancelled) { setCategoryError(reason instanceof AcademyError ? reason.message : 'โหลดหมวดหมู่ไม่สำเร็จ'); setCategoriesLoaded(true); }
         });
         return () => { cancelled = true; };
-    }, [categoryRequest]);
+    }, [categoryRequest, refreshVersion]);
 
     useEffect(() => {
         if (!categoriesLoaded) return;
@@ -99,7 +101,7 @@ function CoursesContent() {
                 .finally(() => { if (!cancelled && generation.current === requestGeneration) { setLoading(false); pendingReload.current = false; } });
         }, 200);
         return () => { cancelled = true; clearTimeout(timer); };
-    }, [searchTerm, selectedCategory, categories, categoriesLoaded, requestVersion]);
+    }, [searchTerm, selectedCategory, categories, categoriesLoaded, requestVersion, refreshVersion]);
 
     const returnTo = academyCoursesHref(searchTerm, selectedCategory);
     const hasFilters = Boolean(searchTerm.trim()) || selectedCategory !== ALL;

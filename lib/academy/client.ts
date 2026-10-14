@@ -121,7 +121,16 @@ export function getAcademyEnrollments() {
   return request<AcademyEnrollment[]>('enrollments');
 }
 
+async function checkoutUserId() {
+  const response = await fetch('/api/auth/pharmacy/me', {credentials: 'include', cache: 'no-store'});
+  if (!response.ok) throw new AcademyError('กรุณาเข้าสู่ระบบใหม่', 401);
+  const body = await response.json() as {user?: {pharmacistLicense?: string}};
+  if (!body.user?.pharmacistLicense) throw new AcademyError('กรุณาเข้าสู่ระบบใหม่', 401);
+  return body.user.pharmacistLicense;
+}
+
 export async function createAcademyOrder(courseId: number, courseSnapshot?: AcademyCourse): Promise<{ type: 'enrolled'; enrollment: AcademyEnrollment } | { type: 'payment_required'; order: AcademyOrder }> {
+  const userId = await checkoutUserId();
   const enrollments = await getAcademyEnrollments();
   const existing = enrollments.find((item) => item.courseId === courseId && item.status === 'active');
   if (existing) return { type: 'enrolled', enrollment: existing };
@@ -130,12 +139,14 @@ export async function createAcademyOrder(courseId: number, courseSnapshot?: Acad
     await request(`courses/${courseId}/enroll`, { method: 'POST' });
     return { type: 'enrolled', enrollment: { courseId, status: 'active' } };
   }
-  return localCall(() => localRegistration.createPendingOrder(course));
+  return localCall(() => localRegistration.createPendingOrder(course, userId));
 }
 
 export async function getAcademyOrder(orderId: number): Promise<AcademyOrder> {
-  const order = await localCall(() => localRegistration.getOrder(orderId));
+  const userId = await checkoutUserId();
+  const order = await localCall(() => localRegistration.getOrder(orderId, userId));
   const enrollments = await getAcademyEnrollments();
+  if (await checkoutUserId() !== userId) throw new AcademyError('บัญชีผู้ใช้เปลี่ยนไป กรุณาเลือกคอร์สใหม่', 409);
   const enrolled = enrollments.some(item => item.courseId === order.courseId && item.status === 'active');
   // Old browser-only mock payments do not prove a registration in the database.
   return { ...order, status: enrolled ? 'paid' : order.status === 'cancelled' ? 'cancelled' : 'pending' };

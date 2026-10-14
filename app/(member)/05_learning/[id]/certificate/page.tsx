@@ -1,5 +1,6 @@
 "use client";
 
+import {useAcademyUser} from '@/lib/academy/use-academy-refresh';
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import styles from "./certificate.module.css";
@@ -15,6 +16,12 @@ type Certificate = {
 };
 
 export default function AcademyCertificatePage() {
+  const userId = useAcademyUser();
+  const {id} = useParams<{id: string}>();
+  return <UserContent key={`${userId}:${id}`} />;
+}
+
+function UserContent() {
   const params = useParams<{ id: string }>();
   const [certificate, setCertificate] = useState<Certificate | null>(null);
   const [message, setMessage] = useState("");

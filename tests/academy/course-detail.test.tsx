@@ -7,7 +7,8 @@ import { getAcademyCourse } from '@/lib/academy';
 
 vi.mock('@/lib/academy', () => ({ getAcademyCourse: vi.fn() }));
 
-const { route, push } = vi.hoisted(() => ({ route: { id: '1' }, push: vi.fn() }));
+const { route, push, authState, refreshAuth } = vi.hoisted(() => ({ route: { id: '1' }, push: vi.fn(), authState: {userId: 'ภ12345'}, refreshAuth: vi.fn() }));
+vi.mock('@/context/AuthContext', () => ({useAuth: () => ({userId: authState.userId, refresh: refreshAuth})}));
 vi.mock('next/navigation', () => ({
   useParams: () => ({ id: route.id }),
   useSearchParams: () => new URLSearchParams(),
@@ -29,7 +30,7 @@ beforeEach(() => {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ok: true, json: async () => ({enrolled: false, progressPercent: 0})}));
 });
 
-afterEach(() => { cleanup(); vi.clearAllMocks(); vi.unstubAllGlobals(); route.id = '1'; });
+afterEach(() => { cleanup(); vi.clearAllMocks(); vi.unstubAllGlobals(); route.id = '1'; authState.userId = 'ภ12345'; });
 
 describe('Academy course details', () => {
   it('matches Siwakorn: posts simulated payment directly and opens learning after API success', async () => {
@@ -55,6 +56,67 @@ describe('Academy course details', () => {
     expect(await screen.findByText('Unauthorized: Pharmacy session ไม่ถูกต้องหรือหมดอายุ')).toBeInTheDocument();
     expect(push).not.toHaveBeenCalled();
     expect(screen.getByRole('button', {name: 'ชำระเงินจำลอง'})).toBeEnabled();
+  });
+
+  it('disables registration for a draft course', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue({...course(1), status: 'draft'});
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    render(<CourseDetailPage />);
+    expect(await screen.findByRole('button', {name: 'ยังไม่เปิดลงทะเบียน'})).toBeDisabled();
+  });
+
+  it('does not submit when the latest price has changed', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValueOnce(course(1)).mockResolvedValue({...course(1), price: '100'});
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    render(<CourseDetailPage />);
+    fireEvent.click(await screen.findByRole('button', {name: 'ลงทะเบียนเรียน'}));
+    expect(await screen.findByText(/ข้อมูลคอร์สมีการเปลี่ยนแปลง/)).toBeInTheDocument();
+    expect(vi.mocked(fetch).mock.calls.some(([,init]) => init?.method === 'POST')).toBe(false);
+    expect(screen.getByRole('button', {name: 'ชำระเงินจำลอง'})).toBeInTheDocument();
+  });
+
+  it('blocks registration after the deadline changes on the server', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValueOnce(course(1)).mockResolvedValue({...course(1), enrollmentDeadline: '2020-01-01T00:00:00Z'});
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    render(<CourseDetailPage />);
+    fireEvent.click(await screen.findByRole('button', {name: 'ลงทะเบียนเรียน'}));
+    expect(await screen.findByRole('button', {name: 'ปิดรับสมัคร'})).toBeDisabled();
+    expect(vi.mocked(fetch).mock.calls.some(([,init]) => init?.method === 'POST')).toBe(false);
+  });
+
+  it('keeps registration locked after success while navigation is pending', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue(course(1));
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    render(<CourseDetailPage />);
+    fireEvent.click(await screen.findByRole('button', {name: 'ลงทะเบียนเรียน'}));
+    await waitFor(() => expect(push).toHaveBeenCalledWith('/learning/1/learn'));
+    const button = screen.getByRole('button', {name: 'กำลังดำเนินการ...'});
+    expect(button).toBeDisabled();
+    fireEvent.click(button);
+    expect(vi.mocked(fetch).mock.calls.filter(([,init]) => init?.method === 'POST')).toHaveLength(1);
+  });
+
+  it('clears the previous account enrollment immediately when the user changes', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValue(course(1));
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    vi.mocked(fetch).mockResolvedValueOnce({ok: true, json: async () => ({enrolled: true, progressPercent: 100})} as Response);
+    const view = render(<CourseDetailPage />);
+    await screen.findByRole('link', {name:'ใบประกาศ'});
+    vi.mocked(fetch).mockResolvedValue({ok: true, json: async () => ({enrolled:false})} as Response);
+    authState.userId = '11111';
+    view.rerender(<CourseDetailPage />);
+    expect(screen.queryByRole('link', {name:'ใบประกาศ'})).not.toBeInTheDocument();
+    expect(await screen.findByRole('button', {name:'ลงทะเบียนเรียน'})).toBeInTheDocument();
+  });
+
+  it('reloads course details after returning from the Back Office tab', async () => {
+    vi.mocked(getAcademyCourse).mockResolvedValueOnce(course(1)).mockResolvedValue({...course(1),title:'ชื่อใหม่จากหลังบ้าน',price:'250'});
+    vi.mocked(listAcademyReviews).mockResolvedValue([]);
+    render(<CourseDetailPage />);
+    await screen.findByRole('heading', {name:'คอร์ส 1',level:1});
+    fireEvent.focus(window);
+    expect(await screen.findByRole('heading', {name:'ชื่อใหม่จากหลังบ้าน',level:1})).toBeInTheDocument();
+    expect(screen.getByRole('button', {name:'ชำระเงินจำลอง'})).toBeInTheDocument();
   });
 
   it('ignores old local mock registrations and still offers checkout', async () => {

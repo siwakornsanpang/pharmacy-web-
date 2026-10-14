@@ -4,7 +4,7 @@ import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
 
 import AcademyImagePlaceholder from '@/components/member/learning/AcademyImagePlaceholder';
 
-import { useEffect, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import AcademyImage from '@/components/member/learning/AcademyImage';
 import { AlertCircle, ArrowRight, Award, Check, Clock, UserRound } from 'lucide-react';
@@ -15,6 +15,8 @@ import { AcademyCourse, AcademyError, AcademyReview, listAcademyReviews } from '
 
 import { getAcademyCourse } from '@/lib/academy';
 import { mapIncomingCourse } from '@/lib/academy/incoming';
+import { registrationClosedReason } from '@/lib/academy/registration-status';
+import { useAcademyRefresh, useAcademyUser } from '@/lib/academy/use-academy-refresh';
 
 type LearningState = { enrolled: boolean; progressPercent?: number; orderStatus?: string | null };
 
@@ -42,6 +44,12 @@ function scrollToSection(event: MouseEvent<HTMLAnchorElement>) {
 }
 
 export default function CourseDetailPage() {
+    const userId = useAcademyUser();
+    const {id} = useParams<{id: string}>();
+    return <CourseDetailContent key={`${userId}:${id}`} />;
+}
+
+function CourseDetailContent() {
     const { id: rawId } = useParams<{ id: string }>();
     const courseId = Number(rawId);
     const router = useRouter();
@@ -55,6 +63,10 @@ export default function CourseDetailPage() {
     const [error, setError] = useState('');
     const [reviews, setReviews] = useState<AcademyReview[]>([]);
     const [reviewStatus, setReviewStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+    const refreshVersion = useAcademyRefresh();
+    const actionLock = useRef(false);
+    const active = useRef(true);
+    useEffect(() => { active.current = true; return () => { active.current = false; }; }, []);
     const [loadVersion, setLoadVersion] = useState(0);
     const [reviewVersion, setReviewVersion] = useState(0);
 
@@ -63,6 +75,7 @@ export default function CourseDetailPage() {
         setError('');
         setCourse(null);
         setEnrolled(false);
+        setLearningState(null);
         if (!Number.isInteger(courseId) || courseId < 1) {
             setError('ไม่พบคอร์สที่ต้องการ');
             setLoading(false);
@@ -84,7 +97,7 @@ export default function CourseDetailPage() {
             })
             .finally(() => { if (!cancelled) setLoading(false); });
         return () => { cancelled = true; };
-    }, [courseId, loadVersion]);
+    }, [courseId, loadVersion, refreshVersion]);
 
     useEffect(() => {
         if (!course) return;
@@ -99,25 +112,42 @@ export default function CourseDetailPage() {
     }, [course, reviewVersion]);
 
     const performAction = async (action: 'enroll' | 'order' | 'cancel' | 'refund') => {
-        if (!course || busy) return;
+        if (!course || actionLock.current) return;
+        actionLock.current = true;
+        let navigating = false;
         setBusy(true);
         setError('');
         try {
+            if (action === 'enroll' || action === 'order') {
+                const latest = mapIncomingCourse(await getAcademyCourse(String(course.id)));
+                if (!active.current) return;
+                setCourse(latest);
+                const closed = registrationClosedReason(latest);
+                if (closed) { setError(closed); return; }
+                if (Number(latest.price) !== Number(course.price)) {
+                    setError('ข้อมูลคอร์สมีการเปลี่ยนแปลง กรุณาตรวจสอบราคาใหม่ก่อนยืนยัน');
+                    return;
+                }
+            }
             const response = await fetch(`/api/academy/courses/${course.id}/${action}`, {
                 method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(action === 'refund' ? { reason: 'จำลองการคืนเงิน' } : {}),
             });
             const data = await response.json().catch(() => ({}));
+            if (!active.current) return;
             if (!response.ok) throw new Error(data.message || 'ดำเนินการไม่สำเร็จ กรุณาลองใหม่');
             if (action === 'enroll' || action === 'order') {
+                navigating = true;
                 router.push(`/learning/${course.id}/learn`);
             } else {
                 setEnrolled(false);
                 setLearningState({ enrolled: false, progressPercent: 0, orderStatus: action === 'refund' ? 'refunded' : learningState?.orderStatus });
             }
         } catch (reason) {
-            setError(reason instanceof Error ? reason.message : 'ดำเนินการไม่สำเร็จ กรุณาลองใหม่');
-        } finally { setBusy(false); }
+            if (active.current) setError(reason instanceof Error ? reason.message : 'ดำเนินการไม่สำเร็จ กรุณาลองใหม่');
+        } finally {
+            if (active.current && !navigating) { actionLock.current = false; setBusy(false); }
+        }
     };
 
     if (loading || !course) return <main className={styles.page}><div className={styles.container}>
@@ -128,7 +158,8 @@ export default function CourseDetailPage() {
         </div>
     </div></main>;
 
-    const isClosed = Boolean(course.enrollmentDeadline && new Date(course.enrollmentDeadline).getTime() < Date.now());
+    const closedReason = registrationClosedReason(course);
+    const isClosed = Boolean(closedReason);
     const price = Number(course.price);
 
     return (
@@ -187,7 +218,7 @@ export default function CourseDetailPage() {
                                         {busy ? 'กำลังดำเนินการ...' : price > 0 ? 'คืนเงินจำลอง' : 'ยกเลิกการลงทะเบียน'}
                                     </button>}
                             </> : <button className={styles.enrollButton} type="button" onClick={() => performAction(price > 0 ? 'order' : 'enroll')} disabled={busy || isClosed}>
-                                {busy ? 'กำลังดำเนินการ...' : isClosed ? 'ปิดรับสมัคร' : price > 0 ? 'ชำระเงินจำลอง' : 'ลงทะเบียนเรียน'}
+                                {busy ? 'กำลังดำเนินการ...' : isClosed ? closedReason : price > 0 ? 'ชำระเงินจำลอง' : 'ลงทะเบียนเรียน'}
                                 {!busy && !isClosed && <ArrowRight size={18} aria-hidden="true" />}
                             </button>}
                         </div>

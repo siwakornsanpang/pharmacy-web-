@@ -15,6 +15,7 @@ import LearnerReviews from '@/components/member/learning/LearnerReviews';
 import SectionHeader from '@/components/ui/SectionHeader';
 import { getAcademyStats, getAcademyCategories as listAcademyCategories, getAcademyCourses, getAcademyInstructors as listAcademyInstructors, getAcademyReviews as listAcademyReviews } from '@/lib/academy';
 import styles from './learning.module.css';
+import {useAcademyRefresh} from '@/lib/academy/use-academy-refresh';
 
 const loadPopularCourses = () => getAcademyCourses().then(items => items.slice(0, 9));
 const loadFeaturedCourses = () => getAcademyCourses({ featured: true }).then(items => items.filter(course => course.isFeatured));
@@ -26,6 +27,7 @@ function useAcademySection<T>(load: () => Promise<T>, initialData: T, fallbackEr
     const [status, setStatus] = useState<SectionStatus>('loading');
     const [error, setError] = useState('');
     const [version, setVersion] = useState(0);
+    const refreshVersion = useAcademyRefresh();
 
     useEffect(() => {
         let active = true;
@@ -35,7 +37,7 @@ function useAcademySection<T>(load: () => Promise<T>, initialData: T, fallbackEr
             if (active) { setError(fallbackError); setStatus('error'); }
         });
         return () => { active = false; };
-    }, [load, fallbackError, version]);
+    }, [load, fallbackError, version, refreshVersion]);
 
     const retry = () => {
         setStatus('loading');

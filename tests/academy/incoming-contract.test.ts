@@ -48,3 +48,10 @@ describe('Incoming Academy contract', () => {
     expect(page.items.map((item) => item.id)).toEqual([7]);
   });
 });
+
+it('preserves registration status and excludes explicitly unpublished courses', () => {
+  expect(mapIncomingCourse({...course,status:'archived',enrollmentDeadline:'2026-01-01T00:00:00Z'})).toMatchObject({status:'archived',enrollmentDeadline:'2026-01-01T00:00:00Z'});
+  const page=pageIncomingCourses([course,{...course,id:8,status:'draft'},{...course,id:9,status:'archived'}]);
+  expect(page.items.map(item=>item.id)).toEqual([course.id]);
+  expect(page.total).toBe(1);
+});

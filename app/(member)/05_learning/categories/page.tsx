@@ -1,5 +1,6 @@
 'use client';
 
+import {useAcademyRefresh} from '@/lib/academy/use-academy-refresh';
 import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
 
 import { useEffect, useState } from 'react';
@@ -9,6 +10,7 @@ import { AcademyCategory, getAcademyCategories } from '@/lib/academy';
 import styles from '../directory.module.css';
 
 export default function CategoriesPage() {
+    const refreshVersion = useAcademyRefresh();
     const [reloadKey, setReloadKey] = useState(0);
     const [items, setItems] = useState<AcademyCategory[]>([]);
     const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
@@ -17,7 +19,7 @@ export default function CategoriesPage() {
         getAcademyCategories().then((data) => { if (active) { setItems(data); setStatus('ready'); } })
             .catch(() => { if (active) setStatus('error'); });
         return () => { active = false; };
-    }, [reloadKey]);
+    }, [reloadKey, refreshVersion]);
     return <main className={styles.page}>
         <div className={styles.back}><AcademyBackLink href="/learning" destination="Pharmacy Academy" /></div>
         <div className={styles.heading}><h1>หมวดหมู่คอร์สเรียน</h1></div>
