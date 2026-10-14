@@ -68,8 +68,24 @@
         height: 250px;
     }
 
+    .bannerOverlay {
+        padding-bottom: 1.25rem;
+    }
+
+    .bannerContent {
+        width: 90%;
+        padding: 0;
+    }
+
+    .bannerTitle,
     .bannerContent h1 {
-        font-size: 2.5rem;
+        font-size: 1.85rem;
+        line-height: 1.15;
+        margin-bottom: 0.28rem;
+    }
+
+    .bannerSubtitle {
+        font-size: 0.8rem;
     }
 
     .container {

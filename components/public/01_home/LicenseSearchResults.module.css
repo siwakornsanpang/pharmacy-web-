@@ -225,11 +225,23 @@
 
 @media (max-width: 640px) {
   .banner {
-    height: 200px;
+    height: 250px;
   }
 
   .bannerContent {
-    bottom: 2rem;
+    bottom: 1.25rem;
+    width: 90%;
+    padding: 0;
+  }
+
+  .bannerTitle {
+    font-size: 1.85rem;
+    line-height: 1.15;
+    margin-bottom: 0.28rem;
+  }
+
+  .bannerSubtitle {
+    font-size: 0.8rem;
   }
 
   .resultsTable th,

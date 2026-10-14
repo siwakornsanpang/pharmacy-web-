@@ -736,19 +736,21 @@
 
 @media (max-width: 576px) {
     .banner {
-        height: 200px;
+        height: 250px;
         min-height: unset;
     }
     .bannerOverlay {
-        padding: 0 0 2rem;
+        padding: 0 0 1.25rem;
     }
     .bannerContent {
-        bottom: 2rem;
-        padding: 0 1rem;
+        bottom: 1.25rem;
+        width: 90%;
+        padding: 0;
     }
     .bannerTitle {
-        font-size: 1.45rem;
-        margin-bottom: 0.8rem;
+        font-size: 1.85rem;
+        line-height: 1.15;
+        margin-bottom: 0.28rem;
     }
     .bannerMeta {
         flex-direction: column;

@@ -167,19 +167,26 @@
 
 @media (max-width: 640px) {
     .banner {
-        height: 200px;
+        height: 250px;
     }
 
     .bannerOverlay {
-        padding-bottom: 1.5rem;
+        padding-bottom: 1.25rem;
+    }
+
+    .bannerContent {
+        width: 90%;
+        padding: 0;
     }
 
     .bannerTitle {
-        font-size: 1.7rem;
+        font-size: 1.85rem;
+        line-height: 1.15;
+        margin-bottom: 0.28rem;
     }
 
     .bannerSubtitle {
-        font-size: 0.85rem;
+        font-size: 0.8rem;
     }
 
     .container {
