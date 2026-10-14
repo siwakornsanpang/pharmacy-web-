@@ -1,8 +1,8 @@
 # Pharmacy POC refactor — design specification
 
-วันที่: 14 ตุลาคม 2026
+วันที่: 14 ตุลาคม 2026 · อัปเดตขอบเขตส่งงาน 15 ตุลาคม 2026
 
-สถานะ: ผู้ใช้เห็นชอบขอบเขตล่าสุดแล้ว จัดทำชุด implementation plans สำหรับ review โดยเพิ่มรายละเอียด upload ticket ตามข้อจำกัด Vercel ยังไม่ได้เริ่ม product implementation, migration หรือ deployment
+สถานะ: อัปเดตตามกำหนดส่งวันอาทิตย์ที่18ตุลาคม2026 และเป้าหมาย Conference ภายในสามแอป แผนต้องเน้น core structure/security และส่งทั้งโค้ดใหม่กับ deployment ใหม่ ยังไม่ได้เริ่ม product implementation/migration/deployment
 
 เอกสารอยู่ใน repository pharmacy-web เดิมเพื่อเก็บประวัติการออกแบบ เมื่อสร้าง monorepo ใหม่ ให้นำเอกสารนี้ไปอยู่ใน docs ของ repository ใหม่ด้วย
 
@@ -25,6 +25,14 @@
 
 ภาพ Tech Stack ที่แนบเป็นแนวทาง การจัด production server ตามมาตรฐาน เช่น Ubuntu, Nginx และ PM2 เป็นหน้าที่ vendor ไม่ใช่งาน infrastructure ของ POC รอบนี้ การตรวจสิทธิ์ การป้องกันข้อมูลรั่ว และการรักษาข้อมูลระหว่างย้ายยังอยู่ในขอบเขตโค้ดรอบนี้
 
+### 1.1. กำหนดส่งและลำดับความสำคัญล่าสุด
+
+ต้องส่ง **โค้ดใหม่พร้อมระบบใหม่ที่ deploy เปิดใช้ได้ ภายในวันอาทิตย์18ตุลาคม2026 เวลาไทย** ไม่ส่งโค้ดเก่าแทนงาน refactor เวลาส่งที่แน่นอนยังไม่ได้ระบุ จึงวางเป้าหมายให้วันเสาร์17เป็นจุดหยุดเพิ่มงานและตรวจrelease candidate เพื่อเผื่อวันอาทิตย์สำหรับแก้ปัญหาและส่งมอบ นี่เป็นลำดับงานเป้าหมาย ไม่ใช่การรับประกันว่าจะเสร็จทันก่อนตรวจbuild/migration/cloudaccessจริง
+
+สิ่งที่ต้องเสร็จก่อนส่ง: โครงสร้าง workspace/feature/domain ที่มีเจ้าของชัด, validated env/server-client boundaries, backend authorization/current sessions/roles/catalog workflow, ปิดpublicdata/HTML/fileownershipช่องโหว่, transactionและfailure handlingของflowเดิม, build/typecheck/criticalUI/negative-security tests, data/file migrationที่reconcileครบ และnewdeploymentsพร้อมsetup/handoffdocs
+
+เลื่อนงานที่ไม่ช่วยreleaseนี้: ปรับConferencecheckout/session architectureใหญ่, ย้ายConferenceทุกscreenเพื่อจัดfolder, staffSSOกับบริการเพื่อน, distributedmicroservices infrastructure, frameworkCRUDกลาง และperformance optimizationเพิ่มเติมที่ยังไม่มีbaselineชี้ปัญหา ห้ามลดsecurity/data-integrity gatesเพื่อแลกกับกำหนดส่ง
+
 ## 2. สิ่งที่คงเดิมและสิ่งที่เลื่อนออกไป
 
 คง JSX/CSS, URLs, layouts, labels, navigation, responsive behavior, forms, modals, editor/crop/upload interactions และผลของ mock flows เดิม การแก้ security/logic defects ต้องบันทึกแยกจาก visual regressions เช่น การปิด draft ที่ public API เคยอ่านได้หรือการปฏิเสธผู้ไม่มีสิทธิ์
@@ -38,7 +46,7 @@ pharmacy-web ใช้ mock login/OTP ต่อไป:
 - Profile save, contact form, e-Service payment และส่วนอื่นที่เป็น mock คงเป็น mock
 - Academy catalog/enrollment/progress ที่เชื่อม API อยู่แล้วคงการเชื่อมต่อ ส่วน payment/refund คง mock outcomes
 
-เลื่อนออกไป: บัญชีสมาชิกจริง/onboarding/ช่องทาง OTP จริง, payment/refund จริง, การรวม Conference backoffice/staff SSO และ production infrastructure ของ vendor รายการ placeholder เดิมไม่กลายเป็นระบบธุรกิจใหม่จากการ refactor
+เลื่อนออกไป: บัญชีสมาชิกจริง/onboarding/ช่องทาง OTP จริง, payment/refund จริง, implementation ของ Conference module ภายในสามแอปโดยทีมถัดไป, staffSSOกับบริการConferenceภายนอก และproduction infrastructureของvendor รายการplaceholderเดิมไม่กลายเป็นระบบธุรกิจใหม่จากการrefactor
 
 ## 3. Repository และขอบเขตโค้ด
 
@@ -62,7 +70,7 @@ docs/
 
 packages/contracts เก็บเฉพาะ API DTOs/runtime schemas และ typed capability catalog ที่ใช้ร่วมกันจริง จัด public exports แยก domain มี package version และ build artifact ที่ consumer ใช้ได้โดยไม่อ้างไฟล์ภายใน monorepo ไม่ส่ง DB credentials, ORM connection, server-only auth, business logic หรือ Supabase server client ไป frontend bundle ภายหลังแยก repo สามารถใช้ released package version หรือ generated client จาก versioned API contract แทน source-path imports
 
-Frontend route/layout เป็นตัวเชื่อมไป feature screens โดยย้าย JSX/CSS เดิมอย่างระมัดระวัง แต่ละ domain แยก API functions, mapping/types และ stateful screen/form logic เท่าที่ช่วยลดหน้าที่ที่ปะปนกัน Shared controls ใช้เมื่อมีการใช้ร่วมจริง
+Frontend route/layout และcomponentsเดิมเป็นUI layer แต่ละdomainแยกAPIfunctions, mapping/types, authและstatefulformlogicที่ซับซ้อนออกเป็นfeatures/sharedmodulesก่อนส่ง คงJSX/CSSและpublicURLsไว้ในที่เดิมได้ การย้ายทุกหน้าจอไปไฟล์Screenใหม่เป็นงานจัดระเบียบเพิ่มเติมภายหลัง ไม่ใช่เงื่อนไขว่าระบบปลอดภัยหรือเพิ่มโมดูลได้ Sharedcontrolsใช้เมื่อมีการใช้ร่วมจริง
 
 Backend แยก app construction ออกจาก process startup และจัด domain modules ได้แก่ auth/access, content, registry/requests, Academy และ media DB connection/migration runner ใช้ร่วมใน POC แต่ schema/repository ownership แยก domain ชัดเจน Domain service ใช้เมื่อมี business transition หรือหลาย writes ที่ต้องเป็น transaction ไม่สร้าง controller/repository layers ให้ CRUD ธรรมดาโดยไม่มีเหตุผล
 
@@ -172,15 +180,19 @@ Media ใช้ asset identity/object path และเจ้าของที�
 
 Requests/Academy order/enrollment/refund/course transitions ที่มีหลาย writes ใช้ transactions และ idempotency ตาม flow ไม่เปลี่ยน mock paid/refund outcomes Mutation errors ไม่แสดง success เมื่อ write ล้มเหลว optimistic state rollback/revalidate และยกเลิก/กัน response เก่าทับ state ใหม่
 
-## 8. Conference boundary
+## 8. Conference ปัจจุบันและโมดูลภายในระบบที่ทีมถัดไปจะพัฒนา
 
-Conference เป็นบริการของเพื่อนบน Railway ไม่มี source ในงานนี้ pharmacy-web คง public/member integration และ contract เดิม Backoffice ของทั้งสองระบบยังแยก ไม่มี Conference staff tab หรือ staff SSO ในรอบนี้
+ผู้ใช้อัปเดตว่า **Conference จะพัฒนาภายใน pharmacy-web/backoffice/backend-api ของงานนี้โดยทีมถัดไป** จึงไม่ออกแบบให้ต้องเป็น standaloneถาวร รอบrefactorนี้เตรียมcoreให้ทีมเพิ่มfeatureได้ง่ายและปลอดภัย ไม่ต้องย้ายConferenceจากบริการเพื่อนหรือเขียนConferenceใหม่ก่อนวันอาทิตย์
+
+บริการRailwayปัจจุบันยังไม่มีsourceในworkspace คงfrontendintegration/URLs/UI/contractsเท่าที่มีอยู่จนโมดูลภายในพร้อม แยกlegacyintegrationที่serverconfig/adapterboundary ใช้validatedenv, no server secretsในbrowser, finiteproxyและcredential-isolation checksที่จำเป็น ไม่rewritecheckout/order/sessionrecoveryหรือย้ายscreenทุกหน้าเพียงเพื่อรองรับบริการภายนอก
 
 คง public list/detail, eligibility, orders, free registration, pending-order recovery, mock payment success/failure/retry/cancel, paid-only success และ QR behavior รวม CSRF/cookies/idempotency ที่มีอยู่ Proxy exchange ต้องผ่าน verified Pharmacy session และไม่เปิด arbitrary direct exchange จาก browser
 
 ทดสอบด้วย recorded/local fixtures หรือ test environment ที่ตกลงกับเพื่อน ไม่ถือว่าการอ่าน public OpenAPI หรือ events HTTP 200 เป็นหลักฐานว่า authenticated/session flows ปลอดภัยครบ Public documentation ไม่มี response contracts ครบทั้งหมดจึงไม่สร้าง type จากการเดา
 
-เมื่อพัฒนา Conference backoffice ภายหลัง จึงค่อยยืนยัน staff authentication/authorization กับบริการนั้นและเพิ่ม capabilities ผ่าน workflow catalog ใหม่ ไม่ให้ core JWT มีอำนาจกับบริการเพื่อนโดยอัตโนมัติ
+เมื่อทีมเพิ่มConferenceภายใน ให้ทำbackend `modules/conference` เป็นเจ้าของschema/routes/servicesของตน, frontend/backoffice `features/conference` กับroute/menuadaptersที่ใช้sharedtransportsและcontracts, staffroutesใช้Accessguard/currentactorเดิม, memberroutesใช้verifiedmemberboundaryเดิม และdeclarecapabilitiesในversionedcatalogแล้วcontrolledsyncก่อนเปิดfeature Nonadmindenyโดยdefault ไม่มีการให้เจ้าของระบบเพิ่มSQLpermissionkeysด้วยมือ ไม่สร้างemptybusinessschema/dummytab/pluginloaderก่อนมีrequirementsของConferenceจริง
+
+Conferenceภายในไม่ต้องทำSSOกับstaffของRailwayเป็นprerequisite; เมื่อimplementationภายในผ่านcontract/flowtestsจึงเปลี่ยนserveradapter/upstreamแล้วเลิกlegacybridgeอย่างมีแผน CoreJWTยังไม่มีอำนาจกับบริการเพื่อนโดยอัตโนมัติ รายละเอียดevents/tickets/attendance/payment/dataimportของConferenceเป็นงานทีมถัดไป ไม่ใช่migrationของรอบนี้
 
 ## 9. Data และ storage migration
 
@@ -219,13 +231,13 @@ Role/permission config เดิมยังเก็บเพราะผู้
 - Migration/data/file reconciliation ครบและ staff account exclusions ตรงขอบเขต
 - Conference fixture/contract checks ผ่านโดยไม่อ้างว่าทดสอบ live mutations ที่ยังไม่มี test environment
 
-วัดก่อน/หลังบนข้อมูลและสภาพแวดล้อมเดียวกัน: loading ของหน้าหลัก, request/payload/query counts, relevant API latency และ bundle output กำหนด numeric targets หลังได้ baseline ไม่รับประกันเปอร์เซ็นต์เร็วขึ้นก่อนวัด งานที่ต้องแก้จาก source ได้แก่ public auth ที่บล็อกทั้งหน้า, full payload lists, pagination/count, N+1, request races, upload memory และ indexes ที่เลือกจาก query evidence Cache public content มี invalidation หลัง publish/update; private data ใช้ no-store
+วัดก่อน/หลังบนข้อมูลและสภาพแวดล้อมเดียวกัน: loadingหน้าหลัก, request/payload/querycounts, relevantAPIlatencyและbundleoutput ไม่รับประกันเปอร์เซ็นต์เร็วขึ้นก่อนวัด ก่อนวันอาทิตย์แก้publicauthblocking, pagination/count/fullpayloadที่กระทบflowจริง, request races/uploadmemory และmulti-writeintegrity; เพิ่มindexesเมื่อqueryevidenceชี้ความจำเป็น releaseนี้APIdataใช้no-storeเพื่อไม่ต้องเพิ่มcachecallback/retryinfrastructureก่อนส่ง หากเพิ่มpubliccacheภายหลังต้องมีinvalidationหลังpublish/updateก่อนเปิดcache; staff/memberno-storeเสมอ
 
 ผลตรวจปัจจุบันเป็น baseline จาก source: TypeScript ทั้งสามแอปผ่านและ pharmacy-web tests 6 files/18 tests ผ่านในรอบ discovery ไม่ใช่ผลทดสอบของ implementation ใหม่ ยังไม่มี production builds, visual comparison, live migration reconciliation หรือ runtime performance measurement ที่ทำเสร็จแล้ว
 
 ## 11. Deployment, rollback และ vendor handoff
 
-สร้าง GitHub monorepo ใหม่, Vercel projects ใหม่แยก pharmacy-web/backoffice, Render backend ใหม่ และ Supabase DB/Storage ใหม่ Conference คง Railway เดิม ชื่อบัญชี/project/domain และ credentials เป็น configuration ตอน setup ไม่ใช่ข้อกำหนดให้แก้ UI
+สร้าง GitHub monorepoใหม่, Vercelprojectsใหม่แยกpharmacy-web/backoffice, Renderbackendใหม่และSupabaseDB/Storageใหม่ก่อนส่ง LegacyConferenceอาจยังเรียกRailwayในreleaseนี้; เป้าหมายทีมถัดไปคือConferencemoduleภายในสามแอป ชื่อบัญชี/project/domainและcredentialsเป็นconfigurationตอนsetupไม่ใช่ข้อกำหนดให้แก้UI
 
 Release ตรวจ build/typecheck/tests, schema migrations และ catalog sync ก่อนเปิด frontend feature ที่ต้องพึ่ง contracts/capabilities ใหม่ มี liveness health และ readiness ที่ตรวจ DB/required migration version, graceful shutdown และ sanitized request/error logs ที่ไม่แสดง tokens/password/private keys Backend ไม่ seed ตอน startup
 

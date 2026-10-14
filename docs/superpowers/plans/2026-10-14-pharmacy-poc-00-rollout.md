@@ -12,6 +12,16 @@
 
 สถานะ: ชุดแผนพร้อมให้ผู้ใช้ตรวจ ยังไม่อนุมัติการเริ่ม implementation และยังไม่มี product changes/migration/deployment ที่ทำโดยงานนี้ Paths ภายในแผนย่อยคือไฟล์ใน **monorepo ใหม่**; เอกสารเก็บชั่วคราวใน pharmacy-web เดิมเพราะยังไม่สร้าง repo ใหม่
 
+## ขอบเขตส่งวันอาทิตย์ที่18ตุลาคม2026 — อัปเดต15ตุลาคม
+
+ผู้ใช้ยืนยันให้ส่ง **โค้ดใหม่พร้อมระบบdeployใหม่ตามแผนเดิม** โครงสร้าง/coresecurityและความพร้อมให้ทีมเพิ่มConferenceภายในสามแอปเป็นลำดับแรก ไม่ทำexternalConferenceoverhaulหรือConferenceimplementationใหม่ในreleaseนี้ เป้าหมายวันเสาร์17คือหยุดเพิ่มscopeและตรวจreleasecandidate; วันอาทิตย์ใช้แก้ปัญหา/ตรวจรับ/ส่งมอบ เวลาส่งยังไม่ระบุและยังไม่รับประกันdeadlineจนตรวจbuild/liveinventory/cloudaccessจริง
+
+เงื่อนไขก่อนส่ง: สามแอปbuild/typecheckได้, API/auth/role/catalog/env/moduleownershipชัด, negativeauthorization/privacy/media/transactiontestsผ่าน, คงUI/mockและcriticalflows, migration/data/filehashesreconcileครบ, newdeploymentsพร้อมhealth/readiness/freshadmin และเอกสารให้devsetup/addtabได้เอง
+
+ลดงานที่ไม่จำเป็นกับเงื่อนไขนี้: ไม่ย้ายทุกJSX/CSSเป็นScreenfilesหรือrewriteConferencecheckout/session; แยกAPI/types/auth/complexstateออกจากUIfilesเดิมก่อน ไม่สร้างgenericCRUD/pluginloader/dummytab/emptyConferenceschema; screenshotใช้criticalrepresentativeflowsสองviewportsพร้อมsmokeทุกrouteแทนexhaustivestatematrix; publicAPIdataใช้no-store โดยไม่สร้างcachecallback/retry/envsecretsในreleaseนี้ การปรับcache/index/bundleเพิ่มเติมอยู่หลังส่งและต้องใช้baseline
+
+หากcloudaccessหรือdata/fileinventoryยังไม่พร้อม ต้องรายงานเป็นdeploymentblockerและจัดการทันที ไม่ถือว่าโค้ดใหม่อย่างเดียวแทนdeliverableได้ ไม่ข้ามsecurity/reconciliationเพื่อให้ดูเหมือนdeployเสร็จ
+
 ## Global Constraints
 
 - “คง JSX/CSS, URLs, layouts, labels, navigation, responsive behavior, forms, modals, editor/crop/upload interactions และผลของ mock flows เดิม” — security/logic corrections บันทึกแยกจากภาพเปลี่ยน
@@ -19,7 +29,7 @@
 - “ย้าย application content/business/configuration ทั้งหมด” และ copy file bytes/metadata ครบ; source38tables ข้ามusers1table แต่ต้องตรวจ live inventory ไม่สรุปจาก sourceอย่างเดียว
 - pharmacy-web ใช้10numericmockIDs `11111,22222,33333,44444,55555,66666,77777,88888,99999,00000` และ `ph123`; password12345/OTP111222; mocksอื่นคงเดิม
 - “role admin คง full-access policy ตาม UI เดิม” แต่ current session/account/capability/business validation บังคับเสมอ; nonadminไม่ได้capabilitiesใหม่อัตโนมัติ
-- Backendอยู่Render; DB/Storageอยู่Supabaseใหม่; frontendสองVercelprojectsใหม่; ConferenceคงRailwayแยกและทดสอบด้วยfixtures ไม่รวมstaffSSO/backoffice
+- Backendอยู่Render; DB/Storageอยู่Supabaseใหม่; frontendสองVercelprojectsใหม่; Conferenceเป้าหมายทีมถัดไปอยู่ภายในทั้งสามแอป ปัจจุบันคงlegacyRailwayintegrationเท่าที่จำเป็นและทดสอบด้วยfixtures ไม่ทำstaffSSOกับบริการเพื่อน
 - POCยังไม่เป็นmicroservicesปลายทาง; vendorกำหนดservice/data/trust/distributedconsistencyเพิ่ม ใช้publicports/versionedcontractsและไม่อ่านprivate tablesข้ามdomain
 - NextรับboundedJSONmetadata/auth; filebytesใช้one-useuploadticketตรงfixedRender และ authorizeddownloadredirect เพื่อรองรับVercel4.5MBlimit โดยคงUI
 - ไม่ใช้realkeys/dumps/privatefilesในGit/log/chat; ไม่ทิ้งnewwritesหลังcutoverโดยกลับstalesource
@@ -38,22 +48,25 @@
 
 1. [Foundation และ Access](/Users/arm/a3/pharmacy-web/docs/superpowers/plans/2026-10-14-pharmacy-poc-01-foundation-access.md): workspace/contracts/config, current staff JWT/session, catalog sync, roles/admin policy, Next auth/proxy และ Backoffice shell
 2. [Content, Registry และ Media](/Users/arm/a3/pharmacy-web/docs/superpowers/plans/2026-10-14-pharmacy-poc-02-content-registry-media.md): visual baseline, published content/HTML, registry/requests, safe upload/download/replace และ feature screens
-3. [Academy, Conference และ Performance](/Users/arm/a3/pharmacy-web/docs/superpowers/plans/2026-10-14-pharmacy-poc-03-academy-conference-performance.md): atomic mock transitions, member identity, Conference adapter, public auth rendering และ comparable performance evidence
+3. [Academy, Conference และ Performance](/Users/arm/a3/pharmacy-web/docs/superpowers/plans/2026-10-14-pharmacy-poc-03-academy-conference-performance.md): atomic mock transitions, memberidentity, minimalConferencecompatibilityและfutureinternalmoduleguide, publicauthrenderingและperformanceevidence
 4. [Migration, Deployment และ Handoff](/Users/arm/a3/pharmacy-web/docs/superpowers/plans/2026-10-14-pharmacy-poc-04-migration-deployment.md): inventory/mapping/copy/reconciliation, new projects, controlled cutover/restore และ vendor docs
 
 ## ลำดับ execution ที่ใช้จริง
 
-- [ ] เก็บ source versions/overrides และworking-tree state; สร้าง isolated workspaceสำหรับ monorepoใหม่ตามexecution skill ไม่แก้repositoriesเดิมหรือcopy `.git`/real`.env`/buildoutputs
+- [ ] เก็บsourceversions/overridesและworking-treesnapshotล่าสุด รวมUIeditsที่ผู้ใช้ทำต่อโดยไม่commit/ย้อนงานเขา; ตรวจhashก่อน/หลังcopyป้องกันcopyขณะsourceเปลี่ยน; สร้างisolatedworkspaceสำหรับmonorepoใหม่ ไม่copy `.git`/real`.env`/buildoutputs
+- [ ] ตรวจread-onlycloudaccess/sourceNeon/storageinventoryแต่ต้น และเตรียมnewprojectnames/operatorconfigร่วมกับcore refactor อย่ารอจนจบงานโค้ดแล้วจึงค้นพบว่าdeploy/migrationไม่มีสิทธิ์; actualprojectcreationหลังผ่านreviewgate
 - [ ] แผน01Task1: copy sourceเดิมและวางworkspace/contracts โดยคงappbehavior; แผน02Task1: รันlegacyappsกับofflinefixturesและเก็บvisual/flow/font/performancebaselineก่อนbehaviorchanges
 - [ ] แผน01Tasks2–7: config/appfactory, Accessschema0008, sessions/catalog/adminsafety, Nextcookie/CSRFและfiniteproxy/transport
 - [ ] แผน02Tasks2–6: contracts/guards/publication/registry/requestsและMediaports; Task5Step4aส่งbrowseruploadhelperให้แผน01Task8; ทำแผน01Task8ก่อนแผน02Task7screenintegration ห้ามdeployintermediateformsที่ยังส่งfilebytesผ่านNext
-- [ ] ทำแผน02Task8รวมcache-retry schemaให้ครบและfreeze reviewed0009/media/interfacesก่อนแผน03Task2สร้าง0010; Task03Task1contractworkเริ่มได้เมื่อportsนิ่ง แต่ไม่apply0010ก่อน0009เสร็จ
+- [ ] ทำแผน02Task8boundary/privacy/no-storechecksและfreeze reviewed0009/media/interfacesก่อนแผน03Task2สร้าง0010; releaseนี้ไม่มีcache-retryschema; Task03Task1contractworkเริ่มได้เมื่อportsนิ่ง แต่ไม่apply0010ก่อน0009เสร็จ
 - [ ] แผน03Tasks1–6: Academy/member/Conference/publicauth/performance; ปิดfocusedtests/build/typecheck/visualทั้งสามแอป พร้อมpublicpackageconsumer/boundarychecks
 - [ ] แผน04Tasks1–3: สร้างและทดสอบmigrationtoolingด้วยdisposableDB/fakestorageก่อนlivewrites; เริ่มread-onlyinventoryเมื่อมีsourceaccessได้ แต่canonicalmappingต้องใช้schemaที่freezeแล้ว
 - [ ] แผน04Task4Steps1–5: preflightและprovisionnewSupabase/GitHub/Vercel/Render; จึงแผน04Task3Step5rehearsal/import/copy/verify และTask4Step6deployedacceptance อย่าสลับliveapplyมาก่อนมีtarget
 - [ ] แผน04Task5: finalwriterfreeze/snapshot/delta/reconcile/cutover/restoreexercise และfreshadminsetup; Task6: handoffที่อ้างactualcommands/resultsและPOClimits
 
 ทุกtaskใช้testsตามแผนย่อยและcommitที่reviewได้; schema numberingคง0000–0007เดิม ต่อ0008_staff_access→0009_media→0010_academy_commands ไม่claimlivepolicy/performanceจากfixturetests
+
+FutureConferenceworkflowส่งต่อในแผน04Task6: developerเพิ่มbackendmodules/conference, frontend/backofficefeatures/conferenceและroute/menuentry, publicDTOs, capabilityconstant/guardและdenytestในPRเดียว; catalogsyncเพิ่มdefinitionsผ่านreleaseโดยไม่ขยายnonadmingrants ไม่ให้ownerเพิ่มSQLkeyมือ ยังไม่ต้องมีConferenceplaceholderหรือbusinessimplementationเพื่อพิสูจน์workflow
 
 ## สิ่งที่ยังต้องเตรียม
 

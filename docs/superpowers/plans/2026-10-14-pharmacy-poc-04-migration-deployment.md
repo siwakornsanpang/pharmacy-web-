@@ -4,7 +4,7 @@
 
 **Goal:** ย้าย backoffice-managed data และรูป/ไฟล์เดิมครบโดยไม่ย้าย staff accounts แล้วเปิด POC ใหม่พร้อมหลักฐานและเอกสารส่งต่อ vendor
 
-**Architecture:** ใช้ migration tooling แยกจาก runtime APIs ทำ inventory→dry-run→rehearsal→reconcile ก่อน final freeze/cutover โดยไม่ให้ feature modules เข้าตารางของกันและกัน Runtime ใช้หนึ่ง modular backend กับสอง Next apps; บัญชี/session ใหม่สร้างผ่าน controlled setup และ Conference ยังคง external Railway
+**Architecture:** ใช้ migration tooling แยกจาก runtime APIs ทำ inventory→dry-run→rehearsal→reconcile ก่อน final freeze/cutover โดยไม่ให้ feature modules เข้าตารางของกันและกัน Runtime ใช้หนึ่ง modular backend กับสอง Next apps; บัญชี/session ใหม่สร้างผ่าน controlled setup และlegacyConferenceคงexistingRailwayintegrationเฉพาะcompatibilityจนทีมพัฒนาmoduleภายในสามแอป
 
 **Tech Stack:** npm workspaces, Node 24, TypeScript/tsx, pg/Drizzle, PostgreSQL client tools, Supabase Storage adapter, node:test และ acceptance harness จากแผน 02
 
@@ -13,6 +13,8 @@
 **Execution order:** Tasks1–3สร้างtoolingและทดสอบด้วยdisposableDB/fakestorageก่อน; Task4Steps1–5ทำpreflight/สร้างnewSupabaseและresourceconfig ก่อนTask3Step5live rehearsal; แล้วจึงTask4Step6ตรวจdeployedreleaseหลังimport และTask5finalfreeze/cutover ไม่ลองimportก่อนมีtargetและไม่ใช้readinessแทนreconciliation
 
 ## Global Constraints
+
+- Deadline18ตุลาคม2026ต้องส่งโค้ด+newdeployments; source/cloud read-only preflightเริ่มแต่ต้นก่อนพบblockerช้า; Conferenceภายในเป็นทีมถัดไป ไม่migratefriendDB/storageหรือสร้างstandaloneprojectเพิ่ม ไม่มีcachecallback/envsecretsในreleaseนี้
 
 - “ไม่ย้ายบัญชี login เจ้าหน้าที่เดิม password hashes หรือ sessions/tokens เดิม” — target users เริ่มว่าง; users sequence ใหม่; role names จาก users.role ย้ายเป็น configuration เท่านั้น
 - “ย้าย application content/business/configuration ทั้งหมด” — source ปัจจุบัน 37 non-users tables แต่ live schema/dependencies ต้องตรวจจริงก่อน execution
@@ -98,9 +100,9 @@ assert.equal(reportWithBadSequence.passed, false);
 
 **Files:** Create tools/deployment/{config.ts,preflight.ts,database-policy.ts}, tools/deployment/{preflight.test.ts,database-policy.test.ts}, render.yaml, apps/{pharmacy-web,backoffice}/vercel.json, docs/operations/{deployment.md,env-inventory.md}; Modify .github/workflows/ci.yml และ root package.json release:check/deployment:preflight/test:deployment
 **Interfaces:** getDeploymentConfig(file:string):DeploymentConfig; DeploymentConfig={githubRepository,vercelPharmacyProject,vercelBackofficeProject,renderService,supabaseProjectRef,frontendOrigins,backendOrigin,customDomains}; validateDeployment(config):Promise<PreflightReport> with no provider writes. Secret values remain outside this DTO/report.
-- [ ] **Step 1 — RED:** config tests reject old backend fallback, partial env, mismatched target source ref, wildcard origins, secrets/archives tracked, active localUi bypass, private-JWK in public env, inconsistent JWT/session TTL and invalid callback origin; ensure provider failure does not report ready.
+- [ ] **Step 1 — RED:** configtestsrejectoldbackendfallback/partialenv/target-sourcemismatch/wildcardorigins/trackedsecrets/activePOCbypass/privateJWKในpublicenv/inconsistentTTL/invalidfixeduploadorigin; providerfailureต้องไม่reportready ไม่มีcachecallbackconfigในreleaseนี้
 - [ ] **Step 2 — Run RED:** npm run test:deployment -- tools/deployment/preflight.test.ts; expected FAIL missing validator.
-- [ ] **Step 3 — Implement:** validate required per-app env from plan01 including fixed backend origins, PUBLIC_UPLOAD_BASE_URL, PHARMACY_WEB_ORIGIN/revalidation secret and isolated session/signing keys; run independent build/typecheck/focused tests + root test:visual before deployment. Set Node major24 on Vercel/Render, record actual runtime patch; Vercel manages its own patch updates.
+- [ ] **Step 3 — Implement:** validate required per-app env from plan01 including fixed backend origins, PUBLIC_UPLOAD_BASE_URL, configuredfrontendorigins และisolatedsession/signingkeys ไม่มีrevalidationsecret/callback; run independent build/typecheck/focused tests + root test:visual before deployment. Set Node major24 on Vercel/Render, record actual runtime patch; Vercel manages its own patch updates.
 - [ ] **Step 4 — Database/storage policy tooling:** `applyDatabasePolicy(config:MigrationConfig):Promise<void>` ในtools/deployment/database-policy.ts ให้controlledsetupสร้างdedicatedbackendDBprincipalที่มีเฉพาะapptables/sequences/DML; migrationprincipalownsDDL; revokeanon/authenticatedapptableaccessและRLSpolicyเฉพาะbackendprincipal ตามexplicitappmanifest; RED/GREENdisposableDBtests anonSELECTถูกdeny/backendDMLได้/backendDDLdeny/idempotentsetupไม่แตะmanagedschemas; run `npm run test:deployment -- tools/deployment/database-policy.test.ts`; provisionpublic/privatebucketpolicyตามแผน02 เมื่อมีactualtarget ไม่applyก่อนมีproject/schema
 - [ ] **Step 5 — Provider setup:** หลังpreflight/ownerinputsสร้างnewSupabaseprojectและrecordrefก่อนlive rehearsal; สร้างprivateGitHubrepoจากsanitizedfreshmonorepohistory, newVercelprojects roots apps/pharmacy-web/apps/backoffice ที่buildcontractsก่อนapp, newRenderservice buildcontracts/backendแล้วstart `npm run start --workspace @pharmacy/backend-api` host0.0.0.0/PORT health/readyตามแผน01; รอcontrolledschemaapplyแล้วapplyDatabasePolicyก่อนเปิดapptarget รักษาoldprojectIDsและrecordnewIDswithoutsecrets
 - [ ] **Step 6 — GREEN:** run RED command and deployment:preflight; expected PASS, build/tests/visual checks complete, /health200 and /ready200 after schema/import, anonymous DB/private file denial, public images/docs work, 8MiB ticket upload succeeds without Next body relay. Rotate known shared/committed credentials before use; Conference new verifier public key confirmed with friend before authenticated fixture/live smoke of that bridge, no Railway admin writes by this agent.
@@ -119,10 +121,10 @@ assert.equal(reportWithBadSequence.passed, false);
 
 ### Task 6: Vendor handoff และ final coverage
 
-**Files:** Create docs/development/{setup.md,add-module.md}, docs/architecture/{data-ownership.md,service-extraction.md}, docs/verification/{acceptance.md,known-limitations.md}; Modify README.md และ copied historical architecture/conference docs.
+**Files:** Create docs/development/{setup.md,add-module.md}, docs/architecture/{data-ownership.md,service-extraction.md}, docs/verification/{acceptance.md,known-limitations.md}; Modify README.md และcopiedhistoricalarchitecture/conferencedocs; consume add-conference-module.mdจากแผน03Task5
 **Interfaces:** handoff links completed commands/results, fixture hashes/release IDs, ownership/interface maps and mock/infrastructure boundaries; no actual backups/secrets in repository.
 - [ ] **Step 1 — Verify:** clean disposable checkout can npm ci/build/typecheck/test, setup named test DB, bootstrap test staff, run catalog:sync twice without grant changes, add a sample capability/module in a throwaway branch and observe admin catalog with nonadmin denied by default; do not ship dummy tab.
-- [ ] **Step 2 — Assemble:** include per-app env inventory, new resource IDs/ownership, DTO/version/capability workflow, table/transaction boundaries, migration/restore evidence, UI/performance comparison and private artifact custody instructions; historical Conference merge/Axios docs point to current fetch/separate-service scope.
+- [ ] **Step 2 — Assemble:** include per-app env inventory, new resource IDs/ownership, DTO/version/capability workflow, table/transaction boundaries, migration/restore evidence, UI/performance comparison and private artifact custody instructions; historicalConference/Axiosdocsชี้currentfetch/minimallegacyadapterและfutureConferencemoduleภายในสามแอป.
 - [ ] **Step 3 — Close evidence gaps:** distinguish actual live checks from fixture-only Conference checks and source baselines; record numeric metrics only measured under matching data/env, declare real member/payment/staff SSO/server production setup vendor work. Any failed required check prevents completed-Poc claim.
 - [ ] **Step 4 — Commit:** git add README.md docs/development docs/architecture docs/verification แล้ว git commit -m "docs: hand off reproducible POC and extraction boundaries".
 
