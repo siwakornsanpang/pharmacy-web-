@@ -2,9 +2,9 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { nextBackEntry } from '@/lib/navigation/back';
+import { nextBackEntry } from '@/lib/academy/back-navigation';
 
-export default function BackNavigationTracker() {
+export default function AcademyNavigationTracker() {
   const path = usePathname();
   const previous = useRef<{ path: string; depth: number } | null>(null);
 

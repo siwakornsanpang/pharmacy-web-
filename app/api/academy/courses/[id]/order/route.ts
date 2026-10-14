@@ -14,5 +14,5 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       displayName: `${identity.firstName} ${identity.lastName}`.trim(),
       slipUrl: typeof body.slipUrl === "string" ? body.slipUrl : "",
     }),
-  }, identity);
+  });
 }

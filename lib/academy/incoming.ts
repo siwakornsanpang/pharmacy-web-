@@ -27,9 +27,6 @@ export interface IncomingAcademyCourse {
   outcomes?: string[];
   lessons?: Array<{ id: number; title: string }>;
   isFeatured?: boolean;
-  status?: 'draft' | 'published' | 'archived';
-  enrollmentDeadline?: string | null;
-  maxStudents?: number | null;
 }
 
 export function mapIncomingCategory(category: IncomingAcademyCategory): AcademyCategory {
@@ -58,9 +55,6 @@ export function mapIncomingCourse(course: IncomingAcademyCourse): AcademyCourse 
     learningOutcomes: course.outcomes ?? [],
     curriculum: course.lessons?.map((lesson) => lesson.title) ?? [],
     isFeatured: course.isFeatured ?? false,
-    status: course.status,
-    enrollmentDeadline: course.enrollmentDeadline,
-    maxStudents: course.maxStudents,
   };
 }
 
@@ -68,10 +62,9 @@ export function pageIncomingCourses(
   courses: IncomingAcademyCourse[],
   params: { categoryId?: number | null; page?: number; limit?: number } = {},
 ): AcademyPage<AcademyCourse> {
-  const published = courses.filter(course => !course.status || course.status === 'published');
   const filtered = params.categoryId
-    ? published.filter((course) => course.categoryId === params.categoryId)
-    : published;
+    ? courses.filter((course) => course.categoryId === params.categoryId)
+    : courses;
   const page = Math.max(1, params.page ?? 1);
   const limit = Math.max(1, params.limit ?? 12);
   const offset = (page - 1) * limit;

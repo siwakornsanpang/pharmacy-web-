@@ -3,8 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Calendar } from 'lucide-react';
-import ViewAllLink from '@/components/ui/ViewAllLink';
+import { Calendar, ArrowRight } from 'lucide-react';
 import { News } from '@/lib/api';
 import styles from './FeaturedNews.module.css';
 
@@ -64,19 +63,23 @@ export default function FeaturedNews({ news, showViewAll = false }: FeaturedNews
 
     return (
         <div
-            className={styles.container}
+            className={`${styles.container} ${showViewAll ? styles.home : ""}`}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
             <div className={styles.header}>
                 <h2 className={styles.sectionTitle}>เรื่องเด่น</h2>
                 {showViewAll && (
-                    <ViewAllLink href="/news" />
+                    <Link href="/news" className={styles.viewAll}>
+                        ดูทั้งหมด
+                        <ArrowRight size={18} strokeWidth={2} />
+                    </Link>
                 )}
             </div>
 
             <div className={styles.card} key={currentIndex}>
                 <div className={`${styles.imageSection} ${styles.fadeIn}`}>
+                    <span className={styles.featuredMark}>เรื่องเด่น</span>
                     {current.thumbnailUrl ? (
                         <Image
                             src={current.thumbnailUrl}
@@ -115,6 +118,7 @@ export default function FeaturedNews({ news, showViewAll = false }: FeaturedNews
                         อ่านเพิ่มเติม
                     </Link>
                 </div>
+                <Link href={`/news/${current.id}`} className={styles.cardHit} tabIndex={-1} aria-hidden />
             </div>
 
             {news.length > 1 && (

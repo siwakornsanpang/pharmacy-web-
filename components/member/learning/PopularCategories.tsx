@@ -3,7 +3,7 @@
 import type { CSSProperties } from "react";
 import Link from 'next/link';
 import styles from './PopularCategories.module.css';
-import SectionHeader from '@/components/ui/SectionHeader';
+import SectionHeader from '@/components/member/learning/SectionHeader';
 import type { AcademyCategory } from '@/lib/academy';
 import AcademyImage from './AcademyImage';
 import AcademyImagePlaceholder from './AcademyImagePlaceholder';

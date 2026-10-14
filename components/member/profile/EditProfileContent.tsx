@@ -2,7 +2,6 @@
 
 import { useState, type ReactNode } from "react";
 import Link from "next/link";
-import BackLink from "@/components/ui/BackLink";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, Save } from "lucide-react";
 import Swal from "sweetalert2";
@@ -145,10 +144,10 @@ export default function EditProfileContent({ userName, userId }: EditProfileCont
 
             <main className={styles.contentBody}>
                 <div className={styles.pageHeader}>
-                    <BackLink href="/profile" className={styles.backBtn}>
+                    <Link href="/profile" className={styles.backBtn}>
                         <ChevronLeft size={18} />
                         <span>ย้อนกลับ</span>
-                    </BackLink>
+                    </Link>
                 </div>
 
                 <form className={styles.formCard} onSubmit={handleSubmit}>

@@ -318,6 +318,15 @@
   overflow: hidden;
 }
 
+.newsMeta {
+  display: contents;
+}
+
+.newsDate,
+.newsDots {
+  display: none;
+}
+
 .newsCardDesc {
   color: #6b7280;
   font-size: 0.95rem;
@@ -390,5 +399,143 @@
     margin-bottom: 0;
     width: 100%;
     justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  .section {
+    background: #fff;
+    padding: 0.5rem 0 1.25rem;
+  }
+
+  .bgDecoration {
+    display: none;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    padding: 0 0 0.5rem;
+  }
+
+  .newsListSection {
+    display: contents;
+  }
+
+  .sectionHeader {
+    order: 1;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    padding: 0 0.75rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.25rem;
+  }
+
+  .featuredSlot {
+    order: 2;
+    padding: 0 0.75rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .newsGrid {
+    order: 3;
+    display: flex;
+    overflow-x: auto;
+    gap: 12px;
+    scroll-snap-type: x mandatory;
+    padding: 0 0.75rem 0.35rem;
+    scrollbar-width: none;
+  }
+
+  .newsGrid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .newsCard {
+    flex: 0 0 46%;
+    scroll-snap-align: start;
+    border-radius: 16px;
+    box-shadow: 0 6px 16px rgba(17, 24, 39, 0.06);
+  }
+
+  .newsCard:hover {
+    transform: none;
+  }
+
+  .newsImageWrapper {
+    height: 108px;
+  }
+
+  .badgeOverImage {
+    top: auto;
+    right: auto;
+    bottom: 0.45rem;
+    left: 0.45rem;
+    padding: 0.18rem 0.55rem;
+    font-size: 0.65rem;
+    color: #1e40af;
+    background: rgba(255, 255, 255, 0.92);
+  }
+
+  .newsCardContent {
+    padding: 0.65rem 0.7rem 0.75rem;
+  }
+
+  .newsCardTitle {
+    font-size: 0.82rem;
+    margin: 0 0 0.35rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .newsMeta {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: #6b7280;
+    font-size: 0.68rem;
+    line-height: 1.45;
+  }
+
+  .newsDate {
+    display: inline;
+    margin-right: 0.3rem;
+  }
+
+  .newsCardDesc {
+    display: inline;
+    color: inherit;
+    font-size: inherit;
+    line-height: inherit;
+  }
+
+  .newsDots {
+    order: 4;
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-top: 0.7rem;
+  }
+
+  .newsDot {
+    width: 8px;
+    height: 8px;
+    border: 0;
+    padding: 0;
+    border-radius: 999px;
+    background: #e5e7eb;
+  }
+
+  .newsDotActive {
+    width: 22px;
+    background: #737300;
   }
 }

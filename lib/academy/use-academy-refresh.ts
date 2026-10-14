@@ -1,7 +1,6 @@
 "use client";
 
 import {useEffect, useRef, useState} from 'react';
-import {useAuth} from '@/context/AuthContext';
 
 // Refresh on returning from another tab or a browser back/forward cache.
 export function useAcademyRefresh() {
@@ -24,11 +23,4 @@ export function useAcademyRefresh() {
     };
   }, []);
   return version;
-}
-
-export function useAcademyUser() {
-  const {userId, refresh} = useAuth();
-  const version = useAcademyRefresh();
-  useEffect(() => { if (version > 0) void refresh(); }, [version, refresh]);
-  return userId;
 }

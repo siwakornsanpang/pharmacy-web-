@@ -64,3 +64,55 @@
         gap: 1rem 1.5rem;
     }
 }
+
+@media (max-width: 640px) {
+    .sidebar {
+        width: 100vw;
+        margin-left: calc(50% - 50vw);
+        background: transparent;
+        border-radius: 0;
+        padding: 0 0 0 1rem;
+    }
+
+    .sidebarTitle {
+        display: none;
+    }
+
+    .sidebarNav {
+        flex-wrap: nowrap;
+        gap: 0.6rem;
+        overflow-x: auto;
+        padding: 0 1rem 0.25rem 0;
+        scrollbar-width: none;
+    }
+
+    .sidebarNav::-webkit-scrollbar {
+        display: none;
+    }
+
+    .sidebarLink {
+        flex: 0 0 auto;
+        width: auto;
+        white-space: nowrap;
+        padding: 0.55rem 1.05rem;
+        border-radius: 999px;
+        border: 1.5px solid #c5c4a6;
+        background: #fff;
+        color: #1f2937;
+        font-size: 0.95rem;
+        font-weight: 500;
+    }
+
+    .sidebarLink:hover {
+        background: #fff;
+        color: #1f2937;
+    }
+
+    .sidebarLinkActive,
+    .sidebarLinkActive:hover {
+        background: #cdcaa5;
+        border-color: #cdcaa5;
+        color: #1f2937;
+        font-weight: 600;
+    }
+}

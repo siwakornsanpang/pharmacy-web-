@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import BackLink from "@/components/ui/BackLink";
 import { Check } from "lucide-react";
 import {
   EServiceModule,
@@ -13,7 +12,6 @@ import styles from "./EServiceShell.module.css";
 
 type FooterAction = {
   label: string;
-  back?: boolean;
   href?: string;
   onClick?: () => void;
   variant?: "primary" | "ghost" | "outline";
@@ -148,9 +146,6 @@ export default function EServiceShell({
                       ? styles.btnOutline
                       : styles.btnGhost;
                 if (action.href && !action.disabled) {
-                  if (action.back) {
-                    return <BackLink key={action.label} href={action.href} className={`${cls} ThaiFont`}>{action.label}</BackLink>;
-                  }
                   return (
                     <Link
                       key={action.label}

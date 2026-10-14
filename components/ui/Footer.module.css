@@ -113,6 +113,18 @@
     font-weight: 600;
 }
 
+.contactLabel::after {
+    content: " : ";
+}
+
+.extHead {
+    display: contents;
+}
+
+.extPlus {
+    display: none;
+}
+
 .socialChannels {
     margin-top: 2rem;
 }
@@ -226,5 +238,156 @@
     }
     .bottomBar {
         padding: 0.75rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .footer {
+        padding-top: 1.35rem;
+        background: #f6f7f4;
+    }
+
+    .footerInner {
+        display: flex;
+        flex-direction: column;
+        gap: 0.85rem;
+        padding-bottom: 1.35rem;
+    }
+
+    .contactSection,
+    .contactInfo,
+    .rightContent,
+    .extHead {
+        display: contents;
+    }
+
+    .extensionSection {
+        order: 1;
+        margin-top: 0.35rem;
+    }
+
+    .socialChannels {
+        order: 2;
+        margin-top: 0.85rem;
+    }
+
+    .mainTitle {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0;
+    }
+
+    .address {
+        font-size: 0.92rem;
+        line-height: 1.55;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    .address br {
+        display: none;
+    }
+
+    .contactRow {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 0.2rem 0.45rem;
+        font-size: 0.95rem;
+    }
+
+    .contactLabel {
+        order: 1;
+        font-weight: 400;
+        color: #6b7280;
+    }
+
+    .contactLabel::after {
+        content: none;
+    }
+
+    .contactNote {
+        order: 2;
+        color: #6b7280;
+    }
+
+    .contactLink {
+        order: 3;
+        font-weight: 700;
+        color: #1f2937;
+        text-decoration: none;
+    }
+
+    .contactLink[href^="mailto"] {
+        text-decoration: underline;
+    }
+
+    .extHead {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        border-bottom: 1px solid #c5c4a4;
+        padding-bottom: 0.45rem;
+    }
+
+    .extensionSection .sectionTitle,
+    .socialChannels .sectionTitle {
+        margin: 0;
+        font-size: 1rem;
+        font-weight: 700;
+        color: #1f2937;
+    }
+
+    .socialChannels .sectionTitle {
+        margin-bottom: 0.85rem;
+    }
+
+    .extPlus {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px;
+        height: 32px;
+        border: 0;
+        background: transparent;
+        color: #1f2937;
+        font-size: 1.6rem;
+        line-height: 1;
+        padding: 0;
+        cursor: pointer;
+    }
+
+    .extensionGrid {
+        display: none;
+        margin-top: 0.75rem;
+    }
+
+    .extensionOpen .extensionGrid {
+        display: grid;
+    }
+
+    .socialIcons {
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        gap: 0;
+        margin-top: 0;
+    }
+
+    .socialIconCircle {
+        width: 40px;
+        height: 40px;
+        font-size: 1rem;
+        flex-shrink: 0;
+    }
+
+    .bottomBar {
+        padding: 0.85rem 0.75rem;
+    }
+
+    .copyright {
+        font-size: 0.95rem;
+        opacity: 1;
     }
 }

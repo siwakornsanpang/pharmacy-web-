@@ -9,7 +9,7 @@ import cardStyles from './courses/CourseCard.module.css';
 import { ArrowRight } from 'lucide-react';
 import { ChevronLeft, ChevronRight, Check, Star } from 'lucide-react';
 import styles from './FeaturedCourse.module.css';
-import SectionHeader from '@/components/ui/SectionHeader';
+import SectionHeader from '@/components/member/learning/SectionHeader';
 import type { AcademyCourse } from '@/lib/academy';
 
 export default function FeaturedCourse({ courses }: { courses: AcademyCourse[] }) {

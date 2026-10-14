@@ -8,7 +8,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import styles from './LearnerReviews.module.css';
-import SectionHeader from '@/components/ui/SectionHeader';
+import SectionHeader from '@/components/member/learning/SectionHeader';
 import type { AcademyReview } from '@/lib/academy';
 
 export default function LearnerReviews({ reviews, showAll = false }: { reviews: AcademyReview[]; showAll?: boolean }) {

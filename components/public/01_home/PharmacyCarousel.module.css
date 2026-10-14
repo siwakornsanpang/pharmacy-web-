@@ -34,6 +34,10 @@
   animation: fadeInUp 0.8s ease forwards;
 }
 
+.subtitleBreak {
+  display: none;
+}
+
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -354,4 +358,153 @@
   
   .cardLeft1 { transform: translateX(-50%) scale(0.85); }
   .cardRight1 { transform: translateX(50%) scale(0.85); }
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 1.5rem 0 1.25rem;
+  }
+
+  .sectionInner {
+    width: 100%;
+  }
+
+  .sectionTitle {
+    font-size: 1.4rem;
+    margin-bottom: 0.7rem;
+  }
+
+  .sectionSubtitle {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin: 0 1.5rem 1.6rem;
+    opacity: 1;
+    animation: none;
+  }
+
+  .subtitleBreak {
+    display: inline;
+  }
+
+  .carouselWrapper {
+    min-height: 0;
+    margin-bottom: 0;
+  }
+
+  .carouselWrapper::before {
+    display: none;
+  }
+
+  .carouselTrack {
+    height: calc(44vw + 36px);
+  }
+
+  .card {
+    width: 52vw;
+    height: 38vw;
+    border-radius: 16px;
+  }
+
+  .cardActive,
+  .cardActive:hover {
+    width: 43vw;
+    height: 44vw;
+    transform: translateX(0) translateY(0) scale(1);
+    box-shadow: 0 22px 36px rgba(17, 24, 39, 0.14);
+  }
+
+  .cardActive:hover .slideImage {
+    transform: none;
+  }
+
+  .card:hover .cardShine {
+    left: -100%;
+  }
+
+  .cardLeft1,
+  .cardRight1 {
+    filter: none;
+    opacity: 1;
+    box-shadow: 0 8px 16px rgba(17, 24, 39, 0.06);
+  }
+
+  .cardLeft1 {
+    transform: translateX(-44%) rotateY(0);
+  }
+
+  .cardRight1 {
+    transform: translateX(44%) rotateY(0);
+  }
+
+  .cardLeft2,
+  .cardRight2,
+  .cardHidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .bottomSection {
+    position: static;
+    z-index: auto;
+    max-width: none;
+    width: 100%;
+    margin: 1.15rem 0 0;
+    padding: 0 1rem;
+    gap: 0.4rem;
+    pointer-events: auto;
+    align-items: center;
+  }
+
+  .navBtn {
+    display: flex;
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid #737300;
+    background: #fff;
+    color: #737300;
+    box-shadow: none;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .navBtn svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .slideContent {
+    flex: 1;
+    min-height: 112px;
+    width: auto;
+    padding: 1.35rem 0.85rem 1.2rem;
+    background: #f9fafb;
+    border: 0;
+    border-radius: 24px;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+
+  .slideTitle,
+  .slideDesc {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .slideTitle {
+    color: #1f2937;
+    font-size: 1.3rem;
+    margin: 0 0 0.55rem;
+  }
+
+  .slideDesc {
+    display: block;
+    color: #6b7280;
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+
+  .pagination {
+    padding-top: 0.85rem;
+  }
 }

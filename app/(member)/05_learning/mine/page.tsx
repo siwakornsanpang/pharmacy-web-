@@ -6,18 +6,11 @@ import { ArrowRight, BookOpen, AlertCircle, CheckCircle2 } from 'lucide-react';
 import AcademyBackLink from '@/components/member/learning/AcademyBackLink';
 import AcademySkeleton from '@/components/member/learning/AcademySkeleton';
 import styles from './mine.module.css';
-import {useAcademyRefresh, useAcademyUser} from '@/lib/academy/use-academy-refresh';
 
 type Enrollment = { courseId: number; title: string; status: string; progressPercent: number };
 class EnrollmentLoadError extends Error {}
 
 export default function MyAcademyCoursesPage() {
-    const userId = useAcademyUser();
-    return <MyCoursesContent key={userId} />;
-}
-
-function MyCoursesContent() {
-    const refreshVersion = useAcademyRefresh();
     const [items, setItems] = useState<Enrollment[]>([]);
     const [status, setStatus] = useState<'loading' | 'ready' | 'error'>('loading');
     const [message, setMessage] = useState('');
@@ -38,7 +31,7 @@ function MyCoursesContent() {
                 }
             });
         return () => controller.abort();
-    }, [reloadKey, refreshVersion]);
+    }, [reloadKey]);
 
     return <main className={styles.page}>
         <div className={styles.container}>

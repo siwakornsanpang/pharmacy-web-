@@ -1,5 +1,5 @@
 import { ArrowLeft } from 'lucide-react';
-import BackLink from '@/components/ui/BackLink';
+import BackLink from '@/components/member/learning/BackLink';
 import styles from './AcademyBackLink.module.css';
 
 interface AcademyBackLinkProps {

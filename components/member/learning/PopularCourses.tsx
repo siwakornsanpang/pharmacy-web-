@@ -1,7 +1,7 @@
 "use client";
 
 import styles from './PopularCourses.module.css';
-import SectionHeader from '@/components/ui/SectionHeader';
+import SectionHeader from '@/components/member/learning/SectionHeader';
 import CourseCard from './courses/CourseCard';
 import type { AcademyCourse } from '@/lib/academy';
 

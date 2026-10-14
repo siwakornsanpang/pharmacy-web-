@@ -97,7 +97,8 @@ export default function PharmacyCarousel() {
         <div className={styles.headerGroup}>
           <h2 className={styles.sectionTitle}>สายงานวิชาชีพเภสัชกร</h2>
           <p className={styles.sectionSubtitle}>
-            วิชาชีพเภสัชกรมีความหลากหลายในการปฏิบัติงานเพื่อดูแลประชาชนในมิติต่าง ๆ
+            วิชาชีพเภสัชกรมีความหลากหลายในการ<br className={styles.subtitleBreak} />
+            ปฏิบัติงานเพื่อดูแลประชาชนในมิติต่าง ๆ
           </p>
         </div>
 
@@ -166,12 +167,13 @@ export default function PharmacyCarousel() {
           </button>
         </div>
 
-        {/* Standard Pagination Dots */}
-        <DotPagination 
-            total={slides.length} 
-            active={activeIndex} 
-            onClick={goTo} 
-        />
+        <div className={styles.pagination}>
+          <DotPagination
+            total={slides.length}
+            active={activeIndex}
+            onClick={goTo}
+          />
+        </div>
       </Container>
     </section>
   );

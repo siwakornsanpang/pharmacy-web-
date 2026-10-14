@@ -1,8 +1,8 @@
 import { Metadata } from 'next';
 import Image from 'next/image';
-import BackLink from '@/components/ui/BackLink';
+import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Calendar } from 'lucide-react';
+import { ArrowLeft, Calendar, User } from 'lucide-react';
 import { getNewsById } from '@/lib/api';
 import styles from './news-detail.module.css';
 
@@ -43,10 +43,10 @@ export default async function NewsDetailPage({ params }: NewsPageProps) {
 
     return (
         <article className={styles.container}>
-            <BackLink href="/news" className={styles.backBtn}>
+            <Link href="/news" className={styles.backBtn}>
                 <ArrowLeft size={20} />
-                <span>ย้อนกลับ</span>
-            </BackLink>
+                <span>กลับไปหน้าข่าวสาร</span>
+            </Link>
 
             <header className={styles.header}>
                 <div className={styles.category}>

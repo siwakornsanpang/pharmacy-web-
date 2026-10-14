@@ -2,10 +2,8 @@ import { afterEach, expect, it, vi } from 'vitest';
 import { cleanup, fireEvent, render, screen } from '@testing-library/react';
 import MyCourses from '@/app/(member)/05_learning/mine/page';
 
-const {authState, refreshAuth} = vi.hoisted(() => ({authState: {userId:'ภ12345'}, refreshAuth:vi.fn()}));
-vi.mock('@/context/AuthContext', () => ({useAuth: () => ({userId:authState.userId,refresh:refreshAuth})}));
 vi.mock('next/navigation', () => ({useRouter: () => ({push: vi.fn(), back: vi.fn()})}));
-afterEach(() => {cleanup(); vi.unstubAllGlobals(); authState.userId='ภ12345';});
+afterEach(() => {cleanup(); vi.unstubAllGlobals();});
 
 it('keeps the empty state hidden until loading completes', () => {
   vi.stubGlobal('fetch', vi.fn(() => new Promise(() => {})));
@@ -46,14 +44,4 @@ it('does not expose a technical error when the server returns an empty body', as
   render(<MyCourses />);
   expect(await screen.findByRole('alert')).toHaveTextContent('ไม่สามารถโหลดข้อมูลได้ กรุณาลองอีกครั้ง');
   expect(screen.queryByText(/Unexpected/)).not.toBeInTheDocument();
-});
-
-it('removes previous account courses immediately on account change', async () => {
-  vi.stubGlobal('fetch', vi.fn().mockResolvedValueOnce({ok:true,json:async()=>[{courseId:1,title:'คอร์สของบัญชีแรก',status:'active',progressPercent:25}]}).mockResolvedValue({ok:true,json:async()=>[]}));
-  const view=render(<MyCourses />);
-  await screen.findByText('คอร์สของบัญชีแรก');
-  authState.userId='11111';
-  view.rerender(<MyCourses />);
-  expect(screen.queryByText('คอร์สของบัญชีแรก')).not.toBeInTheDocument();
-  await screen.findByRole('heading',{name:'ยังไม่มีคอร์สเรียน'});
 });

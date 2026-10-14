@@ -27,8 +27,8 @@ function config() {
   };
 }
 
-export async function signPharmacyAssertion(identity: VerifiedPharmacyIdentity, audience?: string) {
-  const { jwk, kid, issuer, audience: configuredAudience } = config();
+export async function signConferenceAssertion(identity: VerifiedPharmacyIdentity) {
+  const { jwk, kid, issuer, audience } = config();
   const now = Math.floor(Date.now() / 1000);
   return new SignJWT({
     pharmacistLicense: identity.pharmacistLicense,
@@ -39,14 +39,10 @@ export async function signPharmacyAssertion(identity: VerifiedPharmacyIdentity, 
   })
     .setProtectedHeader({ alg: "EdDSA", kid, typ: "JWT" })
     .setIssuer(issuer)
-    .setAudience(audience ?? configuredAudience)
+    .setAudience(audience)
     .setSubject(identity.subject)
     .setJti(randomUUID())
     .setIssuedAt(now)
     .setExpirationTime(now + 60)
     .sign(await importJWK(jwk, "EdDSA"));
-}
-
-export async function signConferenceAssertion(identity: VerifiedPharmacyIdentity) {
-  return signPharmacyAssertion(identity);
 }

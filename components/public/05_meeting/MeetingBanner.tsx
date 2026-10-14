@@ -14,7 +14,7 @@ export default function MeetingBanner({ onBack }: MeetingBannerProps) {
         {onBack && (
           <button onClick={onBack} className={styles.backBtn}>
             <ChevronLeft size={20} />
-            <span>ย้อนกลับ</span>
+            <span>กลับสู่หน้าหลัก</span>
           </button>
         )}
         <div className={styles.bannerContent}>

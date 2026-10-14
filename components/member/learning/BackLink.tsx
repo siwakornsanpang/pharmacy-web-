@@ -3,7 +3,7 @@
 import type { MouseEvent, ReactNode } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { goBack } from '@/lib/navigation/back';
+import { goBack } from '@/lib/academy/back-navigation';
 
 type BackLinkProps = {
   href: string;

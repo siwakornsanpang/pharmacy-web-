@@ -30,8 +30,3 @@ export function academyCourseHref(courseId: number, source: AcademySource): stri
   const query = new URLSearchParams({ from: source });
   return `/learning/${courseId}?${query}`;
 }
-
-export function academyCheckoutHref(orderId: number, source: AcademySource): string {
-  const query = new URLSearchParams({ orderId: String(orderId), from: source });
-  return `/learning/checkout?${query}`;
-}

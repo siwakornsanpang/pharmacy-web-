@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { FaFacebookF, FaYoutube, FaTiktok, FaGlobe, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import { SiLine } from "react-icons/si";
 import { MdEmail } from "react-icons/md";
@@ -6,6 +9,7 @@ import Container from "@/components/ui/Container";
 
 export default function Footer() {
     const currentYear = new Date().getFullYear();
+    const [extensionsOpen, setExtensionsOpen] = useState(false);
 
     return (
         <footer className={styles.footer}>
@@ -20,15 +24,16 @@ export default function Footer() {
                             </p>
 
                             <div className={styles.contactRow}>
-                                <span className={styles.contactLabel}>โทรศัพท์ : </span>
-                                <a href="tel:025919992" className={styles.contactLink}>0 2591 9992</a> (คู่สายอัตโนมัติ)
+                                <span className={styles.contactLabel}>โทรศัพท์</span>
+                                <a href="tel:025919992" className={styles.contactLink}>0 2591 9992</a>
+                                <span className={styles.contactNote}> (คู่สายอัตโนมัติ)</span>
                             </div>
                             <div className={styles.contactRow}>
-                                <span className={styles.contactLabel}>โทรสาร : </span>
+                                <span className={styles.contactLabel}>โทรสาร</span>
                                 <a href="tel:025919996" className={styles.contactLink}>0 2591 9996</a>
                             </div>
                             <div className={styles.contactRow}>
-                                <span className={styles.contactLabel}>Email : </span>
+                                <span className={styles.contactLabel}>Email</span>
                                 <a href="mailto:pharthai@pharmacycouncil.org" className={styles.contactLink}>pharthai@pharmacycouncil.org</a>
                             </div>
 
@@ -52,9 +57,20 @@ export default function Footer() {
                     <div className={styles.rightContent}>
 
                         {/* Extensions Block */}
-                        <div className={styles.extensionSection}>
-                            <h3 className={styles.sectionTitle}>หมายเลขภายในหน่วยงานต่าง ๆ</h3>
-                            <div className={styles.extensionGrid}>
+                        <div className={`${styles.extensionSection} ${extensionsOpen ? styles.extensionOpen : ""}`}>
+                            <div className={styles.extHead}>
+                                <h3 className={styles.sectionTitle}>หมายเลขภายในหน่วยงานต่าง ๆ</h3>
+                                <button
+                                    type="button"
+                                    className={styles.extPlus}
+                                    aria-expanded={extensionsOpen}
+                                    aria-controls="footer-extensions"
+                                    onClick={() => setExtensionsOpen((open) => !open)}
+                                >
+                                    {extensionsOpen ? "–" : "+"}
+                                </button>
+                            </div>
+                            <div id="footer-extensions" className={styles.extensionGrid}>
                                 <div className={styles.extensionCol}>
                                     <div className={styles.extensionItem}>
                                         <span className={styles.extKey}>กด 1</span>

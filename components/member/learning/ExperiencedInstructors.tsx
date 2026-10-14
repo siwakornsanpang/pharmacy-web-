@@ -4,7 +4,7 @@ import React from 'react';
 import Image from './AcademyImage';
 import AcademyImagePlaceholder from './AcademyImagePlaceholder';
 import styles from './ExperiencedInstructors.module.css';
-import SectionHeader from '@/components/ui/SectionHeader';
+import SectionHeader from '@/components/member/learning/SectionHeader';
 import type { AcademyInstructor } from '@/lib/academy';
 
 export default function ExperiencedInstructors({ instructors, showAll = false }: { instructors: AcademyInstructor[]; showAll?: boolean }) {

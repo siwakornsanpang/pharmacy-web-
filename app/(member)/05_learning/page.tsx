@@ -12,7 +12,7 @@ import PopularCourses from '@/components/member/learning/PopularCourses';
 import ExperiencedInstructors from '@/components/member/learning/ExperiencedInstructors';
 import LearningStats from '@/components/member/learning/LearningStats';
 import LearnerReviews from '@/components/member/learning/LearnerReviews';
-import SectionHeader from '@/components/ui/SectionHeader';
+import SectionHeader from '@/components/member/learning/SectionHeader';
 import { getAcademyStats, getAcademyCategories as listAcademyCategories, getAcademyCourses, getAcademyInstructors as listAcademyInstructors, getAcademyReviews as listAcademyReviews } from '@/lib/academy';
 import styles from './learning.module.css';
 import {useAcademyRefresh} from '@/lib/academy/use-academy-refresh';
