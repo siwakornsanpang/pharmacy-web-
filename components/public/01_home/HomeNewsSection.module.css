@@ -429,7 +429,7 @@
     flex-direction: row;
     align-items: center;
     margin-bottom: 0.75rem;
-    padding: 0 0.75rem;
+    padding: 0 1.25rem;
   }
 
   .sectionTitle {
@@ -448,7 +448,8 @@
     overflow-x: auto;
     gap: 12px;
     scroll-snap-type: x mandatory;
-    padding: 0 0.75rem 0.35rem;
+    margin: 0 1.25rem;
+    padding: 0 0 0.35rem;
     scrollbar-width: none;
   }
 

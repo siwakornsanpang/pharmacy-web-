@@ -148,7 +148,66 @@ max-width: var(--max-width-2xl);
 }
 
 @media (max-width: 640px) {
+    .section {
+        padding-top: 0.75rem;
+    }
+
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+
+    .wrapper {
+        padding: 1rem;
+        border-radius: 18px;
+    }
+
+    .title {
+        font-size: 1.2rem;
+        margin-bottom: 0.85rem;
+    }
+
     .row {
-        flex-direction: column;
+        flex-wrap: wrap;
+        gap: 0.55rem;
+    }
+
+    .dropdown {
+        flex: 1 1 calc(50% - 0.3rem);
+        min-width: 0;
+    }
+
+    .dropdownBtn {
+        width: 100%;
+        min-width: 0;
+        padding: 0.65rem 0.7rem;
+        border-radius: 14px;
+        font-size: 0.82rem;
+    }
+
+    .dropdownBtn span {
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .inputWrap {
+        flex: 1 1 auto;
+        min-width: 0;
+        padding: 0.65rem 0.9rem;
+        border-radius: 14px;
+    }
+
+    .inputIcon {
+        display: none;
+    }
+
+    .searchBtn {
+        flex: none;
+        width: auto;
+        padding: 0.65rem 1.15rem;
+        border-radius: 14px;
+        background: #6d6d10;
+        font-size: 0.95rem;
     }
 }

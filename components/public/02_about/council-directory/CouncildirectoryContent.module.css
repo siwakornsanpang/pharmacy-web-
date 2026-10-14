@@ -461,42 +461,215 @@
 }
 
 @media (max-width: 640px) {
-    .cardHeader {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
-        padding-bottom: 18px;
+    .wrapper {
+        align-items: stretch;
+        max-width: 100%;
+        padding: 0;
     }
 
-    .headerDivider {
+    .timelineContainer {
+        gap: 0.65rem;
+        margin-bottom: 1rem;
+    }
+
+    .timelineLabel {
+        font-size: 0.92rem;
+        font-weight: 500;
+        color: #4b5563;
+        letter-spacing: 0;
+    }
+
+    .timelineLabel::after {
+        content: ":";
+    }
+
+    .scrollBtn,
+    .timelineLine,
+    .timelineDot {
+        display: none;
+    }
+
+    .timelineWrapper {
         width: 100%;
-        height: 1.5px;
+        min-width: 0;
+    }
+
+    .timelineScroll {
+        min-width: 0;
+        width: calc(100% + 5vw);
+        margin: 0 -5vw 0 0;
+        padding: 2px 5vw 6px 0;
+    }
+
+    .termsList {
+        width: max-content;
+        align-items: stretch;
+        gap: 12px;
+        padding: 0;
+    }
+
+    .termNode {
+        flex: 0 0 92px;
+        min-width: 92px;
+        scroll-snap-align: start;
+    }
+
+    .termCard,
+    .activeCard {
+        width: 92px;
+        height: 104px;
+        border-radius: 16px;
+        transform: none;
+        box-shadow: none;
+        padding: 8px 6px;
+    }
+
+    .termCard {
+        border: 1.5px solid #8a9040;
+        background: #fff;
+    }
+
+    .activeCard {
+        background: #737300;
+        border: 1.5px solid #737300;
+    }
+
+    .termNodeLabel {
+        font-size: 0.72rem;
+        font-weight: 500;
+        color: #6b7280;
+    }
+
+    .termNodeNum {
+        margin: 2px 0;
+        font-size: 1.7rem;
+        font-weight: 700;
+    }
+
+    .termNodeYears {
+        font-size: 0.68rem;
+        color: #4b5563;
+    }
+
+    .activeCard .termNodeLabel,
+    .activeCard .termNodeYears {
+        color: #fff;
+        font-size: 0.72rem;
+        font-weight: 500;
+    }
+
+    .activeCard .termNodeNum {
+        color: #fff;
+        font-size: 1.85rem;
+        font-weight: 800;
+    }
+
+    .detailCard {
+        gap: 14px;
+        max-width: 100%;
+        padding: 16px 14px 14px;
+        border-radius: 20px;
+        border: 1.5px solid #d3d1b3;
+        background: #fff;
+        box-shadow: none;
+    }
+
+    .detailCard::after {
+        display: none;
+    }
+
+    .cardHeader {
+        flex-direction: row;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 2px;
+        border-bottom: 0;
     }
 
     .termTitle {
-        font-size: 32px;
+        font-size: 1.65rem;
+        letter-spacing: 0;
+    }
+
+    .headerDivider {
+        width: 1px;
+        height: 36px;
+        background: #e5e7eb;
+    }
+
+    .headerRight {
+        min-width: 0;
+        gap: 2px;
+    }
+
+    .committeeLabel {
+        font-size: 0.92rem;
+        font-weight: 600;
+        line-height: 1.35;
+    }
+
+    .yearBadge {
+        font-size: 0.82rem;
+        color: #6b7280;
+    }
+
+    .peopleGrid {
+        gap: 12px;
+        max-width: none;
     }
 
     .personCard {
-        flex-direction: column;
+        flex-direction: row;
         align-items: center;
-        text-align: center;
-        gap: 20px;
-        padding: 24px;
+        text-align: left;
+        gap: 14px;
+        padding: 12px;
+        border-radius: 18px;
+        border-color: #eceae0;
+        box-shadow: none;
+    }
+
+    .personCard:hover {
+        transform: none;
+        box-shadow: none;
     }
 
     .imageBox {
-        width: 160px;
-        height: 213px;
+        width: 108px;
+        height: 132px;
+        padding: 0;
+        border-radius: 16px;
+        box-shadow: none;
+    }
+
+    .imageBoxDecoration {
+        display: none;
+    }
+
+    .imageBox img {
+        border-radius: 16px;
     }
 
     .cardInfo {
-        align-items: center;
-        width: 100%;
+        align-items: flex-start;
+        gap: 8px;
     }
 
-    .roleBadge, .nameUnderline {
-        margin-left: auto;
-        margin-right: auto;
+    .roleBadge {
+        margin: 0;
+        padding: 4px 10px;
+        font-size: 0.68rem;
+    }
+
+    .personName {
+        margin: 0;
+        font-size: 1.05rem;
+    }
+
+    .nameUnderline {
+        width: 40px;
+        height: 3px;
+        margin: 0;
+        background: #8a9040;
     }
 }

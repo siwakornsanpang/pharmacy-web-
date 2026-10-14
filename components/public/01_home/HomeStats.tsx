@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useRef } from "react";
 import styles from "./HomeStats.module.css";
-
 import { API_BASE_URL } from "@/lib/api";
 
 interface AnimatedNumberProps {
@@ -125,7 +124,9 @@ export default function HomeStats() {
             <h3 className={styles.statNumber}>
               <AnimatedNumber value={faculties} />
             </h3>
-            <p className={styles.statLabel}>คณะเภสัชศาสตร์ประเทศไทย</p>
+            <p className={styles.statLabel}>
+              คณะเภสัชศาสตร์<br className={styles.labelBreak} />ประเทศไทย
+            </p>
           </div>
         </div>
         <div className={styles.updateTimeContainer}>

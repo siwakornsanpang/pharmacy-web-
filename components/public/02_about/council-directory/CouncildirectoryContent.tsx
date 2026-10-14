@@ -82,7 +82,12 @@ export default function CouncildirectoryContent({
     useEffect(() => {
         if (!selectedTerm || !timelineRef.current) return;
         const target = timelineRef.current.querySelector<HTMLElement>(`[data-term-id="${selectedTerm.id}"]`);
-        target?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+        const narrow = window.matchMedia("(max-width: 640px)").matches;
+        target?.scrollIntoView({
+            behavior: "smooth",
+            inline: narrow ? "nearest" : "center",
+            block: "nearest",
+        });
     }, [selectedTerm]);
 
     // Helper: wrap last word (family name) in a span to prevent mid-word breaks

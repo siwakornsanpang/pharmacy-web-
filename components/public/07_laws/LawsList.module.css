@@ -42,6 +42,10 @@
     margin: 0 0 1rem 0;
 }
 
+.listCount {
+    display: none;
+}
+
 /* Items */
 .list {
     display: flex;
@@ -67,6 +71,10 @@
 .item {
     padding: 0.85rem 0;
     border-bottom: 1px solid #f3f4f6;
+}
+
+.pdfIcon {
+    display: none;
 }
 
 .yearGroup .item:last-child {
@@ -161,8 +169,67 @@
 /* Responsive */
 @media (max-width: 640px) {
     .header {
-        flex-direction: column;
+        flex-direction: row;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .title {
+        font-size: 1.05rem;
+        min-width: 0;
+        line-height: 1.3;
+    }
+
+    .yearSort {
+        flex-shrink: 0;
+        gap: 0.25rem;
+        padding: 0.35rem 0.8rem;
+        border-radius: 999px;
+        font-size: 0.78rem;
+        color: #4b5563;
+    }
+
+    .yearSort svg {
+        display: none;
+    }
+
+    .listLabel {
+        display: block;
+        margin: -0.35rem 0 0.85rem;
+        font-size: 0.82rem;
+        font-weight: 400;
+        color: #9ca3af;
+    }
+
+    .listCount {
+        display: inline;
+    }
+
+    .yearHeading {
+        font-size: 0.95rem;
+        color: #7a7a20;
+        border-bottom: 1px solid #d9d6b4;
+        padding-bottom: 0.35rem;
+    }
+
+    .item {
+        display: flex;
         align-items: flex-start;
-        gap: 0.75rem;
+        gap: 0.55rem;
+        padding: 0.55rem 0;
+        border-bottom: none;
+    }
+
+    .pdfIcon {
+        display: block;
+        flex-shrink: 0;
+        margin-top: 0.15rem;
+        color: #e11d48;
+    }
+
+    .itemLink,
+    .itemTitle {
+        font-size: 0.9rem;
+        line-height: 1.45;
     }
 }

@@ -15,6 +15,7 @@ export default async function ServicesPage() {
             <PublicServices />
             <ServiceList
                 services={services}
+                title="บริการเภสัชกร"
                 viewAllHref="/service/e-service/sap-33/history"
                 viewAllText="ประวัติการยื่นคำขอ"
             />

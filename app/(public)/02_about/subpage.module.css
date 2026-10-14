@@ -20,6 +20,19 @@
     display: block;
 }
 
+@media (max-width: 640px) {
+    .contentTitle {
+        gap: 0.55rem;
+        margin-bottom: 1.15rem;
+        font-size: 1.55rem;
+    }
+
+    .contentTitle::after {
+        width: 48px;
+        height: 3px;
+    }
+}
+
 .emptyPage {
     text-align: center;
     padding: 4rem 2rem;

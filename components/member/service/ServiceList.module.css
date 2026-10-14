@@ -108,3 +108,58 @@
         max-width: 100%;
     }
 }
+
+@media (max-width: 640px) {
+    .section {
+        padding-top: 8px;
+    }
+
+    .sectionCon {
+        width: 100%;
+        padding: 0 0.9rem 1.5rem;
+    }
+
+    .sectionCon > div:first-child h2 {
+        font-size: 1.35rem;
+    }
+
+    .serviceListGrid {
+        gap: 12px;
+        margin-top: 2px;
+    }
+
+    .serviceListItem {
+        padding: 15px 16px;
+        border-radius: 18px;
+        border: none;
+        box-shadow: 0 8px 18px rgba(31, 41, 55, 0.06);
+    }
+
+    .serviceLabel {
+        width: auto;
+        flex: 1;
+        color: #737136;
+        font-size: 0.875rem;
+        font-weight: 600;
+        align-items: flex-start;
+        gap: 0.4rem;
+    }
+
+    .serviceText {
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
+        line-height: 1.45;
+    }
+
+    .serviceListItem::after {
+        content: "";
+        width: 8px;
+        height: 8px;
+        margin-left: 0.5rem;
+        border-right: 2.5px solid #737136;
+        border-top: 2.5px solid #737136;
+        transform: rotate(45deg);
+        flex-shrink: 0;
+    }
+}

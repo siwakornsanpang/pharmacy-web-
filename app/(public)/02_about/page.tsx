@@ -1,14 +1,34 @@
 import Image from "next/image";
 import styles from "./history.module.css";
 
+function NumberedItem({
+  n,
+  children,
+  mark = "paren",
+}: {
+  n: number;
+  children: React.ReactNode;
+  mark?: "paren" | "step";
+}) {
+  return (
+    <p className={styles.infoListItem}>
+      <span className={mark === "step" ? styles.stepNum : styles.infoNum}>{n}</span>
+      <span>{children}</span>
+    </p>
+  );
+}
+
 export default function AboutHistoryPage() {
   return (
     <>
-      <h2 className={`${styles.contentTitle} ThaiFont`}>
-        ประวัติความเป็นมา
-      </h2>
-
-      <div className={`${styles.contentBody} ThaiFont`}>
+      <div className={styles.foldSection}>
+        <input id="about-history" className={styles.fold} type="checkbox" defaultChecked />
+        <label htmlFor="about-history" className={styles.foldHead}>
+          <h2 className={`${styles.contentTitle} ThaiFont`}>
+            ประวัติความเป็นมา
+          </h2>
+        </label>
+        <div className={`${styles.foldBody} ${styles.contentBody} ThaiFont`}>
         <p>
                    การประกอบวิชาชีพเภสัชกรรม ถือเป็นการประกอบโรคศิลปะ
           ซึ่งผู้ที่จะประกอบอาชีพทางด้านนี้ได้จำเป็นจะต้องมีความรู้ทางด้าน
@@ -48,7 +68,6 @@ export default function AboutHistoryPage() {
             width={600}
             height={400}
             className={styles.contentImage}
-            style={{ height: "400px", objectFit: "cover" }}
           />
         </div>
 
@@ -94,9 +113,15 @@ export default function AboutHistoryPage() {
           ได้แก่ เภสัชกรรมโรงพยาบาล เภสัชกรรมสมุนไพรการคุ้มครอง ผู้บริโภคด้านยา
           และสุขภาพ เภสัชกรรม อุตสาหการ การบริหารเภสัชกิจ และเภสัชกรรมชุมชน  
         </p>
+        </div>
+      </div>
 
-        <h3>ประวัติสภาเภสัชกรรม</h3>
-
+      <div className={styles.foldSection}>
+        <input id="about-council-history" className={styles.fold} type="checkbox" defaultChecked />
+        <label htmlFor="about-council-history" className={styles.foldHead}>
+          <h3 className={styles.infoTitle}>ประวัติสภาเภสัชกรรม</h3>
+        </label>
+        <div className={`${styles.foldBody} ${styles.contentBody} ThaiFont`}>
         <p>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           สภาเภสัชกรรม เป็นองค์กรวิชาชีพเภสัชกรรม มีสถานะเป็นนิติบุคคล
@@ -136,8 +161,26 @@ export default function AboutHistoryPage() {
           31 ในวันที่ 26 มิถุนายน พ.ศ. 2568 ดำเนินงานโดยคณะกรรมการ สภาเภสัชกรรม
           วาระที่ 11 (พ.ศ. 2568-2570) 
         </p>
+        </div>
+      </div>
 
        <div className={styles.infoCard}>
+          <input id="about-objectives" className={styles.fold} type="checkbox" defaultChecked />
+          <label htmlFor="about-objectives" className={`${styles.infoSummary} ${styles.foldHead}`}>
+            <h2 className={styles.infoTitle}>วัตถุประสงค์การก่อตั้งสภาเภสัชกรรม</h2>
+          </label>
+          <div className={styles.infoContent}>
+            <p className={styles.infoSubtitle}>(มาตรา 8 แห่งพระราชบัญญัติวิชาชีพเภสัชกรรม พ.ศ. 2537)</p>
+            <div className={styles.infoList}>
+              <NumberedItem n={1}>ส่งเสริมการศึกษาการวิจัยและการประกอบวิชาชีพเภสัชกรรม</NumberedItem>
+              <NumberedItem n={2}>ส่งเสริมความสามัคคีและผดุงเกียรติของสมาชิก</NumberedItem>
+              <NumberedItem n={3}>ผดุงไว้ซึ่งสิทธิ ความเป็นธรรมและส่งเสริมสวัสดิการให้แก่สมาชิก</NumberedItem>
+              <NumberedItem n={4}>ควบคุมความประพฤติของผู้ประกอบวิชาชีพเภสัชกรรมให้ถูกต้องตามจรรยาบรรณ แห่งวิชาชีพเภสัชกรรม</NumberedItem>
+              <NumberedItem n={5}>ช่วยเหลือ แนะนำ เผยแพร่และให้การศึกษาแก่ประชาชนและองค์กรอื่นในเรื่อง ที่เกี่ยวกับการเภสัชกรรม และการสาธารณสุข</NumberedItem>
+              <NumberedItem n={6}>ให้คำปรึกษาหรือข้อเสนอแนะต่อรัฐบาลเกี่ยวกับการเภสัชกรรมและการสาธารณสุข</NumberedItem>
+              <NumberedItem n={7}>เป็นตัวแทนของผู้ประกอบวิชาชีพเภสัชกรรมในประเทศไทย</NumberedItem>
+            </div>
+          </div>
           <div className={styles.infoImageWrapper}>
             <img
               alt="วัตถุประสงค์การก่อตั้งสภาเภสัชกรรม"
@@ -145,24 +188,25 @@ export default function AboutHistoryPage() {
               className={styles.infoImage}
             />
           </div>
-
-          <div className={styles.infoContent}>
-            <h2 className={styles.infoTitle}>วัตถุประสงค์การก่อตั้งสภาเภสัชกรรม</h2>
-            <p className={styles.infoSubtitle}>(มาตรา 8 แห่งพระราชบัญญัติวิชาชีพเภสัชกรรม พ.ศ. 2537)</p>
-            <div className={styles.infoList}>
-              <p className={styles.infoListItem}>(1) ส่งเสริมการศึกษาการวิจัยและการประกอบวิชาชีพเภสัชกรรม</p>
-              <p className={styles.infoListItem}>(2) ส่งเสริมความสามัคคีและผดุงเกียรติของสมาชิก</p>
-              <p className={styles.infoListItem}>(3) ผดุงไว้ซึ่งสิทธิ ความเป็นธรรมและส่งเสริมสวัสดิการให้แก่สมาชิก</p>
-              <p className={styles.infoListItem}>(4) ควบคุมความประพฤติของผู้ประกอบวิชาชีพเภสัชกรรมให้ถูกต้องตามจรรยาบรรณ แห่งวิชาชีพเภสัชกรรม</p>
-              <p className={styles.infoListItem}>(5) ช่วยเหลือ แนะนำ เผยแพร่และให้การศึกษาแก่ประชาชนและองค์กรอื่นในเรื่อง ที่เกี่ยวกับการเภสัชกรรม และการสาธารณสุข</p>
-              <p className={styles.infoListItem}>(6) ให้คำปรึกษาหรือข้อเสนอแนะต่อรัฐบาลเกี่ยวกับการเภสัชกรรมและการสาธารณสุข</p>
-              <p className={styles.infoListItem}>(7) เป็นตัวแทนของผู้ประกอบวิชาชีพเภสัชกรรมในประเทศไทย</p>
-            </div>
-          </div>
         </div>
 
-        {/* การ์ดใบที่ 2: อำนาจหน้าที่ */}
         <div className={styles.infoCard}>
+          <input id="about-powers" className={styles.fold} type="checkbox" defaultChecked />
+          <label htmlFor="about-powers" className={`${styles.infoSummary} ${styles.foldHead}`}>
+            <h2 className={styles.infoTitle}>อำนาจหน้าที่ของสภาเภสัชกรรม</h2>
+          </label>
+          <div className={styles.infoContent}>
+            <p className={styles.infoSubtitle}>(มาตรา 9 แห่งพระราชบัญญัติวิชาชีพเภสัชกรรม พ.ศ. 2537)</p>
+            <div className={styles.infoList}>
+              <NumberedItem n={1}>รับขึ้นทะเบียนและออกใบอนุญาตให้แก่ผู้ขอเป็นผู้ประกอบวิชาชีพเภสัชกรรม</NumberedItem>
+              <NumberedItem n={2}>วินิจฉัยชี้ขาดตามมาตรา 42 วรรคสาม</NumberedItem>
+              <NumberedItem n={3}>รับรองปริญญา ประกาศนียบัตรในวิชาเภสัชศาสตร์หรือวุฒิบัตรในวิชาชีพเภสัชกรรมของสถาบันต่าง ๆ เพื่อประโยชน์ในการสมัครเป็นสมาชิก</NumberedItem>
+              <NumberedItem n={4}>รับรองหลักสูตรต่าง ๆ สำหรับการฝึกอบรมเป็นผู้ชำนาญการในสาขาต่าง ๆ ของ วิชาชีพเภสัชกรรมของสถาบันที่ทำการฝึกอบรมเป็นผู้ชำนาญการในสาขาต่าง ๆ ของ วิชาชีพเภสัชกรรม</NumberedItem>
+              <NumberedItem n={5}>รับรองวิทยาฐานะของสถาบันที่ทำการฝึกอบรมใน (4)</NumberedItem>
+              <NumberedItem n={6}>ออกหนังสืออนุมัติหรือวุฒิบัตรแสดงความรู้ความชำนาญในการประกอบวิชาชีพ เภสัชกรรมสาขาต่าง ๆ และออก หนังสือแสดงวุฒิอื่นในวิชาชีพเภสัชกรรม</NumberedItem>
+              <NumberedItem n={7}>ดำเนินการให้เป็นไปตามวัตถุประสงค์ของสภาเภสัชกรรม</NumberedItem>
+            </div>
+          </div>
           <div className={styles.infoImageWrapper}>
             <img
               alt="อำนาจหน้าที่ของสภาเภสัชกรรม"
@@ -170,46 +214,37 @@ export default function AboutHistoryPage() {
               className={styles.infoImage}
             />
           </div>
-
-          <div className={styles.infoContent}>
-            <h2 className={styles.infoTitle}>อำนาจหน้าที่ของสภาเภสัชกรรม</h2>
-            <p className={styles.infoSubtitle}>(มาตรา 9 แห่งพระราชบัญญัติวิชาชีพเภสัชกรรม พ.ศ. 2537)</p>
-            <div className={styles.infoList}>
-              <p className={styles.infoListItem}>(1) รับขึ้นทะเบียนและออกใบอนุญาตให้แก่ผู้ขอเป็นผู้ประกอบวิชาชีพเภสัชกรรม</p>
-              <p className={styles.infoListItem}>(2) วินิจฉัยชี้ขาดตามมาตรา 42 วรรคสาม</p>
-              <p className={styles.infoListItem}>(3) รับรองปริญญา ประกาศนียบัตรในวิชาเภสัชศาสตร์หรือวุฒิบัตรในวิชาชีพเภสัชกรรมของสถาบันต่าง ๆ เพื่อประโยชน์ในการสมัครเป็นสมาชิก</p>
-              <p className={styles.infoListItem}>(4) รับรองหลักสูตรต่าง ๆ สำหรับการฝึกอบรมเป็นผู้ชำนาญการในสาขาต่าง ๆ ของ วิชาชีพเภสัชกรรมของสถาบันที่ทำการฝึกอบรมเป็นผู้ชำนาญการในสาขาต่าง ๆ ของ วิชาชีพเภสัชกรรม</p>
-              <p className={styles.infoListItem}>(5) รับรองวิทยาฐานะของสถาบันที่ทำการฝึกอบรมใน (4)</p>
-              <p className={styles.infoListItem}>(6) ออกหนังสืออนุมัติหรือวุฒิบัตรแสดงความรู้ความชำนาญในการประกอบวิชาชีพ เภสัชกรรมสาขาต่าง ๆ และออก หนังสือแสดงวุฒิอื่นในวิชาชีพเภสัชกรรม</p>
-              <p className={styles.infoListItem}>(7) ดำเนินการให้เป็นไปตามวัตถุประสงค์ของสภาเภสัชกรรม</p>
-            </div>
-          </div>
         </div>
 
-        <h3>คณะกรรมการสภาเภสัชกรรม</h3>
-
-        <ol>
-          <li>
-            (มาตรา 15 แห่งพระราชบัญญัติวิชาชีพเภสัชกรรม พ.ศ.
-            2537) มีวาระอยู่ในตำแหน่งคราวละสามปี ประกอบด้วย
-          </li>
-          <li>
-            1) กรรมการโดยตำแหน่ง ได้แก่ ปลัดกระทรวงสาธารณสุข
+        <div className={styles.foldSection}>
+          <input id="about-committee" className={styles.fold} type="checkbox" defaultChecked />
+          <label htmlFor="about-committee" className={styles.foldHead}>
+            <h3 className={styles.infoTitle}>คณะกรรมการสภาเภสัชกรรม</h3>
+          </label>
+          <div className={`${styles.foldBody} ${styles.contentBody}`}>
+        <p>
+          (มาตรา 15 แห่งพระราชบัญญัติวิชาชีพเภสัชกรรม พ.ศ.
+          2537) มีวาระอยู่ในตำแหน่งคราวละสามปี ประกอบด้วย
+        </p>
+        <div className={styles.infoList}>
+          <NumberedItem n={1} mark="step">
+            กรรมการโดยตำแหน่ง ได้แก่ ปลัดกระทรวงสาธารณสุข
             นายกเภสัชกรรมสมาคมแห่งประเทศไทยในพระบรมราชูปถัมภ์ คณบดีคณะ
             เภสัชศาสตร์ในสถาบันอุดมศึกษาที่ได้รับความเห็นชอบหรือได้รับอนุญาตจากกระทรวงการอุดมศึกษาฯ
             ให้จัดตั้งขึ้นตามที่กระทรวงการอุดมศึกษาฯ เสนอจำนวนห้าคน
-          </li>
-          <li>
-            2) กรรมการซึ่งได้รับแต่งตั้ง โดยเป็นผู้แทนจากกระทรวงสาธารณสุข
+          </NumberedItem>
+          <NumberedItem n={2} mark="step">
+            กรรมการซึ่งได้รับแต่งตั้ง โดยเป็นผู้แทนจากกระทรวงสาธารณสุข
             จำนวนสามคน จากกระทรวงกลาโหมจำนวนหนึ่งคน และจากกระทรวง
             มหาดไทยจำนวนหนึ่งคน
-          </li>
-          <li>
-            3) กรรมการซึ่งได้รับเลือกตั้ง โดยสมาชิกมีจำนวนเท่ากับจำนวนกรรมการใน
+          </NumberedItem>
+          <NumberedItem n={3} mark="step">
+            กรรมการซึ่งได้รับเลือกตั้ง โดยสมาชิกมีจำนวนเท่ากับจำนวนกรรมการใน
             1) และ 2) รวมกัน
-          </li>
-        </ol>
-      </div>
+          </NumberedItem>
+        </div>
+          </div>
+        </div>
     </>
   );
 }

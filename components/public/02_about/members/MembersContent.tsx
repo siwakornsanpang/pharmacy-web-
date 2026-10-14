@@ -479,6 +479,23 @@ const MembersContent = () => {
             ))}
           </div>
         </div>
+
+        <div className={styles.legendMobile}>
+          <p className={styles.legendMobileTitle}>จำนวนเภสัชกรในแต่ละจังหวัด</p>
+          <div className={styles.legendMobileRow}>
+            {[
+              { label: "0 - 200", color: "#f4f7dc" },
+              { label: "201 - 1,200", color: "#d9e28d" },
+              { label: "1,201 - 3,000", color: "#8a9040" },
+              { label: "3,001 - 17,000", color: "#737300" },
+            ].map((item) => (
+              <div key={item.label} className={styles.legendMobileItem}>
+                <span className={styles.legendMobileSwatch} style={{ backgroundColor: item.color }} />
+                <span>{item.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* ส่วนแสดงข้อมูลสถิติและการค้นหา */}
@@ -539,21 +556,23 @@ const MembersContent = () => {
           <div className={`${styles.statsCard} ${styles.animateFadeInUp}`} style={{ animationDelay: '0.1s' }}>
             <div className={styles.cardGlow} />
 
-            {/* ข้อมูลอัพเดทล่าสุด */}
-            <div className={styles.lastUpdated}>
-              <Clock size={16} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }} />
-              อัพเดทข้อมูล ณ วันที่ 14 มิถุนายน 2569
-            </div>
+            <div className={styles.totalBlock}>
+              <div className={styles.lastUpdated}>
+                <Clock size={16} style={{ display: "inline-block", verticalAlign: "middle", marginRight: "6px" }} />
+                อัพเดทข้อมูล ณ วันที่ 14 มิถุนายน 2569
+              </div>
 
-            {/* สรุปยอดรวมทั้งประเทศแบบตัวใหญ่ */}
-            <div className={styles.totalSummarySection}>
-              <span className={styles.totalSummaryLabel}>เภสัชกรทั้งหมด</span>
-              <div className={styles.totalSummaryValueWrapper}>
-                <span className={styles.totalSummaryNumber}>{totalCount.toLocaleString()}</span>
-                <span className={styles.totalSummaryUnit}>คน</span>
+              <div className={styles.totalSummarySection}>
+                <span className={styles.totalSummaryLabel}>เภสัชกรทั้งหมด</span>
+                <span className={styles.totalSummaryLabelMobile}>จำนวนเภสัชกรทั่วประเทศ</span>
+                <div className={styles.totalSummaryValueWrapper}>
+                  <span className={styles.totalSummaryNumber}>{totalCount.toLocaleString()}</span>
+                  <span className={styles.totalSummaryUnit}>คน</span>
+                </div>
               </div>
             </div>
 
+            <div className={styles.provinceBlock}>
             <div className={styles.cardDivider} />
 
             <h4 className={styles.statsHeader}>ข้อมูลรายจังหวัด</h4>
@@ -589,6 +608,7 @@ const MembersContent = () => {
                   />
                 </div>
               </div>
+            </div>
             </div>
           </div>
 

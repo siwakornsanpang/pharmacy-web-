@@ -62,6 +62,9 @@ export default function HalloffameContent({ initialData = [] }: Props) {
     const [honorMembers, setHonorMembers] = useState<HonorRecipient[]>(initialData);
     const [selectedAward, setSelectedAward] = useState("all");
     const [searchTerm, setSearchTerm] = useState("");
+    const [showAll, setShowAll] = useState(false);
+    const [filterOpen, setFilterOpen] = useState(false);
+    const filterRef = useRef<HTMLDivElement>(null);
     // Show loading only when SSR gave us nothing
     const [loading, setLoading] = useState(initialData.length === 0);
     const [error, setError] = useState<string | null>(null);
@@ -135,6 +138,22 @@ export default function HalloffameContent({ initialData = [] }: Props) {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [modalMember]);
 
+    useEffect(() => {
+        if (!filterOpen) return;
+        const onPointer = (e: MouseEvent) => {
+            if (!filterRef.current?.contains(e.target as Node)) setFilterOpen(false);
+        };
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === "Escape") setFilterOpen(false);
+        };
+        document.addEventListener("mousedown", onPointer);
+        window.addEventListener("keydown", onKey);
+        return () => {
+            document.removeEventListener("mousedown", onPointer);
+            window.removeEventListener("keydown", onKey);
+        };
+    }, [filterOpen]);
+
     // ── Derived state ──
     const excludedTargets = useMemo(() => {
         const list = [
@@ -189,20 +208,41 @@ export default function HalloffameContent({ initialData = [] }: Props) {
                 <h2 className={`${styles.pageTitle} ThaiFont`}>หอเกียรติประวัติ</h2>
 
                 <div className={styles.toolbar}>
-                    <div className={styles.filterBox}>
-                        <select
-                            id="awardFilter"
-                            className={styles.filterSelect}
-                            value={selectedAward}
-                            onChange={(e) => setSelectedAward(e.target.value)}
+                    <div className={styles.filterBox} ref={filterRef}>
+                        <button
+                            type="button"
+                            className={`${styles.filterSelect} ThaiFont`}
+                            aria-haspopup="listbox"
+                            aria-expanded={filterOpen}
+                            onClick={() => setFilterOpen((open) => !open)}
                         >
-                            <option value="all">ทั้งหมด</option>
-                            {awardOptions.slice(1).map((awardName) => (
-                                <option key={awardName} value={awardName}>
-                                    {awardName}
-                                </option>
-                            ))}
-                        </select>
+                            {selectedAward === "all" ? "ทั้งหมด" : selectedAward}
+                        </button>
+                        {filterOpen && (
+                            <ul className={styles.filterMenu} role="listbox">
+                                {awardOptions.map((awardName) => {
+                                    const label = awardName === "all" ? "ทั้งหมด" : awardName;
+                                    const active = awardName === selectedAward;
+                                    return (
+                                        <li key={awardName}>
+                                            <button
+                                                type="button"
+                                                role="option"
+                                                aria-selected={active}
+                                                className={`${styles.filterOption} ${active ? styles.filterOptionActive : ""} ThaiFont`}
+                                                onClick={() => {
+                                                    setSelectedAward(awardName);
+                                                    setShowAll(false);
+                                                    setFilterOpen(false);
+                                                }}
+                                            >
+                                                {label}
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        )}
                     </div>
 
                     <div className={styles.searchBox}>
@@ -211,7 +251,10 @@ export default function HalloffameContent({ initialData = [] }: Props) {
                             className={styles.searchInput}
                             placeholder="ค้นหาชื่อบุคคล"
                             value={searchTerm}
-                            onChange={(e) => setSearchTerm(e.target.value)}
+                            onChange={(e) => {
+                                setSearchTerm(e.target.value);
+                                setShowAll(false);
+                            }}
                         />
                         <svg className={styles.searchIcon} width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                     </div>
@@ -226,7 +269,7 @@ export default function HalloffameContent({ initialData = [] }: Props) {
             )}
 
             {!loading && !error && displayedMembers.length > 0 && (
-                <div className={styles.grid}>
+                <div className={`${styles.grid} ${showAll ? styles.showAll : ""}`}>
                     {displayedMembers.map((member) => (
                         <article key={member.id} className={styles.card}>
                             <div className={styles.cardMedia}>
@@ -257,6 +300,16 @@ export default function HalloffameContent({ initialData = [] }: Props) {
                         </article>
                     ))}
                 </div>
+            )}
+
+            {!loading && !error && displayedMembers.length > 8 && !showAll && (
+                <button
+                    type="button"
+                    className={`${styles.showAllBtn} ThaiFont`}
+                    onClick={() => setShowAll(true)}
+                >
+                    แสดงทั้งหมด
+                </button>
             )}
 
             {/* ─── DETAIL MODAL ─── */}

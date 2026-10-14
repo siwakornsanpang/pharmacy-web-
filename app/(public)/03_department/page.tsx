@@ -58,6 +58,7 @@ export default async function DepartmentPage() {
             <DepartmentAgencies
                 title="หน่วยงานในกำกับของสภาเภสัชกรรม"
                 agencies={supervisedAgencies}
+                phoneDetail
             />
 
             {/* วิทยาลัย */}
@@ -70,6 +71,7 @@ export default async function DepartmentPage() {
             <DepartmentAgencies
                 title="สภาบันไภษัชชยพัฒน์"
                 agencies={sampleDataAgencies}
+                phoneDetail
             />
 
             {/* เครือข่ายวิชาชีพ */}

@@ -128,7 +128,7 @@ export default function LawsSearch({
             <Search size={18} className={styles.inputIcon} />
             <input
               type="text"
-              placeholder="ค้นหาจาก keyword"
+              placeholder="ค้นหาจาก Keywords"
               value={searchQuery}
               onChange={(e) => onSearchQueryChange(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && onSearch()}

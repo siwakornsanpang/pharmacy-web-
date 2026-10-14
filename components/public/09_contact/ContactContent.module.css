@@ -167,21 +167,34 @@
 
 @media (max-width: 640px) {
     .banner {
-        height: 250px;
-    }
-
-    .bannerContent h1 {
-        font-size: 2.5rem;
-    }
-
-    .container {
-        margin-top: 1.5rem;
-        max-width: 100%;
-        padding: 0 0.75rem 0;
+        height: 200px;
     }
 
     .bannerOverlay {
-        padding: 0 0 3rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .bannerTitle {
+        font-size: 1.7rem;
+    }
+
+    .bannerSubtitle {
+        font-size: 0.85rem;
+    }
+
+    .container {
+        width: 100%;
+        margin-top: 1rem;
+        max-width: 100%;
+        padding: 0 1rem 1.5rem;
+    }
+
+    .mapSection {
+        border-radius: 16px;
+    }
+
+    .mapWrapper {
+        height: 220px;
     }
 }
 
@@ -380,6 +393,16 @@
     gap: 0.5rem;
 }
 
+.captchaHead {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+}
+
+.captchaRefresh {
+    display: none;
+}
+
 .captchaBox {
     background-color: #eef1e4;
     height: 64px;
@@ -424,19 +447,163 @@
 }
 
 @media (max-width: 640px) {
-    .formContainer {
-        padding: 1.5rem 1.25rem;
+    .contactFormSection {
+        gap: 1.35rem;
+        margin-top: 0.25rem;
+        margin-bottom: 1.25rem;
     }
 
-    .sideInfo {
-        padding: 1.5rem 1.25rem;
+    .formContainer {
+        padding: 1.15rem 1rem 1.25rem;
+        border-radius: 18px;
+        box-shadow: none;
+    }
+
+    .formTitle {
+        font-size: 1.15rem;
+        margin-bottom: 1rem;
+    }
+
+    .contactForm {
+        gap: 0.7rem;
     }
 
     .formRow {
-        flex-direction: column;
+        flex-direction: row;
+        gap: 0.55rem;
+    }
+
+    .formRow > .inputGroup {
+        min-width: 0;
+    }
+
+    .inputField,
+    .inputFieldNoIcon,
+    .textareaField {
+        font-size: 0.82rem;
+        border-radius: 12px;
+    }
+
+    .inputField {
+        padding-left: 2.2rem;
+    }
+
+    .inputIcon {
+        left: 0.7rem;
+    }
+
+    .textareaField {
+        min-height: 96px;
     }
 
     .captchaWrapper {
         width: 100%;
+    }
+
+    .captchaBox {
+        height: 72px;
+    }
+
+    .captchaRefresh {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px;
+        height: 36px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 1px solid #e2e8f0;
+        background: #fff;
+        color: #737300;
+    }
+
+    .submitBtn {
+        border-radius: 12px;
+        margin-top: 0.25rem;
+    }
+
+    .sideInfo {
+        border: none;
+        box-shadow: none;
+        background: transparent;
+        padding: 0.15rem 0.1rem 0;
+    }
+
+    .siteName {
+        font-size: 1.25rem;
+        margin-bottom: 0.45rem;
+    }
+
+    .address {
+        font-size: 0.82rem;
+        line-height: 1.65;
+        margin-bottom: 1rem;
+    }
+
+    .contactDetails {
+        display: none;
+    }
+
+    .sideCards {
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0;
+        margin-top: 0.35rem;
+    }
+
+    .sideCard {
+        position: relative;
+        flex: 1;
+        min-width: 0;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 0.45rem;
+        padding: 0 0.4rem;
+        background: transparent;
+        border: none;
+    }
+
+    .sideCard + .sideCard::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.4rem;
+        bottom: 0.4rem;
+        width: 1px;
+        background: #c5c6a0;
+    }
+
+    .cardIconBox {
+        min-width: 52px;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: #f3f3ea;
+    }
+
+    .icon {
+        font-size: 1.15rem;
+    }
+
+    .sideCard:last-child .cardIconBox {
+        background: #8a8a3c;
+    }
+
+    .sideCard:last-child .icon {
+        color: #fff;
+        font-size: 1.45rem;
+    }
+
+    .cardInfo h3 {
+        font-size: 0.8rem;
+        margin-bottom: 0.1rem;
+    }
+
+    .cardInfo p {
+        font-size: 0.72rem;
+        line-height: 1.4;
+        color: #6b7280;
+        overflow-wrap: break-word;
     }
 }

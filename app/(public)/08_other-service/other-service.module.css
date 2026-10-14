@@ -104,6 +104,10 @@ max-width: var(--max-width-2xl);
     margin-bottom: 1.5rem;
 }
 
+.sidebarTitlePhone {
+    display: none;
+}
+
 .categoryList {
     list-style: none;
     padding: 0;
@@ -163,6 +167,10 @@ max-width: var(--max-width-2xl);
     color: #1a1b1e;
     margin-bottom: 1rem;
     padding-bottom: 0.5rem;
+}
+
+.resultCount {
+    display: none;
 }
 
 .docList {
@@ -233,12 +241,139 @@ max-width: var(--max-width-2xl);
 @media (max-width: 768px) {
     .contentLayout {
         flex-direction: column;
+        align-items: stretch;
         gap: 2rem;
     }
 
-    .sidebar {
+    .sidebar,
+    .mainContent {
         width: 100%;
+    }
+
+    .sidebar {
         position: static;
+    }
+}
+
+@media (max-width: 640px) {
+    .banner {
+        height: 200px;
+    }
+
+    .bannerOverlay {
+        padding-bottom: 1.5rem;
+    }
+
+    .bannerTitle {
+        font-size: 1.55rem;
+    }
+
+    .bannerSubtitle {
+        font-size: 0.8rem;
+    }
+
+    .searchSection {
+        padding: 0.85rem 0 0.15rem;
+    }
+
+    .searchContainer,
+    .container {
+        width: 100%;
+        max-width: 100%;
+        padding: 0 1rem;
+    }
+
+    .container {
+        margin-top: 1.35rem;
+        padding-bottom: 1.5rem;
+    }
+
+    .contentLayout {
+        gap: 1.45rem;
+    }
+
+    .sidebar {
+        background: transparent;
+        padding: 0;
+        border-radius: 0;
+    }
+
+    .sidebarTitle {
+        font-size: 1.05rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .sidebarTitleDesktop {
+        display: none;
+    }
+
+    .sidebarTitlePhone {
+        display: inline;
+    }
+
+    .categoryList {
+        flex-direction: row;
+        flex-wrap: nowrap;
+        gap: 0.5rem;
+        overflow-x: auto;
+        scrollbar-width: none;
+    }
+
+    .categoryList::-webkit-scrollbar {
+        display: none;
+    }
+
+    .categoryList li {
+        flex: none;
+    }
+
+    .categoryBtn {
+        width: auto;
+        white-space: nowrap;
+        padding: 0.45rem 0.75rem;
+        border: 1px solid #e6e4d4;
+        border-radius: 999px;
+        background: #fff;
+        font-size: 0.8rem;
+        color: #9a9a6a;
+    }
+
+    .activeCategory {
+        background: #d0cda8;
+        border-color: #d0cda8;
+        color: #1f2937;
+        font-weight: 600;
+    }
+
+    .contentTitle {
+        font-size: 1.35rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .resultCount {
+        display: block;
+        margin: 0 0 1.15rem;
+        font-size: 0.8rem;
+        font-weight: 400;
+        color: #9ca3af;
+    }
+
+    .docListHeader {
+        margin-bottom: 0.95rem;
+        padding-bottom: 0.55rem;
+        border-bottom: 1px solid #e3e0cc;
+        font-size: 0.95rem;
+        font-weight: 600;
+        color: #9c9c38;
+    }
+
+    .docList {
+        gap: 1.15rem;
+    }
+
+    .docItem {
+        font-size: 0.92rem;
+        color: #4b5563;
     }
 }
 

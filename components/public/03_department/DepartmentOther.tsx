@@ -23,7 +23,7 @@ export default function DepartmentOther({ title, agencies }: DepartmentOtherProp
               <li key={agency.id}>
                 <Link href={agency.url || "#"} target={agency.url ? "_blank" : "_self"} rel="noreferrer" className={styles.listItem}>
                   <span className={styles.bullet} />
-                  {agency.name}
+                  <span className={styles.itemName}>{agency.name}</span>
                 </Link>
               </li>
             ))}

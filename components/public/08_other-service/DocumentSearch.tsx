@@ -70,6 +70,10 @@ export default function DocumentSearch({ query, setQuery, filterType, setFilterT
             onChange={e => setQuery(e.target.value)}
           />
         </div>
+
+        <button type="button" className={`${styles.searchButton} ThaiFont`}>
+          ค้นหา
+        </button>
       </div>
     </div>
   );

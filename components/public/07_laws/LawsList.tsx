@@ -1,10 +1,11 @@
-import { ChevronLeft, ChevronRight, ListFilter } from "lucide-react";
+import { ChevronLeft, ChevronRight, Download, ListFilter } from "lucide-react";
 import { LawItem } from "@/lib/api";
 import styles from "./LawsList.module.css";
 
 interface LawsListProps {
   title: string;
   laws: LawItem[];
+  totalCount: number;
   yearSort: "desc" | "asc";
   currentPage: number;
   totalPages: number;
@@ -15,6 +16,7 @@ interface LawsListProps {
 export default function LawsList({
   title,
   laws,
+  totalCount,
   yearSort,
   currentPage,
   totalPages,
@@ -62,7 +64,10 @@ export default function LawsList({
         </button>
       </div>
 
-      <p className={`${styles.listLabel} ThaiFont`}>รายการ</p>
+      <p className={`${styles.listLabel} ThaiFont`}>
+        <span className={styles.listCount}>{totalCount} </span>
+        รายการ
+      </p>
 
       {laws.length === 0 ? (
         <div className={`${styles.emptyState} ThaiFont`}>
@@ -77,6 +82,7 @@ export default function LawsList({
               </div>
               {group.items.map((law) => (
                 <div key={law.id} className={styles.item}>
+                  <Download size={16} className={styles.pdfIcon} aria-hidden />
                   {law.pdfUrl ? (
                     <a
                       href={law.pdfUrl}

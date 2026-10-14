@@ -85,3 +85,55 @@
     font-size: 0.95rem;
   }
 }
+
+@media (max-width: 640px) {
+  .section {
+    padding: 1.4rem 0 2rem;
+  }
+
+  .container {
+    width: 100%;
+    max-width: none;
+    padding: 0 1.15rem;
+  }
+
+  .card {
+    align-items: stretch;
+    gap: 1.15rem;
+    width: 100%;
+  }
+
+  .title {
+    font-size: 1.35rem;
+    white-space: normal;
+  }
+
+  .list {
+    width: 100%;
+    gap: 0.85rem;
+  }
+
+  .listItem {
+    align-items: center;
+    width: 100%;
+    padding: 0.15rem 0;
+    border-bottom: none;
+    font-size: 0.95rem;
+  }
+
+  .itemName {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .listItem::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    margin-left: 0.75rem;
+    border-top: 2px solid #c5c6b0;
+    border-right: 2px solid #c5c6b0;
+    transform: rotate(45deg);
+    flex-shrink: 0;
+  }
+}

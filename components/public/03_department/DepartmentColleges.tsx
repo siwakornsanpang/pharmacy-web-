@@ -44,6 +44,69 @@ export default function DepartmentColleges({ title, agencies }: DepartmentColleg
       <div className={styles.container}>
         <h2 className={styles.sectionTitle}>{title}</h2>
 
+        <div className={styles.phoneCard}>
+          {(hero.thumbnailUrl || heroIcon) && (
+            <div className={styles.phonePhoto}>
+              {hero.thumbnailUrl ? (
+                <Image
+                  src={hero.thumbnailUrl}
+                  alt={hero.name}
+                  fill
+                  className={styles.phonePhotoImage}
+                />
+              ) : (
+                <img src={heroIcon!} alt="" className={styles.phonePhotoImage} />
+              )}
+            </div>
+          )}
+          <Link
+            href={hero.url || "#"}
+            target={hero.url ? "_blank" : "_self"}
+            rel="noreferrer"
+            className={styles.phoneHero}
+          >
+            {heroIcon ? (
+              <img src={heroIcon} alt="" className={styles.phoneHeroIcon} />
+            ) : (
+              <GraduationCap size={18} className={styles.phoneHeroIcon} />
+            )}
+            <span className={styles.phoneHeroBody}>
+              <span className={styles.phoneHeroTitle}>{hero.name}</span>
+              {hero.description && (
+                <span className={styles.phoneHeroDesc}>{hero.description}</span>
+              )}
+            </span>
+            <ArrowUpRight size={18} className={styles.phoneHeroArrow} />
+          </Link>
+          {rest.length > 0 && (
+            <>
+              <div className={styles.phoneSubhead}>
+                <span>วิทยาลัยในสังกัด</span>
+                <span>{rest.length} วิทยาลัย</span>
+              </div>
+              <div className={styles.phoneGrid}>
+                {rest.map((agency) => (
+                  <Link
+                    key={agency.id}
+                    href={agency.url || "#"}
+                    target={agency.url ? "_blank" : "_self"}
+                    rel="noreferrer"
+                    className={styles.phoneCell}
+                  >
+                    <ArrowUpRight size={16} className={styles.phoneCellArrow} />
+                    {agency.logoUrl ? (
+                      <img src={agency.logoUrl} alt="" className={styles.phoneCellLogo} />
+                    ) : (
+                      <GraduationCap size={28} className={styles.phoneCellLogo} />
+                    )}
+                    <span className={styles.phoneCellName}>{agency.name}</span>
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+        </div>
+
         {/* ลำดับที่ 1 — การ์ดใหญ่แบบหน่วยงานในกำกับ */}
         <Link
           href={hero.url || "#"}

@@ -10,16 +10,9 @@ interface DepartmentInstitutionsProps {
 export default function DepartmentInstitutions({ title, agencies }: DepartmentInstitutionsProps) {
   if (agencies.length === 0) return null;
 
-  // Split into 3 columns (top-to-bottom order)
-  const colCount = 3;
-  const perCol = Math.ceil(agencies.length / colCount);
-  const columns: Agency[][] = [];
-  for (let i = 0; i < colCount; i++) {
-    columns.push(agencies.slice(i * perCol, (i + 1) * perCol));
-  }
-
   return (
     <section className={styles.section}>
+      <input id="dept-institutions-all" type="checkbox" className={styles.showAllToggle} />
       {/* Decorative Wavy Background */}
       <div className={styles.bgDecoration}>
         <svg viewBox="0 0 1440 800" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
@@ -39,20 +32,24 @@ export default function DepartmentInstitutions({ title, agencies }: DepartmentIn
       </div>
 
       <div className={styles.container}>
-        <h2 className={styles.title}>{title}</h2>
+        <div className={styles.titleRow}>
+          <h2 className={styles.title}>{title}</h2>
+          <span className={styles.count}>{agencies.length} แห่ง</span>
+        </div>
 
         <div className={styles.listGrid}>
-          {columns.map((col, colIdx) => (
-            <div key={colIdx} className={styles.listColumn}>
-              {col.map((agency) => (
-                <Link key={agency.id} href={agency.url || "#"} target={agency.url ? "_blank" : "_self"} rel="noreferrer" className={styles.listItem}>
-                  <span className={styles.bullet} />
-                  {agency.name}
-                </Link>
-              ))}
-            </div>
+          {agencies.map((agency) => (
+            <Link key={agency.id} href={agency.url || "#"} target={agency.url ? "_blank" : "_self"} rel="noreferrer" className={styles.listItem}>
+              <span className={styles.bullet} />
+              <span className={styles.itemName}>{agency.name}</span>
+            </Link>
           ))}
         </div>
+        {agencies.length > 8 && (
+          <label htmlFor="dept-institutions-all" className={styles.showAllBtn}>
+            ดูทั้งหมด ({agencies.length})
+          </label>
+        )}
       </div>
     </section>
   );

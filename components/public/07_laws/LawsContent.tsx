@@ -125,6 +125,7 @@ export default function LawsContent({ allLaws }: LawsContentProps) {
         <LawsList
           title={activeLabel}
           laws={paginatedLaws}
+          totalCount={filteredLaws.length}
           yearSort={yearSort}
           currentPage={currentPage}
           totalPages={totalPages}

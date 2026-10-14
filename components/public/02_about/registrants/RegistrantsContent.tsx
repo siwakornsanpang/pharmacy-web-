@@ -4,7 +4,21 @@ import {
   REGISTRANT_ROWS,
   formatCount,
   sumColumn,
+  type RegistrantRow,
 } from "./registrantData";
+
+const COLUMNS: {
+  key: keyof Pick<
+    RegistrantRow,
+    "diploma" | "approval" | "professionalCert" | "certificate"
+  >;
+  label: string;
+}[] = [
+  { key: "diploma", label: "วุฒิบัตร" },
+  { key: "approval", label: "หนังสืออนุมัติ" },
+  { key: "professionalCert", label: "ประกาศนียบัตรวิชาชีพ" },
+  { key: "certificate", label: "ประกาศนียบัตร" },
+];
 
 export default function RegistrantsContent() {
   const totals = {
@@ -23,6 +37,50 @@ export default function RegistrantsContent() {
         <p className={`${styles.introSubtitle} ThaiFont`}>
           จำแนกตามคุณวุฒิสาขาความเชี่ยวชาญในการประกอบวิชาชีพเภสัชกรรม
         </p>
+      </div>
+
+      <div className={styles.summary}>
+        <p className={`${styles.summaryTitle} ThaiFont`}>จำนวนรวมทั้งสิ้น</p>
+        <div className={styles.summaryGrid}>
+          {COLUMNS.map((column) => (
+            <div key={column.key} className={styles.summaryCell}>
+              <span className={styles.summaryNumber}>
+                {formatCount(totals[column.key])}
+              </span>
+              <span className={`${styles.summaryLabel} ThaiFont`}>
+                {column.label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className={styles.cards}>
+        {REGISTRANT_ROWS.map((row) => (
+          <article key={row.id} className={styles.card}>
+            <div className={styles.cardHead}>
+              <span className={styles.cardIndex}>{row.id}</span>
+              <h3 className={`${styles.cardTitle} ThaiFont`}>{row.specialty}</h3>
+            </div>
+            <div className={styles.chipRow}>
+              {COLUMNS.map((column) => {
+                const value = row[column.key];
+                const empty = value == null;
+                return (
+                  <div
+                    key={column.key}
+                    className={empty ? styles.chipEmpty : styles.chip}
+                  >
+                    <span className={styles.chipNumber}>{formatCount(value)}</span>
+                    <span className={`${styles.chipLabel} ThaiFont`}>
+                      {column.label}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </article>
+        ))}
       </div>
 
       <div className={styles.tableScroll}>

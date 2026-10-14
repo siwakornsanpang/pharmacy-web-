@@ -2,7 +2,24 @@ import { getWebSettings } from "@/lib/api";
 import styles from "./ContactContent.module.css";
 import { FaPhoneAlt, FaEnvelope } from "react-icons/fa";
 import { SiLine } from "react-icons/si";
-import { User, Phone, Mail } from "lucide-react";
+import { User, Phone, Mail, RefreshCw } from "lucide-react";
+
+function softBreak(value: string) {
+    const slash = value.lastIndexOf("/");
+    if (slash >= 10 && slash < value.length - 1) {
+        return value.slice(0, slash + 1) + "\u200b" + value.slice(slash + 1);
+    }
+    const at = value.lastIndexOf("@");
+    const dot = value.lastIndexOf(".");
+    if (at > 0 && dot > at + 1) {
+        const name = value.slice(at + 1, dot);
+        if (name.length > 10) {
+            const cut = at + 1 + Math.ceil(name.length / 2);
+            return value.slice(0, cut) + "\u200b" + value.slice(cut);
+        }
+    }
+    return value;
+}
 
 export default async function ContactContent() {
     const settings = await getWebSettings();
@@ -57,11 +74,11 @@ export default async function ContactContent() {
                             <div className={styles.formRow}>
                                 <div className={styles.inputGroup}>
                                     <Phone className={styles.inputIcon} size={18} />
-                                    <input type="tel" placeholder="โทรศัพท์ติดต่อกลับ" className={styles.inputField} />
+                                    <input type="tel" placeholder="โทรศัพท์" className={styles.inputField} />
                                 </div>
                                 <div className={styles.inputGroup}>
                                     <Mail className={styles.inputIcon} size={18} />
-                                    <input type="email" placeholder="อีเมลติดต่อกลับ" className={styles.inputField} />
+                                    <input type="email" placeholder="อีเมล" className={styles.inputField} />
                                 </div>
                             </div>
 
@@ -75,8 +92,13 @@ export default async function ContactContent() {
 
                             <div className={styles.captchaSection}>
                                 <div className={styles.captchaWrapper}>
-                                    <div className={styles.captchaBox}>
-                                        <span className={styles.captchaText}>W6 8HP</span>
+                                    <div className={styles.captchaHead}>
+                                        <div className={styles.captchaBox}>
+                                            <span className={styles.captchaText}>W6 8HP</span>
+                                        </div>
+                                        <button type="button" className={styles.captchaRefresh} aria-label="โหลดรหัสใหม่">
+                                            <RefreshCw size={16} />
+                                        </button>
                                     </div>
                                     <input type="text" placeholder="กรุณากรอกตัวอักษรตามรูปภาพ" className={styles.inputFieldNoIcon} />
                                 </div>
@@ -128,7 +150,7 @@ export default async function ContactContent() {
                                 </div>
                                 <div className={styles.cardInfo}>
                                     <h3>อีเมล</h3>
-                                    <p>{settings.email || "pharthai@pharmacycouncil.org"}</p>
+                                    <p>{softBreak(settings.email || "pharthai@pharmacycouncil.org")}</p>
                                 </div>
                             </div>
                             <div className={styles.sideCard}>
@@ -136,8 +158,8 @@ export default async function ContactContent() {
                                     <SiLine className={styles.icon} />
                                 </div>
                                 <div className={styles.cardInfo}>
-                                    <h3>LINE : สภาเภสัชกรรม</h3>
-                                    <p>{settings.lineId || "@pharmacycouncil"}</p>
+                                    <h3>LINE</h3>
+                                    <p>{softBreak(settings.lineId || "@pharmacycouncil")}</p>
                                 </div>
                             </div>
                         </div>

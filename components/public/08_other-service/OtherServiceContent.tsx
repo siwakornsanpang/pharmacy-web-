@@ -79,7 +79,10 @@ export default function OtherServiceContent({ categories, items }: OtherServiceC
             <div className={styles.container}>
                 <div className={styles.contentLayout}>
                     <aside className={styles.sidebar}>
-                        <h2 className={`${styles.sidebarTitle} ThaiFont`}>ดาวน์โหลด</h2>
+                        <h2 className={`${styles.sidebarTitle} ThaiFont`}>
+                            <span className={styles.sidebarTitleDesktop}>ดาวน์โหลด</span>
+                            <span className={styles.sidebarTitlePhone}>ประเภทกฎหมาย</span>
+                        </h2>
                         {sortedCategories.length === 0 ? (
                             <div style={{ color: '#9ca3af', fontSize: '0.9rem', textAlign: 'center', padding: '1rem 0' }}>
                                 ไม่มีหมวดหมู่
@@ -104,6 +107,7 @@ export default function OtherServiceContent({ categories, items }: OtherServiceC
                         <h1 className={`${styles.contentTitle} ThaiFont`}>
                             {activeCategory ? activeCategory.name : 'ดาวน์โหลดเอกสาร'}
                         </h1>
+                        <p className={`${styles.resultCount} ThaiFont`}>{filteredItems.length} รายการ</p>
 
                         <div className={styles.docListContainer}>
                             <h3 className={`${styles.docListHeader} ThaiFont`}>รายการ</h3>
