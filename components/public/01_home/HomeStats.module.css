@@ -93,3 +93,32 @@
   opacity: 0.8;
   width: 100%;
 }
+
+@media (max-width: 640px) {
+  .statsSection {
+    padding: 0.75rem 0.75rem 0.25rem;
+  }
+
+  .statsContainer {
+    width: 100%;
+    padding: 0;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .statItem {
+    padding: 0.25rem;
+  }
+
+  .statNumber {
+    font-size: 1.75rem;
+  }
+
+  .statLabel {
+    font-size: 0.72rem;
+    line-height: 1.3;
+  }
+}

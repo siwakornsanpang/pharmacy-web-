@@ -221,6 +221,25 @@ a.slide {
   }
 }
 
+@media (max-width: 640px) {
+  .banner {
+    aspect-ratio: 16 / 9;
+    max-height: none;
+  }
+
+  .overlay {
+    background: none;
+  }
+
+  .arrow {
+    display: none;
+  }
+
+  .dots {
+    bottom: 0.65rem;
+  }
+}
+
 @keyframes slideUpFade {
   from {
     opacity: 0;

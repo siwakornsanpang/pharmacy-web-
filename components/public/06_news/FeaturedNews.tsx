@@ -63,7 +63,7 @@ export default function FeaturedNews({ news, showViewAll = false }: FeaturedNews
 
     return (
         <div
-            className={styles.container}
+            className={`${styles.container} ${showViewAll ? styles.home : ""}`}
             onMouseEnter={() => setIsPaused(true)}
             onMouseLeave={() => setIsPaused(false)}
         >
@@ -79,6 +79,7 @@ export default function FeaturedNews({ news, showViewAll = false }: FeaturedNews
 
             <div className={styles.card} key={currentIndex}>
                 <div className={`${styles.imageSection} ${styles.fadeIn}`}>
+                    <span className={styles.featuredMark}>เรื่องเด่น</span>
                     {current.thumbnailUrl ? (
                         <Image
                             src={current.thumbnailUrl}
@@ -117,6 +118,7 @@ export default function FeaturedNews({ news, showViewAll = false }: FeaturedNews
                         อ่านเพิ่มเติม
                     </Link>
                 </div>
+                <Link href={`/news/${current.id}`} className={styles.cardHit} tabIndex={-1} aria-hidden />
             </div>
 
             {news.length > 1 && (

@@ -32,8 +32,10 @@ export default function Navbar() {
     const router = useRouter();
     const [lang, setLang] = useState("TH");
     const [isLangDropdownOpen, setIsLangDropdownOpen] = useState(false);
+    const [menuOpen, setMenuOpen] = useState(false);
     const [webSettings, setWebSettings] = useState<any>(null);
     const dropdownRef = useRef<HTMLDivElement>(null);
+    const menuLangRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -49,13 +51,34 @@ export default function Navbar() {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            const target = event.target as Node;
+            const inBar = dropdownRef.current?.contains(target);
+            const inMenu = menuLangRef.current?.contains(target);
+            if (!inBar && !inMenu) {
                 setIsLangDropdownOpen(false);
             }
         };
         document.addEventListener("mousedown", handleClickOutside);
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
+
+    useEffect(() => {
+        setMenuOpen(false);
+    }, [pathname]);
+
+    useEffect(() => {
+        if (!menuOpen) return;
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        const onKey = (event: KeyboardEvent) => {
+            if (event.key === "Escape") setMenuOpen(false);
+        };
+        document.addEventListener("keydown", onKey);
+        return () => {
+            document.body.style.overflow = prev;
+            document.removeEventListener("keydown", onKey);
+        };
+    }, [menuOpen]);
 
     return (
         <nav className={`${styles.navbar} ThaiFont`}>
@@ -86,6 +109,18 @@ export default function Navbar() {
                         </>
                     )}
                 </div>
+
+                <button
+                    type="button"
+                    className={styles.menuToggle}
+                    aria-label={menuOpen ? "ปิดเมนู" : "เปิดเมนู"}
+                    aria-expanded={menuOpen}
+                    onClick={() => setMenuOpen((open) => !open)}
+                >
+                    <span />
+                    <span />
+                    <span />
+                </button>
 
                 <div className={styles.actionsArea}>
                     {/* 1.2 User Actions (Language & Login) */}
@@ -192,6 +227,104 @@ export default function Navbar() {
                             </Link>
                         );
                     })}
+                </div>
+            </div>
+
+            <div className={`${styles.menu} ${menuOpen ? styles.menuOpen : ""} ThaiFont`}>
+                <div className={styles.menuHeader}>
+                    <div className={styles.brandArea}>
+                        <Image
+                            src={webSettings?.logoPath || "/images/public/icon.jpg"}
+                            alt="Pharmacy Council Logo"
+                            width={40}
+                            height={40}
+                            className={styles.logo}
+                        />
+                        <div>
+                            <h1 className={`${styles.brandTitle} ThaiFont`}>
+                                {webSettings?.siteNameTh || "สภาเภสัชกรรม"}
+                            </h1>
+                            <p className={`${styles.brandSubtitle} ThaiFont`}>
+                                {webSettings?.siteNameEn || "THE PHARMACY COUNCIL OF THAILAND"}
+                            </p>
+                        </div>
+                    </div>
+                    <button
+                        type="button"
+                        className={styles.menuClose}
+                        aria-label="ปิดเมนู"
+                        onClick={() => setMenuOpen(false)}
+                    >
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                            <path d="M6 6l12 12M18 6L6 18" />
+                        </svg>
+                    </button>
+                </div>
+
+                {pathname !== "/login" && (
+                    <button
+                        type="button"
+                        className={`${styles.menuLogin} ThaiFont`}
+                        onClick={() => router.push("/login")}
+                    >
+                        เข้าสู่ระบบเภสัชกร
+                    </button>
+                )}
+
+                <div className={styles.menuLinks}>
+                    {navLinks.map((link) => {
+                        const isActive = pathname === link.href || (link.href === "/" && pathname === "/home");
+                        return (
+                            <Link
+                                key={link.href}
+                                href={link.href}
+                                className={`${styles.menuLink} ${isActive ? styles.menuLinkActive : ""} ThaiFont`}
+                            >
+                                {link.name}
+                            </Link>
+                        );
+                    })}
+                </div>
+
+                <div className={`${styles.langDropdownContainer} ${styles.menuLang}`} ref={menuLangRef}>
+                    <div
+                        className={styles.langSwitch}
+                        onClick={() => setIsLangDropdownOpen(!isLangDropdownOpen)}
+                    >
+                        <svg className={styles.langSwitchIcon} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9" />
+                        </svg>
+                        <span className={styles.langSwitchText}>{lang}</span>
+                        <svg className={`${styles.langSwitchArrow} ${isLangDropdownOpen ? styles.rotate180 : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                    </div>
+                    {isLangDropdownOpen && (
+                        <div className={`${styles.langDropdown} ThaiFont`}>
+                            <button
+                                type="button"
+                                className={`${styles.langDropdownItem} ${lang === "TH" ? styles.langDropdownItemActive : ""}`}
+                                onClick={() => { setLang("TH"); setIsLangDropdownOpen(false); }}
+                            >
+                                <div className={styles.langSelectedText}>
+                                    <span>ภาษาไทย</span>
+                                    <span className={styles.langEngName}>Thai</span>
+                                </div>
+                                <span>TH</span>
+                            </button>
+                            <button
+                                type="button"
+                                className={`${styles.langDropdownItem} ${lang === "EN" ? styles.langDropdownItemActive : ""}`}
+                                onClick={() => { setLang("EN"); setIsLangDropdownOpen(false); }}
+                            >
+                                <div className={styles.langSelectedText}>
+                                    <span>English</span>
+                                    <span className={styles.langEngName}>อังกฤษ</span>
+                                </div>
+                                <span>EN</span>
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         </nav>

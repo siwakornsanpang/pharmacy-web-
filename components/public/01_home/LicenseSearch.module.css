@@ -665,6 +665,25 @@
   }
 }
 
+@media (max-width: 640px) {
+  .searchBoxCard {
+    border-radius: var(--radius-xl);
+    box-shadow: 0 8px 24px rgba(17, 24, 39, 0.06);
+    padding: 16px;
+  }
+
+  .dropdownButton,
+  .input,
+  .searchButton {
+    height: 48px;
+    border-radius: var(--radius-md);
+  }
+
+  .searchButton {
+    background: var(--brand-primary);
+  }
+}
+
 @media (max-width: 480px) {
   .searchBoxCard {
     padding: 16px;

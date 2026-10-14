@@ -1,5 +1,6 @@
 "use client";
 
+import { useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -37,10 +38,36 @@ const getExcerpt = (news: News) => {
   );
 };
 
+const formatNewsDate = (news: News) =>
+  new Date(news.publishedAt || news.createdAt).toLocaleDateString("th-TH", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+
 export default function HomeNewsSection({
   highlights,
   newsList,
 }: HomeNewsSectionProps) {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const cards = newsList.slice(0, 6);
+  const [active, setActive] = useState(0);
+
+  const onScroll = () => {
+    const el = scrollerRef.current;
+    const card = el?.firstElementChild as HTMLElement | null;
+    if (!el || !card) return;
+    const step = card.offsetWidth + 12;
+    setActive(Math.min(cards.length - 1, Math.round(el.scrollLeft / step)));
+  };
+
+  const goTo = (index: number) => {
+    const el = scrollerRef.current;
+    const card = el?.children[index] as HTMLElement | undefined;
+    if (!el || !card) return;
+    el.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+  };
+
   return (
     <section className={styles.section}>
       <div className={styles.bgDecoration}>
@@ -79,11 +106,13 @@ export default function HomeNewsSection({
       </div>
 
       <div className={styles.container}>
-        {highlights.length > 0 ? (
-          <FeaturedNews news={highlights} showViewAll />
-        ) : (
-          <div className={styles.emptyState}>ไม่พบข้อมูลเรื่องเด่น</div>
-        )}
+        <div className={styles.featuredSlot}>
+          {highlights.length > 0 ? (
+            <FeaturedNews news={highlights} showViewAll />
+          ) : (
+            <div className={styles.emptyState}>ไม่พบข้อมูลเรื่องเด่น</div>
+          )}
+        </div>
 
         <div className={styles.newsListSection}>
           <div className={styles.sectionHeader}>
@@ -94,9 +123,9 @@ export default function HomeNewsSection({
             </Link>
           </div>
 
-          {newsList.length > 0 ? (
-            <div className={styles.newsGrid}>
-              {newsList.slice(0, 6).map((news) => (
+          {cards.length > 0 ? (
+            <div className={styles.newsGrid} ref={scrollerRef} onScroll={onScroll}>
+              {cards.map((news) => (
                 <Link
                   href={`/news/${news.id}`}
                   key={news.id}
@@ -123,13 +152,29 @@ export default function HomeNewsSection({
                   </div>
                   <div className={styles.newsCardContent}>
                     <h3 className={styles.newsCardTitle}>{news.title}</h3>
-                    <p className={styles.newsCardDesc}>{getExcerpt(news)}</p>
+                    <div className={styles.newsMeta}>
+                      <time className={styles.newsDate}>{formatNewsDate(news)}</time>
+                      <p className={styles.newsCardDesc}>{getExcerpt(news)}</p>
+                    </div>
                   </div>
                 </Link>
               ))}
             </div>
           ) : (
             <div className={styles.emptyState}>ไม่พบข้อมูลข่าวสาร</div>
+          )}
+          {cards.length > 1 && (
+            <div className={styles.newsDots}>
+              {cards.map((news, index) => (
+                <button
+                  key={news.id}
+                  type="button"
+                  className={`${styles.newsDot} ${index === active ? styles.newsDotActive : ""}`}
+                  onClick={() => goTo(index)}
+                  aria-label={`ไปข่าวที่ ${index + 1}`}
+                />
+              ))}
+            </div>
           )}
         </div>
       </div>

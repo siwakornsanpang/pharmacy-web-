@@ -1,3 +1,6 @@
+"use client";
+
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { MapPin, Calendar, Users, Building2 } from "lucide-react";
 import styles from "./HomeMeetings.module.css";
@@ -49,12 +52,32 @@ const MOCK_MEETINGS = [
 ];
 
 export default function HomeMeetings() {
+  const scrollerRef = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+
+  const onScroll = () => {
+    const el = scrollerRef.current;
+    const card = el?.firstElementChild as HTMLElement | null;
+    if (!el || !card) return;
+    const step = card.offsetWidth + 12;
+    setActive(Math.min(MOCK_MEETINGS.length - 1, Math.round(el.scrollLeft / step)));
+  };
+
+  const goTo = (index: number) => {
+    const el = scrollerRef.current;
+    const card = el?.children[index] as HTMLElement | undefined;
+    if (!el || !card) return;
+    el.scrollTo({ left: card.offsetLeft, behavior: "smooth" });
+  };
+
   return (
     <section className={styles.section}>
-      <Container size="2xl">
-        <SectionHeader title="การประชุม" viewAllHref="/meeting" />
+      <Container size="2xl" className={styles.mobileBleed}>
+        <div className={styles.headerWrap}>
+          <SectionHeader title="การประชุม" viewAllHref="/meeting" />
+        </div>
 
-        <div className={styles.meetingList}>
+        <div className={styles.meetingList} ref={scrollerRef} onScroll={onScroll}>
           {MOCK_MEETINGS.map((meeting) => (
             <div key={meeting.id} className={styles.meetingCard}>
               {/* Date Box */}
@@ -70,18 +93,18 @@ export default function HomeMeetings() {
                   {meeting.cpe && meeting.audiences.includes("เภสัชกร") && (
                     <div className={styles.cpeBadge}>
                       <FaGraduationCap className={styles.cpeIcon} />
-                      <span>CPE {meeting.cpe} หน่วยกิต</span>
+                      <span>CPE {meeting.cpe}<span className={styles.cpeUnit}> หน่วยกิต</span></span>
                     </div>
                   )}
                 </div>
                 <div className={styles.meetingDetails}>
                   <div className={styles.detailRow}>
                     <div className={styles.detailIcon}><MapPin size={16} /></div>
-                    <span>สถานที่ : {meeting.location}</span>
+                    <span><span className={styles.fieldLabel}>สถานที่ : </span>{meeting.location}</span>
                   </div>
                   <div className={styles.detailRow}>
                     <div className={styles.detailIcon}><Calendar size={16} /></div>
-                    <span>วันที่จัดประชุม : {meeting.dateRange}</span>
+                    <span><span className={styles.fieldLabel}>วันที่จัดประชุม : </span>{meeting.dateRange}</span>
                   </div>
                   <div className={styles.detailRowFlex}>
                     <div className={styles.audiencesWrapper}>
@@ -96,7 +119,11 @@ export default function HomeMeetings() {
                         )}
                       </div>
                     </div>
-                    <span>จำนวน : {meeting.capacity}</span>
+                    <span className={styles.capacity}>
+                      <Users size={14} className={styles.capacityIcon} />
+                      <span className={styles.fieldLabel}>จำนวน : </span>
+                      {meeting.capacity}
+                    </span>
                   </div>
                   <div className={styles.detailRow}>
                     <div className={styles.detailIcon}><Building2 size={16} /></div>
@@ -117,6 +144,17 @@ export default function HomeMeetings() {
                 />
               </div>
             </div>
+          ))}
+        </div>
+        <div className={styles.dots}>
+          {MOCK_MEETINGS.map((meeting, index) => (
+            <button
+              key={meeting.id}
+              type="button"
+              className={`${styles.dot} ${index === active ? styles.dotActive : ""}`}
+              onClick={() => goTo(index)}
+              aria-label={`ไปการประชุมที่ ${index + 1}`}
+            />
           ))}
         </div>
       </Container>
