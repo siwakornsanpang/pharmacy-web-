@@ -17,7 +17,7 @@ export default async function OtherServicesPage() {
                     <div className={styles.bannerContent}>
                         <h1 className={styles.bannerTitle}>ดาวน์โหลด</h1>
                         <p className={styles.bannerSubtitle}>
-                            พระราชบัญญัติ กฎกระทรวง ข้อบังคับ ระเบียบ ประกาศ คำสั่ง
+                            งานการศึกษา งานทะเบียนและใบอนุญาต หนังสือรับรองและอื่น ๆ
                         </p>
                     </div>
                 </div>

@@ -502,6 +502,16 @@
 
     .roleCard {
         height: 300px;
+        padding: 30px;
+    }
+
+    .roleCardTitle {
+        font-size: 32px;
+    }
+
+    .roleCardDesc {
+        font-size: 24px;
+        white-space: normal;
     }
 
     .publicHeader {
