@@ -1,31 +1,32 @@
 "use client";
 
 import React from 'react';
-import Image from 'next/image';
+import Image from './AcademyImage';
+import AcademyImagePlaceholder from './AcademyImagePlaceholder';
 import styles from './ExperiencedInstructors.module.css';
 import SectionHeader from '@/components/ui/SectionHeader';
 import type { AcademyInstructor } from '@/lib/academy';
 
-export default function ExperiencedInstructors({ instructors }: { instructors: AcademyInstructor[] }) {
+export default function ExperiencedInstructors({ instructors, showAll = false }: { instructors: AcademyInstructor[]; showAll?: boolean }) {
     return (
         <section className={styles.section}>
             <div className={styles.container}>
-                <SectionHeader 
-                    title="วิทยากรผู้เชี่ยวชาญ" 
-                    viewAllHref="/learning/instructors" 
+                {!showAll && <SectionHeader
+                    title="วิทยากรผู้เชี่ยวชาญ"
+                    viewAllHref="/learning/instructors"
                     viewAllText="ดูทั้งหมด"
-                />
-                
+                />}
+
                 <p className={styles.subtitle}>เรียนรู้จากประสบการณ์จริงของเภสัชกรและคณาจารย์ผู้ทรงคุณวุฒิในสายวิชาชีพ</p>
 
                 <div className={styles.grid}>
-                    {instructors.map((instructor) => (
+                    {(showAll ? instructors : instructors.slice(0, 4)).map((instructor) => (
                         <div key={instructor.id} className={styles.card}>
                             <div className={styles.imageWrapper}>
                                 {instructor.imageUrl ? (
-                                    <Image src={instructor.imageUrl} alt={instructor.name} fill className={styles.image} />
+                                    <Image src={instructor.imageUrl} alt={instructor.name} fill className={styles.image} sizes="140px" />
                                 ) : (
-                                    <div className={styles.image} />
+                                    <AcademyImagePlaceholder />
                                 )}
                             </div>
                             <div className={styles.info}>

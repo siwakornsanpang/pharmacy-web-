@@ -12,5 +12,5 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       pharmacistLicense: identity.pharmacistLicense,
       displayName: `${identity.firstName} ${identity.lastName}`.trim(),
     }),
-  });
+  }, identity);
 }

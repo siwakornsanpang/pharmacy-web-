@@ -1,6 +1,5 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
 import { Search, ChevronDown, ListFilter } from 'lucide-react';
 import styles from './CourseFilters.module.css';
 
@@ -10,78 +9,36 @@ interface CourseFiltersProps {
     searchTerm: string;
     onCategoryChange: (category: string) => void;
     onSearchChange: (term: string) => void;
+    onSearch?: () => void;
+    searching?: boolean;
 }
 
-export default function CourseFilters({
-    categories,
-    selectedCategory,
-    searchTerm,
-    onCategoryChange,
-    onSearchChange
-}: CourseFiltersProps) {
-    const [catDropdownOpen, setCatDropdownOpen] = useState(false);
-
+export default function CourseFilters({ categories, selectedCategory, searchTerm, onCategoryChange, onSearchChange, onSearch, searching = false }: CourseFiltersProps) {
     return (
-        <div className={styles.wrapper}>
+        <form className={styles.wrapper} role="search" onSubmit={(event) => { event.preventDefault(); onSearch?.(); }}>
             <div className={styles.header}>
                 <h2 className={styles.title}>ค้นหาคอร์สเรียน</h2>
                 <span className={styles.subtitle}>ค้นหาหลักสูตรที่คุณสนใจเพื่อพัฒนาวิชาชีพ</span>
             </div>
-
             <div className={styles.searchRow}>
-                {/* Category Dropdown */}
                 <div className={styles.dropdown}>
-                    <button
-                        type="button"
-                        className={styles.dropdownButton}
-                        onClick={() => {
-                            setCatDropdownOpen(!catDropdownOpen);
-                        }}
-                    >
-                        <ListFilter size={16} className={styles.dropdownIcon} />
-                        <span>{selectedCategory}</span>
-                        <ChevronDown size={16} className={`${styles.chevron} ${catDropdownOpen ? styles.chevronRotate : ''}`} />
-                    </button>
-                    {catDropdownOpen && (
-                        <ul className={styles.dropdownMenu}>
-                            {categories.map(cat => (
-                                <li key={cat}>
-                                    <button
-                                        type="button"
-                                        className={`${styles.dropdownItem} ${cat === selectedCategory ? styles.dropdownItemActive : ''}`}
-                                        onClick={() => {
-                                            onCategoryChange(cat);
-                                            setCatDropdownOpen(false);
-                                        }}
-                                    >
-                                        {cat}
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    )}
+                    <ListFilter size={18} className={styles.dropdownIcon} aria-hidden="true" />
+                    <select className={styles.dropdownButton} aria-label="เลือกหมวดหมู่คอร์ส" value={selectedCategory}
+                        onChange={(event) => onCategoryChange(event.target.value)}>
+                        {categories.map((category) => <option key={category} value={category}>{category}</option>)}
+                    </select>
+                    <ChevronDown size={18} className={styles.chevron} aria-hidden="true" />
                 </div>
-
-                {/* Search input */}
                 <div className={styles.inputWrap}>
-                    <Search size={18} className={styles.inputIcon} />
-                    <input
-                        type="text"
-                        className={styles.input}
-                        placeholder="ชื่อคอร์ส, วิทยากร หรือเนื้อหา..."
-                        value={searchTerm}
-                        onChange={e => onSearchChange(e.target.value)}
-                    />
+                    <Search size={18} className={styles.inputIcon} aria-hidden="true" />
+                    <input type="text" className={styles.input} aria-label="ค้นหาคอร์ส"
+                        placeholder="ชื่อคอร์ส, วิทยากร หรือเนื้อหา..." value={searchTerm}
+                        onChange={(event) => onSearchChange(event.target.value)} />
                 </div>
-
-                {/* Search button */}
-                <button
-                    type="button"
-                    className={styles.searchButton}
-                >
-                    ค้นหา
+                <button type="submit" className={styles.searchButton} disabled={searching} aria-busy={searching}>
+                    <Search size={18} aria-hidden="true" />{searching ? 'กำลังค้นหา...' : 'ค้นหา'}
                 </button>
             </div>
-        </div>
+        </form>
     );
 }

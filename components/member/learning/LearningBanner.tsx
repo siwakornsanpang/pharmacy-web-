@@ -4,10 +4,11 @@ import { ChevronLeft } from 'lucide-react';
 import styles from "./LearningBanner.module.css";
 
 interface LearningBannerProps {
+    title?: string;
     onBack?: () => void;
 }
 
-export default function LearningBanner({ onBack }: LearningBannerProps) {
+export default function LearningBanner({ onBack, title = 'Pharmacy Academy' }: LearningBannerProps) {
     return (
         <div className={styles.banner}>
             <div className={styles.bannerOverlay}>
@@ -18,7 +19,7 @@ export default function LearningBanner({ onBack }: LearningBannerProps) {
                     </button>
                 )}
                 <div className={styles.bannerContent}>
-                    <h1 className={`${styles.bannerTitle} ThaiFont`}>Pharmacy Academy</h1>
+                    <h1 className={`${styles.bannerTitle} ThaiFont`}>{title}</h1>
                     <p className={`${styles.bannerSubtitle} ThaiFont`}>
                         ยกระดับทักษะและวิชาชีพเภสัชกรรม ด้วยคอร์สเรียนออนไลน์ที่หลากหลายและทันสมัย
                     </p>
