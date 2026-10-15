@@ -81,6 +81,40 @@
     }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+    .banner {
+        height: 300px;
+    }
+
+    .bannerOverlay {
+        padding-bottom: 3rem;
+    }
+
+    .bannerTitle,
+    .bannerContent h1 {
+        font-size: 40px;
+        line-height: 48px;
+        margin-bottom: 8px;
+    }
+
+    .bannerSubtitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .layoutContainer {
+        flex-direction: column;
+        width: 90%;
+        max-width: var(--max-width-2xl);
+        margin-top: 32px;
+        gap: 32px;
+    }
+
+    .contentArea {
+        width: 100%;
+    }
+}
+
 @media (max-width: 640px) {
     .banner {
         height: 250px;

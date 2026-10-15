@@ -384,6 +384,121 @@ max-width: var(--max-width-2xl);
     }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+    .banner {
+        height: 300px;
+    }
+
+    .bannerOverlay {
+        padding-bottom: 3rem;
+    }
+
+    .bannerContent {
+        padding: 0;
+    }
+
+    .bannerTitle {
+        font-size: 40px;
+        line-height: 48px;
+        margin-bottom: 8px;
+    }
+
+    .bannerSubtitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .searchSection {
+        padding: 32px 0 8px;
+    }
+
+    .searchContainer,
+    .container {
+        width: 90%;
+        max-width: var(--max-width-2xl);
+        padding: 0;
+    }
+
+    .container {
+        margin-top: 24px;
+    }
+
+    .contentLayout {
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 24px;
+    }
+
+    .sidebar {
+        width: 232px;
+        position: sticky;
+        top: 165px;
+        padding: 16px;
+    }
+
+    .sidebarTitle {
+        margin-bottom: 12px;
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .categoryList {
+        flex-direction: column;
+        gap: 4px;
+        overflow: visible;
+    }
+
+    .categoryList li {
+        width: 100%;
+    }
+
+    .categoryBtn {
+        width: 100%;
+        padding: 9px 12px;
+        border: none;
+        border-radius: 8px;
+        background: none;
+        color: #4b5563;
+        font-size: 15px;
+        line-height: 22px;
+        white-space: normal;
+    }
+
+    .activeCategory {
+        background-color: #dfdfcc;
+        border-color: transparent;
+        color: #1a1b1e;
+        font-weight: 700;
+    }
+
+    .mainContent {
+        flex: 1;
+        width: auto;
+        min-width: 0;
+    }
+
+    .contentTitle {
+        margin-bottom: 16px;
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .docListHeader {
+        margin-bottom: 24px;
+        font-size: 15px;
+        line-height: 23px;
+    }
+
+    .docList {
+        gap: 20px;
+    }
+
+    .docItem {
+        font-size: 14px;
+        line-height: 20px;
+    }
+}
+
 @keyframes slideUpFade {
     from {
         opacity: 0;

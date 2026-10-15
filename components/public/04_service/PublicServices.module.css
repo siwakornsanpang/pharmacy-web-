@@ -205,3 +205,40 @@
         text-shadow: none;
     }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+    .homeCardGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .homeCardGrid .card {
+        aspect-ratio: 333 / 178;
+    }
+
+    .section {
+        padding: 16px 0 0;
+    }
+
+    .sectionCon {
+        width: 90%;
+        max-width: var(--max-width-2xl);
+        padding: 40px 0;
+    }
+
+    .title {
+        margin-bottom: 24px;
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 44px;
+    }
+
+    .cardGrid:not(.homeCardGrid) {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+    }
+
+    .cardGrid:not(.homeCardGrid) .card {
+        aspect-ratio: 2 / 1;
+    }
+}

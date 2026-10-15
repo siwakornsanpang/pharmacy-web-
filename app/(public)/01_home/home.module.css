@@ -27,6 +27,18 @@
     }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+    .searchSection {
+        padding: 1.35rem 30px 1.5rem;
+    }
+
+    .searchContainer {
+        width: 100%;
+        max-width: none;
+        padding: 0;
+    }
+}
+
 @media (max-width: 640px) {
     .searchSection {
         position: static;

@@ -238,6 +238,10 @@
   display: none;
 }
 
+.panel {
+  display: contents;
+}
+
 @media (max-width: 640px) {
   .section {
     padding: 1.4rem 0;
@@ -397,5 +401,139 @@
     flex-shrink: 0;
     margin-top: 1px;
     color: #4b5563;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding: 48px 0;
+  }
+
+  .container {
+    width: 90%;
+    max-width: var(--max-width-2xl);
+    padding: 0;
+  }
+
+  .sectionTitle {
+    margin-bottom: 24px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 40px;
+  }
+
+  .panel {
+    display: block;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .heroCard {
+    flex-direction: row;
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .heroCard:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .heroContent {
+    flex: 1;
+    min-width: 0;
+    padding: 28px;
+  }
+
+  .heroIcon {
+    margin-bottom: 16px;
+  }
+
+  .heroTitle {
+    margin-bottom: 10px;
+    font-size: 22px;
+    line-height: 32px;
+  }
+
+  .heroDesc {
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .heroImageWrapper {
+    flex: 0 0 43.4%;
+    width: 43.4%;
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
+
+  .heroArrow {
+    top: 24px;
+    right: 24px;
+  }
+
+  .agencyGrid {
+    gap: 0;
+  }
+
+  .count1 {
+    max-width: none;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .count2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .count3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .agencyCard {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 24px 20px 20px;
+  }
+
+  .count2 .agencyCard:nth-child(2n),
+  .count3 .agencyCard:nth-child(3n),
+  .count3 .agencyCard:nth-child(3n + 2) {
+    border-left: 1px solid #e5e7eb;
+  }
+
+  .agencyCard:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .cardArrow {
+    top: 24px;
+    right: 24px;
+  }
+
+  .cardIcon,
+  .cardIconPlaceholder {
+    width: 44px;
+    height: 44px;
+    margin-bottom: 16px;
+  }
+
+  .cardTitle {
+    margin-bottom: 6px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .cardDesc {
+    font-size: 13px;
+    line-height: 20px;
   }
 }

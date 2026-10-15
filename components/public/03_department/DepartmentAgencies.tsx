@@ -97,6 +97,7 @@ export default function DepartmentAgencies({ title, agencies, phoneDetail = fals
           </div>
         </div>
 
+        <div className={styles.panel}>
         {/* Hero Card (First Agency) */}
         <Link href={hero.url || "#"} target={hero.url ? "_blank" : "_self"} rel="noreferrer" className={styles.heroCard}>
           <div className={styles.heroContent}>
@@ -151,6 +152,7 @@ export default function DepartmentAgencies({ title, agencies, phoneDetail = fals
             ))}
           </div>
         )}
+        </div>
       </div>
     </section>
   );

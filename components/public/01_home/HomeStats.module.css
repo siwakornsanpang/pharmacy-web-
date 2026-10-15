@@ -149,3 +149,30 @@
     opacity: 1;
   }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+  .statsSection {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .statsContainer {
+    width: 100%;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .statsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+
+  .statItem {
+    padding: 1rem 0.5rem;
+  }
+
+  .statNumber {
+    font-size: 2.6rem;
+  }
+}

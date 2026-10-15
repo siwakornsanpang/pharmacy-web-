@@ -254,3 +254,37 @@
     font-weight: 600;
   }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+  .wrapper {
+    padding: 20px;
+  }
+
+  .title {
+    margin-bottom: 16px;
+    font-size: 20px;
+    line-height: 30px;
+  }
+
+  .searchRow {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 12px;
+  }
+
+  .dropdown {
+    flex: none;
+    width: 220px;
+    min-width: 0;
+  }
+
+  .dropdownButton,
+  .input {
+    height: 48px;
+  }
+
+  .inputWrap {
+    flex: 1;
+    min-width: 0;
+  }
+}

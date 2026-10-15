@@ -197,3 +197,51 @@
     flex-shrink: 0;
   }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding: 48px 0;
+  }
+
+  .container {
+    width: 90%;
+    max-width: var(--max-width-2xl);
+    padding: 0;
+  }
+
+  .card {
+    flex-direction: row;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .imageWrapper {
+    flex: 0 0 45%;
+    width: 45%;
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 5 / 6;
+  }
+
+  .content {
+    flex: 1;
+    padding: 0;
+  }
+
+  .title {
+    margin-bottom: 24px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 40px;
+  }
+
+  .list {
+    gap: 14px;
+  }
+
+  .listItem {
+    gap: 16px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+}

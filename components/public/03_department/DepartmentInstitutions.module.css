@@ -210,3 +210,33 @@
     display: none;
   }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding: 48px 0;
+  }
+
+  .container {
+    width: 90%;
+    max-width: var(--max-width-2xl);
+    padding: 0;
+  }
+
+  .title {
+    margin-bottom: 24px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 40px;
+  }
+
+  .listGrid {
+    column-count: 3;
+    column-gap: 24px;
+  }
+
+  .listItem {
+    margin-bottom: 14px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+}

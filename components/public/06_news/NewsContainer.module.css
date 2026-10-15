@@ -210,3 +210,42 @@
         gap: 0.45rem;
     }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+    .wrapper {
+        gap: 40px;
+    }
+
+    .featuredSection {
+        margin-bottom: 0;
+    }
+
+    .tabsContainer {
+        margin-bottom: 28px;
+    }
+
+    .tabs {
+        gap: 32px;
+    }
+
+    .tab {
+        padding: 14px 0;
+        font-size: 16px;
+        line-height: 26px;
+    }
+
+    .grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+    .pagination {
+        gap: 12px;
+        margin-top: 64px;
+    }
+
+    .pageBtn {
+        width: 40px;
+        height: 40px;
+    }
+}

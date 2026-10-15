@@ -233,3 +233,42 @@
         line-height: 1.45;
     }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+    .header {
+        margin-bottom: 12px;
+    }
+
+    .title {
+        font-size: 20px;
+        line-height: 30px;
+    }
+
+    .yearSort {
+        height: 40px;
+        padding: 0 17px;
+        border-radius: 10px;
+        font-size: 15px;
+    }
+
+    .listLabel {
+        margin-bottom: 16px;
+        font-size: 15px;
+        line-height: 23px;
+    }
+
+    .yearHeading {
+        padding: 8px 0;
+        font-size: 14px;
+    }
+
+    .item {
+        padding: 12px 0;
+    }
+
+    .itemLink,
+    .itemTitle {
+        font-size: 15px;
+        line-height: 21px;
+    }
+}

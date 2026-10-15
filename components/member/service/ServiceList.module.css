@@ -163,3 +163,48 @@
         flex-shrink: 0;
     }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+    .section {
+        padding: 8px 0 0;
+    }
+
+    .sectionCon {
+        width: 90%;
+        max-width: var(--max-width-2xl);
+        padding: 20px 0 0;
+    }
+
+    .listHeader {
+        margin-bottom: 24px;
+    }
+
+    .listHeader h2 {
+        font-size: 32px;
+        font-weight: 600;
+        line-height: 44px;
+    }
+
+    .listHeader a {
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .serviceListGrid {
+        grid-template-columns: minmax(0, 1fr);
+        gap: 14px;
+        margin-top: 0;
+    }
+
+    .serviceListItem {
+        min-height: 65px;
+        padding: 20px 28px;
+        border: 1px solid #9f9f9f;
+        border-radius: 15px;
+    }
+
+    .serviceLabel {
+        font-size: 18px;
+        line-height: 23px;
+    }
+}

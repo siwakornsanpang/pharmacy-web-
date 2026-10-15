@@ -288,6 +288,32 @@
   }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .mobileBleed {
+    width: 100%;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .meetingCard {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 1rem;
+  }
+
+  .meetingImageWrapper {
+    width: 220px;
+    height: 150px;
+    flex-shrink: 0;
+  }
+}
+
 @media (max-width: 640px) {
   .section {
     padding: 1.25rem 0 0.5rem;

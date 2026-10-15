@@ -38,8 +38,8 @@ const PHARMACIST_ROLES: PharmacistRole[] = [
 
 export default function PharmacistRolesSection() {
     return (
-        <section className={styles.serviceSection}>
-            <Container size="2xl">
+        <section className={`${styles.serviceSection} ${styles.roleSection}`}>
+            <Container size="2xl" className={styles.roleWrap}>
                 <div className={styles.roleMobileHeader}>
                     <h2 className={styles.roleMobileTitle}>บทบาทหน้าที่หลักของเภสัชกร</h2>
                 </div>

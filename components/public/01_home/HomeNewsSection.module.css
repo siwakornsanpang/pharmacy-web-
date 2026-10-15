@@ -402,6 +402,34 @@
   }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .container {
+    width: 100%;
+    max-width: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .newsGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .highlightCard {
+    flex-direction: row;
+  }
+
+  .highlightImageWrapper {
+    width: 42%;
+    min-height: 220px;
+    flex-shrink: 0;
+  }
+}
+
 @media (max-width: 640px) {
   .section {
     background: #fff;

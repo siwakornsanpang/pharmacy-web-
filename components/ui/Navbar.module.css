@@ -516,3 +516,59 @@
         transform-origin: bottom left;
     }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+    .topBanner {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem;
+        padding: 0.6rem 30px;
+    }
+
+    .brandArea {
+        width: auto;
+        flex: 1;
+        min-width: 0;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+    }
+
+    .brandTitle {
+        font-size: 1.15rem;
+        text-align: left;
+    }
+
+    .brandSubtitle {
+        font-size: 0.72rem;
+    }
+
+    .actionsArea {
+        width: auto;
+        flex-shrink: 0;
+        justify-content: flex-end;
+        gap: 0.6rem;
+    }
+
+    .loginBtn {
+        padding: 0.4rem 0.75rem;
+        font-size: 0.82rem;
+        white-space: nowrap;
+    }
+
+    .lowerNav {
+        padding: 0 30px;
+    }
+
+    .navContainer {
+        gap: 0;
+        justify-content: space-between;
+        overflow: visible;
+    }
+
+    .navItem,
+    .navItemActive {
+        padding: 0.7rem 0.2rem;
+        font-size: 0.875rem;
+    }
+}

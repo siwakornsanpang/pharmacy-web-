@@ -314,7 +314,19 @@
 }
 
 /* === Responsive === */
-@media (max-width: 1024px) {
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding-left: 30px;
+    padding-right: 30px;
+  }
+
+  .sectionInner {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 1440px) {
   .card { width: 280px; height: 360px; }
   .carouselTrack { height: 380px; }
   .carouselWrapper { min-height: 400px; }

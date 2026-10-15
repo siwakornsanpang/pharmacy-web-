@@ -137,3 +137,39 @@
     flex-shrink: 0;
   }
 }
+
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding: 48px 0;
+  }
+
+  .container {
+    width: 90%;
+    max-width: var(--max-width-2xl);
+    padding: 0;
+  }
+
+  .card {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: flex-start;
+    gap: 46px;
+  }
+
+  .title {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 40px;
+    white-space: pre-line;
+  }
+
+  .list {
+    gap: 20px;
+  }
+
+  .listItem {
+    gap: 16px;
+    font-size: 15px;
+    line-height: 23px;
+  }
+}

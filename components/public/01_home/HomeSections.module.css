@@ -472,6 +472,55 @@
     }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+    .publicGrid,
+    .pharmaGrid,
+    .otherServiceGrid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .roleSection {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .roleWrap {
+        width: 100%;
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .roleGrid {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .roleTitleCard {
+        height: 250px;
+    }
+
+    .roleCard {
+        height: 300px;
+    }
+
+    .publicHeader {
+        margin-bottom: 1rem;
+    }
+
+    .publicServiceSection {
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .publicServiceWrap {
+        width: 100%;
+        max-width: none;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 @media (max-width: 640px) {
     .serviceSection {
         padding-top: 0.75rem;

@@ -108,7 +108,28 @@
     overflow: hidden;
 }
 
-@media (max-width: 1024px) {
+@media (min-width: 641px) and (max-width: 1440px) {
+    .sectionCon {
+        width: 100%;
+        max-width: none;
+        padding: 0 30px;
+    }
+
+    .count3,
+    .count4 {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 24px;
+        overflow-x: auto;
+    }
+
+    .popularCard {
+        flex: 0 0 293px;
+        min-height: 240px;
+    }
+}
+
+@media (max-width: 1440px) {
     .count3,
     .count4 {
         grid-template-columns: repeat(2, minmax(0, 1fr));

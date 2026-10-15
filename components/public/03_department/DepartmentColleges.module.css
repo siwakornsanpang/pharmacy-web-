@@ -250,6 +250,10 @@
   display: none;
 }
 
+.panel {
+  display: contents;
+}
+
 /* === Responsive === */
 @media (max-width: 1024px) {
   .collegeGrid {
@@ -439,5 +443,131 @@
     font-size: 0.75rem;
     font-weight: 600;
     line-height: 1.35;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1440px) {
+  .section {
+    padding: 48px 0;
+  }
+
+  .container {
+    width: 90%;
+    max-width: var(--max-width-2xl);
+    padding: 0;
+  }
+
+  .sectionTitle {
+    margin-bottom: 24px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 40px;
+  }
+
+  .panel {
+    display: block;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    border: 1px solid #e5e7eb;
+    border-radius: 24px;
+    background: #fff;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08);
+  }
+
+  .heroCard {
+    flex-direction: row;
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .heroCard:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .heroContent {
+    flex: 1;
+    padding: 28px;
+  }
+
+  .heroIcon,
+  .heroIconPlaceholder {
+    margin-bottom: 16px;
+  }
+
+  .heroTitle {
+    margin-bottom: 10px;
+    font-size: 22px;
+    line-height: 32px;
+  }
+
+  .heroDesc {
+    font-size: 14px;
+    line-height: 24px;
+  }
+
+  .heroImageWrapper {
+    flex: 0 0 43.4%;
+    width: 43.4%;
+    aspect-ratio: auto;
+    align-self: stretch;
+  }
+
+  .heroArrow {
+    top: 24px;
+    right: 24px;
+  }
+
+  .collegeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+  }
+
+  .collegeCard {
+    align-items: flex-start;
+    gap: 16px;
+    margin: 0;
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    padding: 20px;
+  }
+
+  .collegeCard:nth-child(even) {
+    border-left: 1px solid #e5e7eb;
+  }
+
+  .collegeCard:hover {
+    transform: none;
+    box-shadow: none;
+  }
+
+  .logoWrapper,
+  .logoPlaceholder {
+    width: 56px;
+    height: 56px;
+    border-radius: 15px;
+  }
+
+  .cardTitle {
+    margin-bottom: 6px;
+    padding-right: 28px;
+    font-size: 16px;
+    line-height: 24px;
+  }
+
+  .cardDesc {
+    font-size: 13px;
+    line-height: 20px;
+  }
+
+  .cardArrow {
+    top: 24px;
+    right: 24px;
   }
 }

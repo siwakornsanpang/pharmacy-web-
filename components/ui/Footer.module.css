@@ -226,6 +226,22 @@
     }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+    .footer .footerWrap {
+        width: 100%;
+        max-width: none;
+        padding-left: 30px;
+        padding-right: 30px;
+    }
+
+    .footerInner {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+        padding-left: 0;
+        padding-right: 0;
+    }
+}
+
 @media (max-width: 600px) {
     .extensionGrid {
         grid-template-columns: 1fr;

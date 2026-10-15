@@ -6,12 +6,13 @@ interface SectionHeaderProps {
     title: string;
     viewAllHref?: string;
     viewAllText?: string;
+    className?: string;
     children?: React.ReactNode;
 }
 
-export default function SectionHeader({ title, viewAllHref, viewAllText = "ดูทั้งหมด", children }: SectionHeaderProps) {
+export default function SectionHeader({ title, viewAllHref, viewAllText = "ดูทั้งหมด", className = "", children }: SectionHeaderProps) {
     return (
-        <div className={styles.sectionHeader}>
+        <div className={`${styles.sectionHeader} ${className}`}>
             <h2 className={styles.title}>{title}</h2>
             {viewAllHref && (
                 <Link href={viewAllHref} className={styles.viewAll}>

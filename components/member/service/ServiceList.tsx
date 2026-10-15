@@ -29,6 +29,7 @@ export default function ServiceList({
     <section className={styles.section}>
       <div className={styles.sectionCon}>
         <SectionHeader
+          className={styles.listHeader}
           title={title}
           viewAllHref={viewAllHref}
           viewAllText={viewAllText}

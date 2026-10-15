@@ -57,10 +57,10 @@ const PUBLIC_SERVICES = [
 export default function PublicServiceSection() {
   return (
     <PublicOnlySection>
-      <section className={homeStyles.serviceSection}>
-        <Container size="2xl">
-          <SectionHeader title="บริการประชาชน" viewAllHref="/service" />
-          <div className={serviceStyles.cardGrid}>
+      <section className={`${homeStyles.serviceSection} ${homeStyles.publicServiceSection}`}>
+        <Container size="2xl" className={homeStyles.publicServiceWrap}>
+          <SectionHeader title="บริการประชาชน" viewAllHref="/service" className={homeStyles.publicHeader} />
+          <div className={`${serviceStyles.cardGrid} ${serviceStyles.homeCardGrid}`}>
             {PUBLIC_SERVICES.map((service) => (
               <Link
                 key={service.id}

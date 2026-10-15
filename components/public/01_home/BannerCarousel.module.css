@@ -240,6 +240,13 @@ a.slide {
   }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+  .banner {
+    aspect-ratio: 744 / 476;
+    max-height: none;
+  }
+}
+
 @keyframes slideUpFade {
   from {
     opacity: 0;

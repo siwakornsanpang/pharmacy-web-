@@ -684,6 +684,45 @@
   }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+  .searchBoxCard {
+    padding: 1.35rem 1.25rem 1.4rem;
+  }
+
+  .searchRow {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.85rem;
+  }
+
+  .dropdown {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
+  .dropdownButton,
+  .input,
+  .searchButton {
+    height: 48px;
+    border-radius: 12px;
+  }
+
+  .dropdownButton {
+    width: auto;
+  }
+
+  .inputWrap {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .searchButton {
+    width: auto;
+    flex-shrink: 0;
+    padding: 0 1.75rem;
+  }
+}
+
 @media (max-width: 480px) {
   .searchBoxCard {
     padding: 16px;

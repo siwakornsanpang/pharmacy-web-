@@ -107,6 +107,7 @@ export default function DepartmentColleges({ title, agencies }: DepartmentColleg
           )}
         </div>
 
+        <div className={styles.panel}>
         {/* ลำดับที่ 1 — การ์ดใหญ่แบบหน่วยงานในกำกับ */}
         <Link
           href={hero.url || "#"}
@@ -175,6 +176,7 @@ export default function DepartmentColleges({ title, agencies }: DepartmentColleg
             ))}
           </div>
         )}
+        </div>
       </div>
     </section>
   );

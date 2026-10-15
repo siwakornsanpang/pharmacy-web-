@@ -92,6 +92,31 @@
     }
 }
 
+@media (min-width: 641px) and (max-width: 1440px) {
+    .banner {
+        height: 300px !important;
+    }
+
+    .bannerOverlay {
+        padding-bottom: 3rem;
+    }
+
+    .bannerContent {
+        padding: 0;
+    }
+
+    .bannerTitle {
+        font-size: 40px;
+        line-height: 48px;
+        margin-bottom: 8px;
+    }
+
+    .bannerSubtitle {
+        font-size: 16px;
+        line-height: 24px;
+    }
+}
+
 @keyframes slideUpFade {
     from {
         opacity: 0;
